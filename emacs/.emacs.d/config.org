@@ -1477,11 +1477,11 @@
          :hook
          (after-init . org-roam-mode)
          :custom
-         (org-roam-directory "~/Documents/org_files/slip-box/")
+         (org-roam-directory "~/Documents/slipbox")
          (org-roam-capture-templates '(
                                        ("d" "default" plain (function org-roam--capture-get-point)
                                         "%?"
-                                        :file-name "%<%Y%m%d%H%M%S>-${slug}"
+                                        :file-name "pages/${slug}"
                                         :head "#+title: ${title}\n#+roam_key: \n#+roam_tags: \n"
                                         :unnarrowed t)))
          :bind (:map org-roam-mode-map
