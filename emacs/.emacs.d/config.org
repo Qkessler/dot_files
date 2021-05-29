@@ -249,7 +249,7 @@
        (use-package dired-collapse
          :hook (dired-load . (lambda () (dired-collapse)))
          :straight t)
-#+end_src
+     #+end_src
 
      
 *** Help
@@ -261,7 +261,7 @@
         (global-set-key (kbd "C-h f") #'helpful-function)
         (global-set-key (kbd "C-h v") #'helpful-variable)
         (global-set-key (kbd "C-h c") #'helpful-key))
-#+end_src
+    #+end_src
 
     
 *** Latex
@@ -273,54 +273,54 @@
      #+end_src
 
     
-    Adding reference connection made easier with reftex.
-    #+BEGIN_SRC emacs-lisp
-      (use-package reftex
-        :straight t
-        :defer t
-        :config
-        (setq reftex-cite-prompt-optional-args t))
-    #+END_SRC
+     Adding reference connection made easier with reftex.
+     #+BEGIN_SRC emacs-lisp
+       (use-package reftex
+         :straight t
+         :defer t
+         :config
+         (setq reftex-cite-prompt-optional-args t))
+     #+END_SRC
 
-    Adding autodictionary in order to get completion on the words
-    that have been miss-typed.
-    #+BEGIN_SRC emacs-lisp
-      (use-package auto-dictionary
-        :straight t
-        :init(add-hook 'flyspell-mode-hook (lambda () (auto-dictionary-mode 1))))
-    #+END_SRC
+     Adding autodictionary in order to get completion on the words
+     that have been miss-typed.
+     #+BEGIN_SRC emacs-lisp
+       (use-package auto-dictionary
+         :straight t
+         :init(add-hook 'flyspell-mode-hook (lambda () (auto-dictionary-mode 1))))
+     #+END_SRC
 
-    Adding general configuration for tex files and latex-mode better defaults.
-    #+BEGIN_SRC emacs-lisp
-      (use-package tex
-        :straight auctex
-        :mode ("\\.tex\\'" . latex-mode)
-        :config (progn
-                  (setq TeX-source-correlate-mode t)
-                  (setq TeX-source-correlate-method 'synctex)
-                  (setq TeX-auto-save t)
-                  (setq TeX-parse-self t)
-                  (setq-default TeX-master nil)
-                  (setq reftex-plug-into-AUCTeX t)
-                  (setq TeX-view-program-selection '((output-pdf "PDF Tools"))
-                        TeX-source-correlate-start-server t)
-                  ;; Update PDF buffers after successful LaTeX runs
-                  (add-hook 'TeX-after-compilation-finished-functions
-                            #'TeX-revert-document-buffer)
-                  (add-hook 'LaTeX-mode-hook
-                            (lambda ()
-                              (reftex-mode t)
-                              (flyspell-mode t)))
-                  ))
-    #+END_SRC
+     Adding general configuration for tex files and latex-mode better defaults.
+     #+BEGIN_SRC emacs-lisp
+       (use-package tex
+         :straight auctex
+         :mode ("\\.tex\\'" . latex-mode)
+         :config (progn
+                   (setq TeX-source-correlate-mode t)
+                   (setq TeX-source-correlate-method 'synctex)
+                   (setq TeX-auto-save t)
+                   (setq TeX-parse-self t)
+                   (setq-default TeX-master nil)
+                   (setq reftex-plug-into-AUCTeX t)
+                   (setq TeX-view-program-selection '((output-pdf "PDF Tools"))
+                         TeX-source-correlate-start-server t)
+                   ;; Update PDF buffers after successful LaTeX runs
+                   (add-hook 'TeX-after-compilation-finished-functions
+                             #'TeX-revert-document-buffer)
+                   (add-hook 'LaTeX-mode-hook
+                             (lambda ()
+                               (reftex-mode t)
+                               (flyspell-mode t)))
+                   ))
+     #+END_SRC
 
-    Removing the mark keybindings on latex buffers, which are
-    normally bound to the flyspell word correction keys.
-    #+begin_src emacs-lisp
-      (use-package flyspell
-        :bind (:map flyspell-mode-map (("C-." . nil)
-                                       ("C-," . nil))))
-    #+end_src
+     Removing the mark keybindings on latex buffers, which are
+     normally bound to the flyspell word correction keys.
+     #+begin_src emacs-lisp
+       (use-package flyspell
+         :bind (:map flyspell-mode-map (("C-." . nil)
+                                        ("C-," . nil))))
+     #+end_src
 
 *** Appearence
 **** Cursor display
@@ -845,7 +845,7 @@
                       '("\\`\\*Embark Collect \\(Live\\|Completions\\)\\*"
                         nil
                         (window-parameters (mode-line-format . none)))))
-#+end_src
+     #+end_src
 
 ***** Embark-consult
       Configuration merging embark and consult, creating live previews of completion candidates in the Embark collections buffer.
@@ -948,30 +948,30 @@
       (setq org-directory "~/Documents/org_files")
       (defvar org-book-list-file (concat org-directory "/book_list.org"))
       (setq
-            org-default-notes-file (concat org-directory "/org-agenda/refile.org")
-            org-agenda-files (list (concat org-directory "/org-agenda"))
-            org-archive-location (concat org-directory "/archive/%s_archive::")
-            org-refile-targets (quote ((nil :maxlevel . 5)
-                                       (org-agenda-files :maxlevel . 5)
-                                       (org-book-list-file :maxlevel . 2)))
-            org-src-fontify-natively t
-            org-columns-default-format "%50ITEM(Task) %10Effort{:} %10CLOCKSUM"
-            org-clock-out-remove-zero-time-clocks t
-            org-clock-out-when-done t
-            org-agenda-restore-windows-after-quit t
-            org-clock-persistence-insinuate t
-            org-clock-persist t
-            org-clock-in-resume t
-            org-startup-with-inline-images t
-            )
-           (defvar org-archive-file-header-format "#+FILETAGS: ARCHIVE\nArchived entries from file %s\n")
-           (add-hook 'org-capture-after-finalize-hook 'org-save-all-org-buffers)
-           (add-hook 'org-clock-in-hook 'org-save-all-org-buffers)
-           (add-hook 'org-clock-out-hook 'org-save-all-org-buffers)
-           (add-hook 'org-mode-hook 'visual-line-mode)
-           (org-babel-do-load-languages 'org-babel-load-languages
-                                        (append org-babel-load-languages
-                                                '((ledger . t))))
+       org-default-notes-file (concat org-directory "/org-agenda/refile.org")
+       org-agenda-files (list (concat org-directory "/org-agenda"))
+       org-archive-location (concat org-directory "/archive/%s_archive::")
+       org-refile-targets (quote ((nil :maxlevel . 5)
+                                  (org-agenda-files :maxlevel . 5)
+                                  (org-book-list-file :maxlevel . 2)))
+       org-src-fontify-natively t
+       org-columns-default-format "%50ITEM(Task) %10Effort{:} %10CLOCKSUM"
+       org-clock-out-remove-zero-time-clocks t
+       org-clock-out-when-done t
+       org-agenda-restore-windows-after-quit t
+       org-clock-persistence-insinuate t
+       org-clock-persist t
+       org-clock-in-resume t
+       org-startup-with-inline-images t
+       )
+      (defvar org-archive-file-header-format "#+FILETAGS: ARCHIVE\nArchived entries from file %s\n")
+      (add-hook 'org-capture-after-finalize-hook 'org-save-all-org-buffers)
+      (add-hook 'org-clock-in-hook 'org-save-all-org-buffers)
+      (add-hook 'org-clock-out-hook 'org-save-all-org-buffers)
+      (add-hook 'org-mode-hook 'visual-line-mode)
+      (org-babel-do-load-languages 'org-babel-load-languages
+                                   (append org-babel-load-languages
+                                           '((ledger . t))))
     #+END_SRC
 
 **** org-fill-paragraph fix
@@ -1374,8 +1374,8 @@
      Instead of having the results in the same line and without any highlighting, you can use Hydra to highlight the different options and overall make the process easier.
      #+begin_src emacs-lisp :tangle no
        (defhydra hydra-oa-bulk-action (:pre (setq which-key-inhibit t)
-                                        :post (setq which-key-inhibit nil)
-                                        :hint none)
+                                            :post (setq which-key-inhibit nil)
+                                            :hint none)
          "
             Org agenda bulk action (_q_uit)
 
@@ -1628,8 +1628,8 @@
         :custom
         (ediff-window-setup-function 'ediff-setup-windows-plain)
         (ediff-split-window-function (if (> (frame-width) 150)
-                                          'split-window-horizontally
-                                        'split-window-vertically))
+                                         'split-window-horizontally
+                                       'split-window-vertically))
         (ediff-diff-options "-w"))
     #+end_src
 
@@ -1645,15 +1645,40 @@
             (when (re-search-forward "^<<<<<<< " nil :noerror)
               (smerge-mode 1))))
         (add-hook 'find-file-hook #'modi/enable-smerge-maybe :append)
-        (hercules-def
-         :toggle-funs #'smerge-mode
-         :keymap 'smerge-mode-map
-         :transient t)
-        :bind ("C-c g" . smerge-mode))
-
+        :config
+        (defhydra hydra-smerge (:color pink
+                                       :hint nil
+                                       :pre (smerge-mode 1)
+                                       ;; Disable `smerge-mode' when quitting hydra if
+                                       ;; no merge conflicts remain.
+                                       :post (smerge-auto-leave))
+          "
+      ^Move^       ^Keep^               ^Diff^                 ^Other^
+      ^^-----------^^-------------------^^---------------------^^-------
+      _n_ext       _b_ase               _<_: upper/base        _C_ombine
+      _p_rev       _u_pper              _=_: upper/lower       _r_esolve
+      ^^           _l_ower              _>_: base/lower        _k_ill current
+      ^^           _a_ll                _R_efine
+      ^^           _RET_: current       _E_diff
+      "
+          ("n" smerge-next)
+          ("p" smerge-prev)
+          ("b" smerge-keep-base)
+          ("u" smerge-keep-mine)
+          ("l" smerge-keep-other)
+          ("a" smerge-keep-all)
+          ("RET" smerge-keep-current)
+          ("\C-m" smerge-keep-current)
+          ("<" smerge-diff-base-mine)
+          ("=" smerge-diff-mine-other)
+          (">" smerge-diff-base-other)
+          ("R" smerge-refine)
+          ("E" smerge-ediff)
+          ("C" smerge-combine-with-next)
+          ("r" smerge-resolve)
+          ("k" smerge-kill-current)
+          ("q" nil "cancel" :color blue)))
     #+end_src
-
-
 
 *** Enforcing commit messages
     I considered [[https://www.adventuresinwhy.com/post/commit-message-linting/][this]] post a very good guide resumming most of the
@@ -1739,40 +1764,40 @@
 ** Programming
 *** Completion Overlay
 **** Company
-    Company is used for better completion on the fly. :warning: UPDATE 2021/05/20: Instead of using company, the master branch will now be testing [[https://github.com/minad/corfu][corfu]], which seems a package that is better align with my goal of making the configuration as modular as possible.
+     Company is used for better completion on the fly. :warning: UPDATE 2021/05/20: Instead of using company, the master branch will now be testing [[https://github.com/minad/corfu][corfu]], which seems a package that is better align with my goal of making the configuration as modular as possible.
 
-    For completion reasons, I still leave the company configuration here, just in case someone might want to give it a try.
-    #+BEGIN_SRC emacs-lisp :tangle no
-      (use-package company
-        :straight t
-        :config (progn 
-                  (global-company-mode 1)
-                  (setq company-show-numbers t)
-                  (setq company-dabbrev-downcase 0)
-                  (setq company-idle-delay 0)))
-    #+END_SRC
+     For completion reasons, I still leave the company configuration here, just in case someone might want to give it a try.
+     #+BEGIN_SRC emacs-lisp :tangle no
+       (use-package company
+         :straight t
+         :config (progn 
+                   (global-company-mode 1)
+                   (setq company-show-numbers t)
+                   (setq company-dabbrev-downcase 0)
+                   (setq company-idle-delay 0)))
+     #+END_SRC
 
-    Adding completion on tab.
-    #+BEGIN_SRC emacs-lisp :tangle no
-      (defun tab-indent-or-complete ()
-        (interactive)
-        (if (minibufferp)
-            (minibuffer-complete)
-          (if (or (not yas-minor-mode)
-                  (null (do-yas-expand)))
-              (if (check-expansion)
-                  (company-complete-common)
-                (indent-for-tab-command)))))
-      (global-set-key [backtab] 'tab-indent-or-complete)
-    #+END_SRC
+     Adding completion on tab.
+     #+BEGIN_SRC emacs-lisp :tangle no
+       (defun tab-indent-or-complete ()
+         (interactive)
+         (if (minibufferp)
+             (minibuffer-complete)
+           (if (or (not yas-minor-mode)
+                   (null (do-yas-expand)))
+               (if (check-expansion)
+                   (company-complete-common)
+                 (indent-for-tab-command)))))
+       (global-set-key [backtab] 'tab-indent-or-complete)
+     #+END_SRC
 
-    Adding prescient sorting and filtering mechanism with the intention
-    of enabling a better candidate mechanism.
-    #+begin_src emacs-lisp :tangle no
-      (use-package company-prescient
-        :straight t
-        :config (company-prescient-mode 1))
-    #+end_src
+     Adding prescient sorting and filtering mechanism with the intention
+     of enabling a better candidate mechanism.
+     #+begin_src emacs-lisp :tangle no
+       (use-package company-prescient
+         :straight t
+         :config (company-prescient-mode 1))
+     #+end_src
 
 **** Corfu
      As I mentioned in the company configuration update. I can't seem to come around using company for its heavy weight obsession. Instead of trying to create a completion API, let Emacs do its work (using =completion-at-point-functions=, which are normally defined by programming modes), improving the performance in the process.
@@ -2038,8 +2063,8 @@
        #+BEGIN_SRC emacs-lisp
          (use-package emmet-mode
            :straight (emmet-mode :type git :host github :repo "smihica/emmet-mode"
-                      :fork (:host github
-                             :repo "Qkessler/emmet-mode"))
+                                 :fork (:host github
+                                              :repo "Qkessler/emmet-mode"))
            :custom (emmet-move-cursor-between-quotes t))
          (add-hook 'sgml-mode-hook 'emmet-mode) ;; Auto-start on any markup modes
          (add-hook 'css-mode-hook  'emmet-mode) ;; enable Emmet's css abbreviation.
@@ -2148,12 +2173,12 @@
     There are multiple packages to integrate Google calendar with org-mode, but I didn't found that any was really fit to my needs, which are simply to have the calendars synced in.
     
     I added a script I created with python3, and I find that hooking up an emacs function helps calling the script and having my tasks updated.
-     #+begin_src emacs-lisp
-       (defun qk/gcal-org-sync()
-         (interactive)
-         (let ((default-directory "~/Documents/gcal-org")) 
-           (shell-command "./crontab-script.sh")))
-     #+end_src
+    #+begin_src emacs-lisp
+      (defun qk/gcal-org-sync()
+        (interactive)
+        (let ((default-directory "~/Documents/gcal-org")) 
+          (shell-command "./crontab-script.sh")))
+    #+end_src
 
 *** Email from emacs
     Adding email integration for the email indexer mu, called mu4e.
