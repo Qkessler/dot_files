@@ -82,6 +82,20 @@
         :straight t)
     #+END_SRC
 
+*** General
+    =general.el= provides a more convenient method for binding keys in emacs (for both evil and non-evil users). Like use-package, which provides a convenient, unified interface for managing packages, general.el is intended to provide a convenient, unified interface for key definitions.
+    #+begin_src emacs-lisp
+      (use-package general
+        :straight t)
+    #+end_src
+
+*** Hercules
+    =hercules.el= lets you call any group of related command sequentially with no prefix keys, while showing a handy popup to remember the bindings for those commands. hercules.el can create both of these (the grouped commands, and the popup) from any keymap. It is basically the hydra killer for use configuration, providing useful commands and cutting the setup lines from 10 to 1.
+    #+begin_src emacs-lisp
+      (use-package hercules
+        :straight t)
+    #+end_src
+    
 *** Delimiters
 **** smart-parens
      Smart-parens is a package that improves on the previous package,
@@ -229,6 +243,15 @@
        (setq backup-directory-alist '(("" . "~/.emacs.d/backup")))
      #+END_SRC
 
+**** Dired-collapse
+     Collapse the folders if they only have an unique file.
+     #+begin_src emacs-lisp
+       (use-package dired-collapse
+         :hook (dired-load . (lambda () (dired-collapse)))
+         :straight t)
+#+end_src
+
+     
 *** Help
     The default emacs help buffers could use some tweaking, and the Helpful package is there to assist. It provides better formatting and links for help buffers, and defines different functions to limit the disruption effect in your emacs configuration.
     #+begin_src emacs-lisp
@@ -1597,6 +1620,40 @@
     #+begin_src emacs-lisp
       (setq vc-follow-symlinks t)
     #+end_src
+
+*** Ediff
+    Provides a convenient way of simultaneous browsing through the differences between a pair (or a triple) of files or buffers. Nevertheless, it needs to be configured to remove some of the defaults that are horrible. We will remove the frame that ediff creates, opting for using a window with options if needed. We might even change the behaviour to use a transient command.
+    #+begin_src emacs-lisp
+      (use-package ediff
+        :custom
+        (ediff-window-setup-function 'ediff-setup-windows-plain)
+        (ediff-split-window-function (if (> (frame-width) 150)
+                                          'split-window-horizontally
+                                        'split-window-vertically))
+        (ediff-diff-options "-w"))
+    #+end_src
+
+*** Smerge-mode
+    =smerge-mode= is a minor mode included in Emacs that provides merging functionality. There has been defined multiple funcions to navigate and act upon changes in files. You are able to use ediff-like functionality to move around and make the changes that you need. The following configuration provides the automatic activation when a merge conflict is detected, a.k.a, when the buffer has multiple "<" in the same line.
+    #+begin_src emacs-lisp
+      (use-package smerge-mode
+        :init
+        (defun modi/enable-smerge-maybe ()
+          "Auto-enable `smerge-mode' when merge conflict is detected."
+          (save-excursion
+            (goto-char (point-min))
+            (when (re-search-forward "^<<<<<<< " nil :noerror)
+              (smerge-mode 1))))
+        (add-hook 'find-file-hook #'modi/enable-smerge-maybe :append)
+        (hercules-def
+         :toggle-funs #'smerge-mode
+         :keymap 'smerge-mode-map
+         :transient t)
+        :bind ("C-c g" . smerge-mode))
+
+    #+end_src
+
+
 
 *** Enforcing commit messages
     I considered [[https://www.adventuresinwhy.com/post/commit-message-linting/][this]] post a very good guide resumming most of the
