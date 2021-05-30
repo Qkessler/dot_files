@@ -1,9 +1,49 @@
 #+STARTUP: showeverything
 * Emacs configuration
 ** Themes
+*** Modus-themes
+    Accessible themes for GNU Emacs, conforming with the highest standard for colour contrast between background and foreground values (WCAG AAA). Even though they have been added to Emacs 28 master, I figured I need to have the full-package in order to configure every option. The options added here are not my full preferences, I still haven't tested them enough to be sure.
+    #+begin_src emacs-lisp :tangle no
+      (use-package modus-themes
+        :straight t
+        :init
+        (setq modus-themes-slanted-constructs nil
+              modus-themes-bold-constructs nil
+              modus-themes-no-mixed-fonts nil
+              modus-themes-subtle-line-numbers t
+              modus-themes-success-deuteranopia t
+              modus-themes-inhibit-reload nil ; only applies to `customize-set-variable' and related
+              modus-themes-fringes nil
+              modus-themes-lang-checkers nil
+              modus-themes-mode-line 'borderless
+              modus-themes-syntax nil
+              modus-themes-hl-line 'accented-background
+              modus-themes-paren-match 'subtle ; {nil,'subtle-bold,'intense,'intense-bold}
+              modus-themes-links 'neutral-underline
+              modus-themes-prompts nil
+              modus-themes-completions nil ; {nil,'moderate,'opinionated}
+              modus-themes-mail-citations 'faint ; {nil,'faint,'monochrome}
+              modus-themes-region 'bg-only-no-extend
+              modus-themes-diffs nil
+              modus-themes-org-blocks nil ; {nil,'gray-background,'tinted-background} (also read doc string)
+              modus-themes-org-habit nil ; {nil,'simplified,'traffic-light}
+              modus-themes-headings nil ; this is an alist: read the manual or its doc string
+              modus-themes-variable-pitch-ui t
+              modus-themes-variable-pitch-headings nil
+              modus-themes-scale-headings nil
+              modus-themes-scale-1 1.1
+              modus-themes-scale-2 1.15
+              modus-themes-scale-3 1.21
+              modus-themes-scale-4 1.27
+              modus-themes-scale-5 1.33)
+        (modus-themes-load-themes)
+        :config (modus-themes-load-operandi))
+    #+end_src
+
+    
 *** Gruvbox theme
     The Gruvbox theme has everything that I love about Emacs, it is the theme that I have been working with for the longest time and I couldn't be happier about it. The reason I have the solarized theme under it is because I'm trying out a function to change the theme depending on the hour of the day.
-    #+begin_src emacs-lisp
+    #+begin_src emacs-lisp :tangle no
       (use-package gruvbox-theme
         :straight t
         :config (load-theme 'gruvbox-dark-soft t))
@@ -11,9 +51,10 @@
 
 *** Solarized theme
     This is the second theme in my book. I really like the solarized theme, but Gruvbox stills wins it. The reason I have it here is because of its light theme.
-    #+begin_src emacs-lisp :tangle no
+    #+begin_src emacs-lisp
       (use-package solarized-theme
-        :straight t)
+	:straight t
+	:config (load-theme 'solarized-light-high-contrast t))
     #+end_src
 
 ** Better defaults
@@ -1083,18 +1124,23 @@
                (sequence "NOTE(n)" "|" "DONE(d)")
                )
               )
-       org-todo-keyword-faces
-       '(
-         ("PROJECT" . (:foreground "#a87600" :weight bold))
-         ("OPTIONAL" . (:foreground "#08a838" :weight bold))
-         ("WAITING" . (:foreground "#fe2f92" :weight bold))
-         ("CANCELLED" . (:foreground "#999999" :weight bold))
-         ("SOMEDAY" . (:foreground "#ab82ff" :weight bold))
-         ("MEETING" . (:foreground "#1874cd" :weight bold))
-         ("NOTE" . (:foreground "#fcba03" :weight bold))
-         )
+       
        )
     #+END_SRC
+
+    Change the faces of the keywords, I keep it in a different source block to tangle or untagle if necessary.
+    #+begin_src emacs-lisp :tangle no
+      (setq org-todo-keyword-faces
+            '(
+              ("PROJECT" . (:foreground "#a87600" :weight bold))
+              ("OPTIONAL" . (:foreground "#08a838" :weight bold))
+              ("WAITING" . (:foreground "#fe2f92" :weight bold))
+              ("CANCELLED" . (:foreground "#999999" :weight bold))
+              ("SOMEDAY" . (:foreground "#ab82ff" :weight bold))
+              ("MEETING" . (:foreground "#1874cd" :weight bold))
+              ("NOTE" . (:foreground "#fcba03" :weight bold))
+              ))
+    #+end_src
 
 *** Org capture
     Capture templates are used with the intention of improving
