@@ -45,7 +45,7 @@
     The Gruvbox theme has everything that I love about Emacs, it is the theme that I have been working with for the longest time and I couldn't be happier about it. The reason I have the solarized theme under it is because I'm trying out a function to change the theme depending on the hour of the day.
     #+begin_src emacs-lisp
       (use-package gruvbox-theme
-        :straight t
+          :straight (gruvbox-theme :type git :host github :repo "Qkessler/emacs-theme-gruvbox")
         :config (load-theme 'gruvbox-light-hard t))
     #+end_src
 
@@ -1129,7 +1129,7 @@
     #+END_SRC
 
     Change the faces of the keywords, I keep it in a different source block to tangle or untagle if necessary.
-    #+begin_src emacs-lisp :tangle no
+    #+begin_src emacs-lisp
       (setq org-todo-keyword-faces
             '(
               ("PROJECT" . (:foreground "#a87600" :weight bold))
@@ -1759,9 +1759,6 @@
                      ("e a" "assignees" forge-edit-topic-assignees)
                      ("e r" "review requests" forge-edit-topic-review-requests)])
                   ))
-
-      ;; Setting up forge token.
-      (setq auth-sources '("~/.authinfo"))
     #+END_SRC
 
 *** Magit
@@ -1852,21 +1849,12 @@
 
      Another option is to also set up the `TAB' for cycling through the candidates, but I don't find it particularly interesting. I prefer the company convention of using C-n and C-p.
      #+begin_src emacs-lisp
-       (defvar gruvbox-dark1 "#3c3836")
-       (defvar gruvbox-bright_purple "#d3869b")
-       (defvar gruvbox-dark2 "#504945")
-
        (use-package corfu
          :straight t
          :bind (:map corfu-map
                      ("C-n" . corfu-next)
                      ("C-p" . corfu-previous))
          :custom (corfu-cycle t) (corfu-global-mode t)
-         :custom-face 
-         (corfu-background ((t (:background ,gruvbox-dark1))))
-         (corfu-current ((t (:foreground ,gruvbox-bright_purple :background ,gruvbox-dark2))))
-         (corfu-bar ((t (:background ,gruvbox-dark2))))
-         (corfu-border ((t (:background ,gruvbox-dark1))))
          :config (corfu-global-mode))
 
        (use-package emacs
@@ -1879,7 +1867,7 @@
          (setq tab-always-indent 'complete))
 
      #+end_src
-     
+
 *** C# programming
     C# still doens't have its own mode in emacs, we need to install an external package. I will be using lsp-mode for completion, but Emacs needs the csharp-mode support
     #+begin_src emacs-lisp
