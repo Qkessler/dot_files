@@ -43,15 +43,15 @@
     
 *** Gruvbox theme
     The Gruvbox theme has everything that I love about Emacs, it is the theme that I have been working with for the longest time and I couldn't be happier about it. The reason I have the solarized theme under it is because I'm trying out a function to change the theme depending on the hour of the day.
-    #+begin_src emacs-lisp :tangle no
+    #+begin_src emacs-lisp
       (use-package gruvbox-theme
         :straight t
-        :config (load-theme 'gruvbox-dark-soft t))
+        :config (load-theme 'gruvbox-light-hard t))
     #+end_src
 
 *** Solarized theme
     This is the second theme in my book. I really like the solarized theme, but Gruvbox stills wins it. The reason I have it here is because of its light theme.
-    #+begin_src emacs-lisp
+    #+begin_src emacs-lisp :tangle no
       (use-package solarized-theme
 	:straight t
 	:config (load-theme 'solarized-light-high-contrast t))
