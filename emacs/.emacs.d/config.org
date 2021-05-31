@@ -1,6 +1,13 @@
 #+STARTUP: showeverything
 * Emacs configuration
 ** Themes
+*** Initial theme list
+    I add the theme list here to be able to add to it when a theme is tangled, considering that I will most likely want to toggle two themes, the ones that are tangled: dark and light.
+    #+begin_src emacs-lisp
+      (setq qk/themes-list nil)
+      (setq qk/themes-index 0)
+    #+end_src
+    
 *** Modus-themes
     Accessible themes for GNU Emacs, conforming with the highest standard for colour contrast between background and foreground values (WCAG AAA). Even though they have been added to Emacs 28 master, I figured I need to have the full-package in order to configure every option. The options added here are not my full preferences, I still haven't tested them enough to be sure.
     #+begin_src emacs-lisp :tangle no
@@ -37,7 +44,8 @@
               modus-themes-scale-4 1.27
               modus-themes-scale-5 1.33)
         (modus-themes-load-themes)
-        :config (modus-themes-load-operandi))
+        :config (modus-themes-load-operandi)
+        (add-to-list 'qk/themes-list 'modus-operandi))
     #+end_src
 
     
@@ -45,17 +53,63 @@
     The Gruvbox theme has everything that I love about Emacs, it is the theme that I have been working with for the longest time and I couldn't be happier about it. The reason I have the solarized theme under it is because I'm trying out a function to change the theme depending on the hour of the day.
     #+begin_src emacs-lisp
       (use-package gruvbox-theme
-          :straight (gruvbox-theme :type git :host github :repo "Qkessler/emacs-theme-gruvbox")
-        :config (load-theme 'gruvbox-light-hard t))
+        :straight (gruvbox-theme :type git :host github :repo "Qkessler/emacs-theme-gruvbox")
+        :config (add-to-list 'qk/themes-list 'gruvbox-dark-soft))
     #+end_src
 
 *** Solarized theme
     This is the second theme in my book. I really like the solarized theme, but Gruvbox stills wins it. The reason I have it here is because of its light theme.
-    #+begin_src emacs-lisp :tangle no
+    #+begin_src emacs-lisp
       (use-package solarized-theme
-	:straight t
-	:config (load-theme 'solarized-light-high-contrast t))
+        :straight t
+        :custom
+        ;; make the fringe stand out from the background
+        (solarized-distinct-fringe-background t)
+
+        ;; Don't change the font for some headings and titles
+        (solarized-use-variable-pitch nil)
+
+        ;; Use less bolding
+        (solarized-use-less-bold t)
+
+        ;; Use more italics
+        (solarized-use-more-italic t)
+
+        ;; Use less colors for indicators such as git:gutter, flycheck and similar
+        (solarized-emphasize-indicators nil)
+
+        ;; Don't change size of org-mode headlines (but keep other size-changes)
+        (solarized-scale-org-headlines nil)
+
+        ;; Avoid all font-size changes
+        (solarized-height-minus-1 1.0)
+        (solarized-height-plus-1 1.0)
+        (solarized-height-plus-2 1.0)
+        (solarized-height-plus-3 1.0)
+        (solarized-height-plus-4 1.0)
+        :config
+        (load-theme 'solarized-light-high-contrast t)
+        (add-to-list 'qk/themes-list 'solarized-light-high-contrast))
     #+end_src
+
+*** Toggle theme
+    I found this function to cycle through a list of themes, which is defined before the function. In my opinion toggling from light to dark is key when working in the evenings.
+    #+begin_src emacs-lisp
+      (defun qk/cycle-theme ()
+        (interactive)
+        (setq qk/themes-index (% (1+ qk/themes-index) (length qk/themes-list)))
+        (qk/load-indexed-theme))
+
+      (defun qk/load-indexed-theme ()
+        (qk/try-load-theme (nth qk/themes-index qk/themes-list)))
+
+      (defun qk/try-load-theme (theme)
+        (if (ignore-errors (load-theme theme :no-confirm))
+            (mapcar #'disable-theme (remove theme custom-enabled-themes))
+          (message "Unable to find theme file for ‘%s’" theme)))
+      (qk/load-indexed-theme)
+#+end_src
+
 
 ** Better defaults
 *** Keep emacs clean
@@ -1124,7 +1178,7 @@
                (sequence "NOTE(n)" "|" "DONE(d)")
                )
               )
-       
+
        )
     #+END_SRC
 
@@ -2076,13 +2130,20 @@
       #+end_src
 
 ***** Web programming
+
+****** CSS
       Css programming is helped with the lsp-mode server: css-ls, installed with
       the command M-x lsp-install-server RET css-ls RET.
 
-      Exactly the same with the html server, installed with lsp-install-server: html-ls.
-      Trying to install emmet-mode, but the package cl is deprecated.
+      Colors need to be highlighted in other buffers too, i.e. elisp-mode. For that I intend to use rainbow-mode, which may be enabled with =M-x rainbow-mode=.
+      #+begin_src emacs-lisp
+        (use-package rainbow-mode
+          :straight t)
+#+end_src
 
-****** HTML      
+
+****** HTML
+       Exactly the same with the html server, installed with lsp-install-server: html-ls.
        To use html-mode in other mode files, I needed to configure .hsb template
        files, using express.
        #+begin_src emacs-lisp
