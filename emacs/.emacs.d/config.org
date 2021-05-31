@@ -1922,18 +1922,6 @@
 
      #+end_src
 
-*** C# programming
-    C# still doens't have its own mode in emacs, we need to install an external package. I will be using lsp-mode for completion, but Emacs needs the csharp-mode support
-    #+begin_src emacs-lisp
-      (use-package tree-sitter :straight t)
-      (use-package tree-sitter-langs :straight t)
-
-      (use-package csharp-mode
-        :straight t
-        :config
-        (add-to-list 'auto-mode-alist '("\\.cs\\'" . csharp-tree-sitter-mode)))
-    #+end_src
-    
 *** Server side functionality (LSP)
     Lsp-mode for server completion.
 **** Flycheck
@@ -2129,6 +2117,18 @@
           :straight t)  
       #+end_src
 
+***** C# programming
+    C# still doens't have its own mode in emacs, we need to install an external package. I will be using lsp-mode for completion, but Emacs needs the csharp-mode support
+    #+begin_src emacs-lisp
+      (use-package tree-sitter :straight t)
+      (use-package tree-sitter-langs :straight t)
+
+      (use-package csharp-mode
+        :straight t
+        :config
+        (add-to-list 'auto-mode-alist '("\\.cs\\'" . csharp-tree-sitter-mode)))
+    #+end_src
+    
 ***** Web programming
 
 ****** CSS
@@ -2253,6 +2253,16 @@
            :after dap-mode
            :straight nil)
        #+end_src
+
+*** DevDocs
+    Instead of having to search for online documentation for each of the modes a certain buffer is in, we can now browse API documentations provided by [[https://devdocs.io/][devdocs.io]] inside emacs using EWW, improving formatting, highlighting code blocks, using the package [[https://github.com/blahgeek/emacs-devdocs-browser][emacs-devdocs-browser]]. We can also install, upgrade docsets, even adding new jumping functions and default browser support. Overall I find that this packages takes a really interesting take at documentation, and I love when they force me to stay inside Emacs.
+    #+begin_src emacs-lisp
+      (use-package emacs-devdocs-browser
+        :straight (emacs-devdocs-browser :type git :host github :repo "blahgeek/emacs-devdocs-browser" )
+        :custom
+        (devdocs-browser-cache-directory (no-littering-expand-var-file-name "devdocs-browser"))
+        :bind ("C-c d" . devdocs-browser-open))
+    #+end_src
 
 *** Yaml-mode
     The yaml-mode package provides indentation features for programming with
