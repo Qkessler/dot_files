@@ -108,7 +108,7 @@
             (mapcar #'disable-theme (remove theme custom-enabled-themes))
           (message "Unable to find theme file for ‘%s’" theme)))
       (qk/load-indexed-theme)
-#+end_src
+    #+end_src
 
 
 ** Better defaults
@@ -2118,28 +2118,28 @@
       #+end_src
 
 ***** C# programming
-    C# still doens't have its own mode in emacs, we need to install an external package. I will be using lsp-mode for completion, but Emacs needs the csharp-mode support
-    #+begin_src emacs-lisp
-      (use-package tree-sitter :straight t)
-      (use-package tree-sitter-langs :straight t)
+      C# still doens't have its own mode in emacs, we need to install an external package. I will be using lsp-mode for completion, but Emacs needs the csharp-mode support
+      #+begin_src emacs-lisp
+        (use-package tree-sitter :straight t)
+        (use-package tree-sitter-langs :straight t)
 
-      (use-package csharp-mode
-        :straight t
-        :config
-        (add-to-list 'auto-mode-alist '("\\.cs\\'" . csharp-tree-sitter-mode)))
-    #+end_src
+        (use-package csharp-mode
+          :straight t
+          :config
+          (add-to-list 'auto-mode-alist '("\\.cs\\'" . csharp-tree-sitter-mode)))
+      #+end_src
     
 ***** Web programming
 
 ****** CSS
-      Css programming is helped with the lsp-mode server: css-ls, installed with
-      the command M-x lsp-install-server RET css-ls RET.
+       Css programming is helped with the lsp-mode server: css-ls, installed with
+       the command M-x lsp-install-server RET css-ls RET.
 
-      Colors need to be highlighted in other buffers too, i.e. elisp-mode. For that I intend to use rainbow-mode, which may be enabled with =M-x rainbow-mode=.
-      #+begin_src emacs-lisp
-        (use-package rainbow-mode
-          :straight t)
-#+end_src
+       Colors need to be highlighted in other buffers too, i.e. elisp-mode. For that I intend to use rainbow-mode, which may be enabled with =M-x rainbow-mode=.
+       #+begin_src emacs-lisp
+         (use-package rainbow-mode
+           :straight t)
+       #+end_src
 
 
 ****** HTML
@@ -2274,6 +2274,88 @@
     #+end_src
 
 ** Extra
+*** Circe
+    Circe is a Client for IRC in Emacs. It tries to have sane defaults, and integrates well with the rest of the editor, using standard Emacs key bindings and indicating activity in channels in the status bar so it stays out of your way unless you want to use it.
+    #+begin_src emacs-lisp
+      (use-package circe
+        :straight t
+        :bind ("C-c i" . qk/irc)
+        :custom
+        (circe-default-nick "qkessler")
+        (cirfe-default-user "qkessler")
+        (circe-default-realname "qkessler")
+        (circe-default-part-message "Bye!")
+        (circe-default-quit-message "Bye!")
+        (circe-format-self-say "<{nick}> {body}")
+        (circe-format-say "{nick:-16s} {body}")
+        (circe-network-options
+         '(("Libera"
+            :port "6697"
+            :host "irc.libera.chat"
+            :tls t
+            :nick "qkessler"
+            :channels ("#emacs")
+            )))
+        (circe-format-server-topic "*** Topic Change by {userhost}: {topic-diff}")
+        (circe-server-buffer-name (concat circe-default-nick "@{network}"))
+        (circe-prompt-string (propertize ">>> " 'face 'circe-prompt-face))
+        (circe-color-nicks-everywhere t)
+        :config
+        (defun qk/irc ()
+          "Connect to all my IRC servers after enabling contrib modules."
+          (interactive)
+          (circe-lagmon-mode)
+          (enable-circe-color-nicks)
+          (enable-lui-autopaste)
+          (enable-lui-track)
+          (require 'circe-chanop)
+          (circe "Libera")))
+    #+end_src
+
+**** Lui
+     Lui, the Linewise User Interface, is a simple extensible mode that allows any program to present a userfriendly interface to the user. [[*Circe][Circe]] uses it to configure the interface.
+     #+begin_src emacs-lisp
+       (use-package lui
+         :custom
+         (lui-time-stamp-position 'right-margin)
+         (lui-fill-type nil)
+         (lui-track-behavior 'before-switch-to-buffer)
+         :init
+         (defun brause/trim-surrounding-lui-whitespace ()
+           (save-excursion
+             (let ((bol (line-beginning-position)))
+               (goto-char bol)
+               (skip-syntax-forward "-")
+               (when (/= (point) bol)
+                 (delete-region bol (point)))
+               (let ((eol (point-max)))
+                 (goto-char eol)
+                 (skip-syntax-backward "-" bol)
+                 (when (/= (point) eol)
+                   (delete-region (point) eol))))))
+         (defun brause/fill-lui-input ()
+           (interactive)
+           (fill-delete-newlines lui-input-marker (point-max) nil nil nil)
+           (brause/trim-surrounding-lui-whitespace)
+           (goto-char (point-max)))
+         (defun brause/no-fill-lui-setup ()
+           (setq fringes-outside-margins t
+                 right-margin-width 10
+                 visual-fill-column-extra-text-width '(0 . -10)
+                 fill-column 80
+                 wrap-prefix "    ")
+           (visual-line-mode)
+           (setf (cdr (assoc 'continuation fringe-indicator-alist)) nil)
+           (make-local-variable 'overflow-newline-into-fringe)
+           (setq overflow-newline-into-fringe nil))
+         (defun qk/circe-set-margin ()
+           (setq right-margin-width 7))
+         :bind-keymap ("M-q" . lui-mode-map)
+         :hook
+         (circe-char-mode . brause/no-fill-lui-setup)
+         (lui-mode . qk/circe-set-margin))
+     #+end_src
+    
 *** Google calendar integration
     There are multiple packages to integrate Google calendar with org-mode, but I didn't found that any was really fit to my needs, which are simply to have the calendars synced in.
     
