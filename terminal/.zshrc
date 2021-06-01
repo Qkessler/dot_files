@@ -167,6 +167,8 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
+# lpass configuration
+export LPASS_AGENT_TIMEOUT=10800
 
 alias ae=". .env/bin/activate"
 alias ec="emacsclient-one-frame.sh"
@@ -176,3 +178,4 @@ alias ect="emacsclient -t" # Open emacs inside terminal.
 # Pulling everything inside a directory.
 alias pa="find . -mindepth 1 -maxdepth 1 -type d -print -exec git -C {} pull \;" 
 alias mon2cam="deno run --unstable -A -r -q https://raw.githubusercontent.com/ShayBox/Mon2Cam/master/src/mod.ts"
+
