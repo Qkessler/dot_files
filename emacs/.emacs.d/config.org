@@ -2290,16 +2290,26 @@
         (circe-format-say "{nick:-16s} {body}")
         (circe-network-options
          '(("Libera"
-            :port "6697"
             :host "irc.libera.chat"
-            :tls t
+            :port "6697"
             :nick "qkessler"
+            :sasl-username "qkessler"
+            :sasl-password qk/lpass-fetch-libera-password
             :channels ("#emacs")
+            :tls t
             )))
         (circe-format-server-topic "*** Topic Change by {userhost}: {topic-diff}")
         (circe-server-buffer-name (concat circe-default-nick "@{network}"))
         (circe-prompt-string (propertize ">>> " 'face 'circe-prompt-face))
         (circe-color-nicks-everywhere t)
+        :init
+        (defun qk/lpass-fetch-libera-password (server)
+          "Returns Libera's NickServer password if the user is logged-in.
+       Prompt the login process if she isn't. "
+          (unless (lastpass-logged-in-p)
+            (lastpass-login)
+            (error "LastPass: Not logged in, log in and retry"))
+          (lastpass-getpass "libera.chat"))
         :config
         (defun qk/irc ()
           "Connect to all my IRC servers after enabling contrib modules."
