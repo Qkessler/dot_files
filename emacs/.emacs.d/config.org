@@ -96,6 +96,7 @@
     I found this function to cycle through a list of themes, which is defined before the function. In my opinion toggling from light to dark is key when working in the evenings.
     #+begin_src emacs-lisp
       (defun qk/cycle-theme ()
+        "Change the theme to the next index in the `qk/themes-list'. I would normally use this for switching from light to dark modes."
         (interactive)
         (setq qk/themes-index (% (1+ qk/themes-index) (length qk/themes-list)))
         (qk/load-indexed-theme))
