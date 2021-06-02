@@ -244,8 +244,7 @@
        (setq doom-modeline-icon t)
        (defface egoge-display-time
          '((((type x w32 mac))
-            ;; #060525 is the background colour of my default face.
-            (:foreground "#fcfcfc" :inherit bold))
+            (:inherit highlight))
            (((type tty))
             (:foreground "blue")))
          "Face used to display the time in the mode line.")
@@ -1077,6 +1076,39 @@
                                    (append org-babel-load-languages
                                            '((ledger . t))))
     #+END_SRC
+
+**** org-insert-link DWIM
+     I followed the [[https://xenodium.com/emacs-dwim-do-what-i-mean/][xenodium blog post]] talking about DWIM and its interactive commands already in Emacs. He implements his DWIM changes to to org-insert-link, and I found his changes to be interesting enough to add them to my own command.
+     #+begin_src emacs-lisp
+       (use-package org
+         :init
+         (defun ar/org-insert-link-dwim ()
+           "Like `org-insert-link' but with personal dwim preferences."
+           (interactive)
+           (let* ((point-in-link (org-in-regexp org-link-any-re 1))
+                  (clipboard-url (when (string-match-p "^http" (current-kill 0))
+                                   (current-kill 0)))
+                  (region-content (when (region-active-p)
+                                    (buffer-substring-no-properties (region-beginning)
+                                                                    (region-end)))))
+             (cond ((and region-content clipboard-url (not point-in-link))
+                    (delete-region (region-beginning) (region-end))
+                    (insert (org-make-link-string clipboard-url region-content)))
+                   ((and clipboard-url (not point-in-link))
+                    (insert (org-make-link-string
+                             clipboard-url
+                             (read-string "title: "
+                                          (with-current-buffer (url-retrieve-synchronously clipboard-url)
+                                            (dom-text (car
+                                                       (dom-by-tag (libxml-parse-html-region
+                                                                    (point-min)
+                                                                    (point-max))
+                                                                   'title))))))))
+                   (t
+                    (call-interactively 'org-insert-link)))))
+         :bind (:map org-mode-map
+                     ("C-c C-l" . ar/org-insert-link-dwim)))
+     #+end_src
 
 **** org-fill-paragraph fix
      Org by default, when calling the fill-paragraph command breaks the org links, creating
@@ -2296,7 +2328,6 @@
         (circe-default-part-message "Bye!")
         (circe-default-quit-message "Bye!")
         (circe-format-self-say "<{nick}> {body}")
-        (circe-format-say "{nick:-16s} {body}")
         (circe-network-options
          '(("Libera"
             :host "irc.libera.chat"
@@ -2600,7 +2631,6 @@
           (hk/elfeed-link-title elfeed-show-entry)
           (org-capture nil "n")
           (yank)
-          (org-capture-refile)
           (org-capture-finalize))
 
         (defun hk/elfeed-search-link-title ()
@@ -2622,7 +2652,6 @@
                      do (hk/elfeed-link-title entry)
                      do (org-capture nil "n")
                      do (yank)
-                     do (org-capture-refile)
                      do (org-capture-finalize)
                      (mapc #'elfeed-search-update-entry entries))
             (unless (use-region-p) (forward-line))))
