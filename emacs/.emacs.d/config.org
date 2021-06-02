@@ -2400,7 +2400,8 @@
            (setq overflow-newline-into-fringe nil))
          (defun qk/circe-set-margin ()
            (setq right-margin-width 7))
-         :bind-keymap ("M-q" . lui-mode-map)
+         :bind (:map lui-mode-map
+                     ("M-q" . brause/fill-lui-input))
          :hook
          (circe-char-mode . brause/no-fill-lui-setup)
          (lui-mode . qk/circe-set-margin))
