@@ -901,8 +901,13 @@
          ;; Use Consult to select xref locations with preview
          (setq xref-show-xrefs-function #'consult-xref
                xref-show-definitions-function #'consult-xref)
+         :custom (consult-narrow-key "<")
          :config
-         (setq consult-narrow-key "<"))
+         (consult-customize
+          ;; Disable preview for `consult-theme' completely.
+          consult-theme :preview-key nil
+          ;; Set preview for `consult-buffer' to key `M-.'
+          consult-buffer :preview-key (kbd "M-.")))
      #+end_src
 
 ***** Consult-projectile
