@@ -2576,15 +2576,68 @@
         (elfeed-search-trailing-width 25)
         (elfeed-show-truncate-long-urls t)
         (elfeed-show-unique-buffers t)
-        (elfeed-search-date-format '("%F %R" 16 :left)))  
-      (use-package elfeed
+        (elfeed-search-date-format '("%F %R" 16 :left))
+        :config
+        (defun hk/elfeed-link-title (entry)
+          "Copy the entry title and URL as org link to the clipboard."
+          (interactive)
+          (let* ((link (elfeed-entry-link entry))
+                 (title (elfeed-entry-title entry))
+                 (titlelink (concat "[[" link "][" title "]]")))
+            (when titlelink
+              (kill-new titlelink)
+              (x-set-selection 'PRIMARY titlelink)
+              (message "Yanked: %s" titlelink))))
+
+        (defun hk/elfeed-show-link-title ()
+          "Copy the current entry title and URL as org link to the clipboard."
+          (interactive)
+          (hk/elfeed-link-title elfeed-show-entry))
+
+        (defun hk/elfeed-show-quick-url-note ()
+          "Fastest way to capture entry link to org agenda from elfeed show mode"
+          (interactive)
+          (hk/elfeed-link-title elfeed-show-entry)
+          (org-capture nil "n")
+          (yank)
+          (org-capture-refile)
+          (org-capture-finalize))
+
+        (defun hk/elfeed-search-link-title ()
+          "Copy the current entry title and URL as org link to the clipboard."
+          (interactive)
+          (let ((entries (elfeed-search-selected)))
+            (cl-loop for entry in entries
+                     when (elfeed-entry-link entry)
+                     do (hk/elfeed-link-title entry))))
+
+        (defun hk/elfeed-search-quick-url-note ()
+          "In search mode, capture the title and link for the selected
+           entry or entries in org aganda."
+          (interactive)
+          (let ((entries (elfeed-search-selected)))
+            (cl-loop for entry in entries
+                     do (elfeed-untag entry 'unread)
+                     when (elfeed-entry-link entry)
+                     do (hk/elfeed-link-title entry)
+                     do (org-capture nil "n")
+                     do (yank)
+                     do (org-capture-refile)
+                     do (org-capture-finalize)
+                     (mapc #'elfeed-search-update-entry entries))
+            (unless (use-region-p) (forward-line))))
+
         :bind (("C-c e" . elfeed)
                :map elfeed-search-mode-map
                ("w" . elfeed-search-yank)
                ("g" . elfeed-update)
                ("G" . elfeed-search-update--force)
+               ("l" . hk/elfeed-search-link-title)
+               ("v" . hk/elfeed-search-quick-url-note)
                :map elfeed-show-mode-map
-               ("w" . elfeed-show-yank)))
+               ("w" . elfeed-show-yank)
+               ("l" . hk/elfeed-show-link-title)
+               ("v" . hk/elfeed-show-quick-url-note)))
     #+end_src
 
 **** Elfeed org
