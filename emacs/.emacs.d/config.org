@@ -458,8 +458,8 @@
        (tool-bar-mode -1)
      #+END_SRC
 
-**** Scrollbar
-     Removing scrollbar.
+**** Scroll-bar
+***** Removing scroll-bar.
      #+BEGIN_SRC emacs-lisp
        (when (fboundp 'set-scroll-bar-mode)
          (set-scroll-bar-mode nil))
@@ -470,8 +470,17 @@
        (add-hook 'after-make-frame-functions 'qk/disable-scroll-bars)
      #+END_SRC
 
-**** Menubar
-     Disabling the menubar, prior to tab-mode-line configuration.
+***** Smooth scrolling
+      Emacs works with the old graphics drivers, which turns its graphical support into a mess. There has been some efforts in making the old bovine better, but at the moment, we can only hope to remedy the smooth scrolling problem (which has also been called pixel scrolling) with packages trying to make the behavior better.
+      #+begin_src emacs-lisp
+        (use-package good-scroll
+          :straight t
+          :config (good-scroll-mode 1))
+      #+end_src
+
+
+**** Menu-bar
+     Disabling the menu-bar, prior to tab-mode-line configuration.
      #+BEGIN_SRC emacs-lisp
        (menu-bar-mode -1)
      #+END_SRC
@@ -486,7 +495,6 @@
     #+BEGIN_SRC emacs-lisp
       (setq-default indent-tabs-mode nil)
       (setq-default tab-width 4)
-      ;; (setq indent-line-function 'insert-tab)
     #+END_SRC
 
 *** Markdown
@@ -1050,6 +1058,7 @@
                                   (org-agenda-files :maxlevel . 5)
                                   (org-book-list-file :maxlevel . 2)))
        org-src-fontify-natively t
+       ;; org-src-preserve-indentation t
        org-columns-default-format "%50ITEM(Task) %10Effort{:} %10CLOCKSUM"
        org-clock-out-remove-zero-time-clocks t
        org-clock-out-when-done t
