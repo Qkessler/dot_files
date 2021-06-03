@@ -1,4 +1,6 @@
 #+STARTUP: showeverything
+#+PROPERTY: header-args :results none
+
 * Emacs configuration
 ** Themes
 *** Initial theme list
@@ -1570,6 +1572,12 @@
                         (indent-to 4))))))
     #+END_SRC
 
+    Remove the anoying warnings when you compile a source block. 
+    #+begin_src emacs-lisp
+      (use-package ob
+        :custom (org-confirm-babel-evaluate nil))
+    #+end_src
+
 *** Archiving of files
     Creating function which archives all files which contain only done (not necessarily
     in a DONE state.) items, with the intention of making org-agenda quicker to proccess.
@@ -2321,6 +2329,13 @@
     #+end_src
 
 ** Extra
+*** Emacs everywhere
+    There have been multiple implementations trying to get the maximum out of text-areas using Emacs. It is key to have set up the emacsclient (as it is my case) in order to call the (emacs-everywhere) function. I'm using [[https://github.com/tecosaur/emacs-everywhere][Tecosaur's version]] instead of [[https://github.com/zachcurry/emacs-anywhere][zachcurry/emacs-anywhere]] because I find the implementation to be cleaner in the first one.
+    #+begin_src emacs-lisp
+      (use-package emacs-everywhere
+        :straight t)
+    #+end_src
+    
 *** Circe
     Circe is a Client for IRC in Emacs. It tries to have sane defaults, and integrates well with the rest of the editor, using standard Emacs key bindings and indicating activity in channels in the status bar so it stays out of your way unless you want to use it.
     #+begin_src emacs-lisp
