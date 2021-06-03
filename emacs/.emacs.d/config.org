@@ -140,6 +140,20 @@
        (setq auto-save-list-file-prefix (no-littering-expand-var-file-name "auto-saves/sessions/")
              auto-save-file-name-transforms `((".*" ,(no-littering-expand-var-file-name "auto-saves/") t)))
      #+end_src
+
+***** auto-save on focus change
+      Xah-lee on his blog [[http://ergoemacs.org/emacs/emacs_auto_save.html][Ergoemacs]] talks about saving all the unsaved files when the focus is changed from the frame, which seems like a clever solution and it doesn't really hurt to have.
+      #+begin_src emacs-lisp
+        (use-package emacs
+          :init
+          (defun xah/save-all-unsaved ()
+            "Save all unsaved files. no ask."
+            (interactive)
+            (save-some-buffers t))
+          :config
+          (add-function :after after-focus-change-function #'xah/save-all-unsaved))
+      #+end_src
+
 **** Lockfiles and versions
      configuration of lockfiles and version control for files,
      the intention this modification is the clean workspace directories.
