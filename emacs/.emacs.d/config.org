@@ -935,6 +935,14 @@
           :bind ("C-c p" . consult-projectile))
       #+end_src
 
+***** Consult-lsp
+      Helm and Ivy users have extra commands that leverage lsp-mode extra information, let’s try to mimic a few features of helm-lsp and lsp-ivy in consult workflow. =consult-lsp= adds the two following functions: =consult-lsp-diagnostics= and =consult-lsp-symbols=, which can be bound to default lsp-mode-map commands.
+      #+begin_src emacs-lisp
+        (use-package consult-lsp
+          :straight t
+          :bind (:map lsp-mode-map
+                      ([remap xref-find-apropos] . consult-lsp-symbols)))
+      #+end_src
 **** Embark
      This package provides a sort of right-click contextual menu for Emacs, accessed through the embark-act command (which you should bind to a convenient key), offering you relevant actions to use on a target determined by the context:
 
