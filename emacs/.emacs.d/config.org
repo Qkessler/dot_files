@@ -2129,8 +2129,6 @@
             (impatient-mode)
             (imp-visit-buffer))) 
       #+end_src
-
-
       
 ***** lsp-ui
       Better ui for lsp-mode, adding el-doc.
@@ -2202,8 +2200,7 @@
           :custom (python-shell-interpreter "python3"))
       #+end_src
 
-      Adding pip-requirements in order to benefit from syntax
-      and completion for pip requirements files.
+      Adding pip-requirements in order to benefit from syntax and completion for pip requirements files.
       #+begin_src emacs-lisp
         (use-package pip-requirements
           :demand t
