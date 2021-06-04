@@ -1,9 +1,0 @@
-#!/bin/bash
-source ~/.profile
-COMMITLINT_MESSAGE=$(commitlint --config ~/.commitlintrc.js < $1)
-status=$?
-if [ $status -gt 0 ]
-then
-        echo "$COMMITLINT_MESSAGE"
-fi
-exit $status
