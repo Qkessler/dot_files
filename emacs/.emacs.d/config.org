@@ -2058,8 +2058,24 @@
         (use-package treemacs-projectile
           :straight t)
       #+end_src
+
+**** Tree-sitter-mode
+     Tree-sitter is a parser generator tool and an incremental parsing library. It can build a concrete syntax tree for a source file and efficiently update the syntax tree as the source file is edited. It could be the next generation of sintax parsers, as it has been really accepted by the community and the Github's Atom team has been working on implementing a ton of languages.
+
+     Even though support has been scarce for the last months, the =emacs-tree-sitter= package now supports most of the most I work with, making the experience snappier, specially with big buffers. It doesn't really hurt to try, considering the sintax-highlighting already provided by =font-lock-mode=, which is not specially fast (it is regex based).
+
+     With the following documenation, tree-sitter-hl-mode will be enabled on all supported major modes, and you will be start to benefit from incremental parsing.
+     #+begin_src emacs-lisp
+       (use-package tree-sitter
+         :straight t)
+       (use-package tree-sitter-langs
+         :straight t
+         :hook (tree-sitter-after-on . tree-sitter-hl-mode)
+         :init (global-tree-sitter-mode))
+     #+end_src
      
 **** lsp-mode
+     Client for Language Server Protocol (v3.14). lsp-mode aims to provide IDE-like experience by providing optional integration with the most popular Emacs packages.
      #+BEGIN_SRC emacs-lisp
        (use-package lsp-mode
          :straight t
@@ -2187,11 +2203,8 @@
       #+end_src
 
 ***** C# programming
-      C# still doens't have its own mode in emacs, we need to install an external package. I will be using lsp-mode for completion, but Emacs needs the csharp-mode support
+      C# still doens't have its own mode in emacs, we need to install an external package. I will be using lsp-mode for completion, but Emacs needs the csharp-mode support, for syntax highlighting and more, which uses [[*Tree-sitter-mode][Tree-sitter-mode]].
       #+begin_src emacs-lisp
-        (use-package tree-sitter :straight t)
-        (use-package tree-sitter-langs :straight t)
-
         (use-package csharp-mode
           :straight t
           :config
@@ -2199,7 +2212,6 @@
       #+end_src
     
 ***** Web programming
-
 ****** CSS
        Css programming is helped with the lsp-mode server: css-ls, installed with
        the command M-x lsp-install-server RET css-ls RET.
@@ -2209,7 +2221,6 @@
          (use-package rainbow-mode
            :straight t)
        #+end_src
-
 
 ****** HTML
        Exactly the same with the html server, installed with lsp-install-server: html-ls.
