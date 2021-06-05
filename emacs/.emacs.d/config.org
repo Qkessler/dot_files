@@ -991,6 +991,15 @@
           (embark-collect-mode . consult-preview-at-point-mode))
       #+end_src
 
+**** Mediator
+     Emacs open-with dialog for opening files in mime-type fitting application. This package uses xdg mime type information (which works only on freedesktops like those on GNU/linux) to present an open-with menu for opening files in an external application as a separate process. Additionally it provides some handy tools to associate applications with mime-types.
+     #+begin_src emacs-lisp
+       (use-package mediator
+         :straight (mediator :type git :host github :repo "dalanicolai/mediator")
+         :bind (:map embark-file-map
+                     ("o" . mediator-open-file)))
+     #+end_src
+
 **** Affe
      Affe is another package from the great =minad=, which keeps coming out with these amazing integrations to the emacs default functionality, improving the performance out of the park. In this case, he is trying to come up with a replacement to the commonly known fzf.el and fuzzy-find.el modes, which emulate fuzzy find matching running fzf in an emacs terminal process.
 
