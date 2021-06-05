@@ -2162,6 +2162,19 @@
                  (lambda () (require 'ccls) (lsp-deferred))))
       #+END_SRC
 
+****** Keybindings
+       Disable some keybindings. For some reason c-mode, c++-mode binds the default keys like TAB, RET and more to their own changes. I don't really like that modes change some of the default keys.
+       #+begin_src emacs-lisp
+         (use-package cc-mode
+           :bind
+           (:map c-mode-base-map
+                 ("TAB" . nil))
+           (:map c-mode-map
+                 ("TAB" . nil))
+           (:map c++-mode-map
+                 ("TAB" . nil)))
+       #+end_src
+
 ***** Dart/Flutter programming
       #+BEGIN_SRC emacs-lisp
         (use-package lsp-dart 
