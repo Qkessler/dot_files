@@ -476,15 +476,15 @@
 
 **** Scroll-bar
 ***** Removing scroll-bar.
-     #+BEGIN_SRC emacs-lisp
-       (when (fboundp 'set-scroll-bar-mode)
-         (set-scroll-bar-mode nil))
-       (defun qk/disable-scroll-bars (frame)
-         (modify-frame-parameters frame
-                                  '((vertical-scroll-bars . nil)
-                                    (horizontal-scroll-bars . nil))))
-       (add-hook 'after-make-frame-functions 'qk/disable-scroll-bars)
-     #+END_SRC
+      #+BEGIN_SRC emacs-lisp
+        (when (fboundp 'set-scroll-bar-mode)
+          (set-scroll-bar-mode nil))
+        (defun qk/disable-scroll-bars (frame)
+          (modify-frame-parameters frame
+                                   '((vertical-scroll-bars . nil)
+                                     (horizontal-scroll-bars . nil))))
+        (add-hook 'after-make-frame-functions 'qk/disable-scroll-bars)
+      #+END_SRC
 
 ***** Smooth scrolling
       Emacs works with the old graphics drivers, which turns its graphical support into a mess. There has been some efforts in making the old bovine better, but at the moment, we can only hope to remedy the smooth scrolling problem (which has also been called pixel scrolling) with packages trying to make the behavior better.
@@ -850,7 +850,9 @@
      #+begin_src emacs-lisp
        (use-package marginalia
          :straight t
-         :init (marginalia-mode))
+         :init (marginalia-mode)
+         :config
+         (add-to-list 'marginalia-prompt-categories '("tab by name" . tab)))
      #+end_src
 
 **** Consult
@@ -964,6 +966,17 @@
            "Run `magit-status` on repo containing the embark target."
            (interactive "GFile: ")
            (magit-status (locate-dominating-file file ".git")))
+         (defun oa/select-tab-by-name (tab)
+           (interactive
+            (list
+             (let ((tab-list (or (mapcar #'(lambda (tab) (cdr (assq 'name tab)))
+                                         (tab-bar-tabs))
+                                 (user-error "No tabs found"))))
+               (consult--read tab-list
+                              :prompt "Tabs: "
+                              :category 'tab))))
+           (tab-bar-select-tab-by-name tab))
+
          ;; Optionally replace the key help with a completing-read interface
          (setq prefix-help-command #'embark-prefix-help-command)
          (setq embark-action-indicator
@@ -976,7 +989,22 @@
          (add-to-list 'display-buffer-alist
                       '("\\`\\*Embark Collect \\(Live\\|Completions\\)\\*"
                         nil
-                        (window-parameters (mode-line-format . none)))))
+                        (window-parameters (mode-line-format . none))))
+         (embark-define-keymap embark-tab-actions
+           "Keymap for actions for tab-bar tabs (when mentioned by name)."
+           ("s" oa/select-tab-by-name)
+           ("r" tab-bar-rename-tab-by-name)
+           ("k" tab-bar-close-tab-by-name))
+
+         (add-to-list 'embark-keymap-alist '(tab . embark-tab-actions)))
+
+       (use-package tab-bar
+         :custom
+         (tab-bar-close-button-show nil)
+         (tab-bar-new-button-show nil)
+         (tab-bar-show nil)
+         :bind
+         ("C-x t RET" . oa/select-tab-by-name))
      #+end_src
 
 ***** Embark-consult
