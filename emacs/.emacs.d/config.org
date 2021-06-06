@@ -2381,6 +2381,17 @@
     #+end_src
 
 ** Extra
+*** Typo.el
+    =typo-mode= is a buffer-specific minor mode that will change a number of normal keys to make them insert typographically useful unicode characters. Some of those keys can be used repeatedly to cycle through variations. This includes in particular quotation marks and dashes.
+
+    With typo.el we can insert different unicode characters without peeking into the default C-x 8 prefix map, which is cumbersome to remember.
+    #+begin_src emacs-lisp
+      (use-package typo
+        :straight t
+        :hook (text-mode . typo-mode)
+        :config (typo-global-mode t))
+    #+end_src
+
 *** Emacs everywhere
     There have been multiple implementations trying to get the maximum out of text-areas using Emacs. It is key to have set up the emacsclient (as it is my case) in order to call the (emacs-everywhere) function. I'm using [[https://github.com/tecosaur/emacs-everywhere][Tecosaur's version]] instead of [[https://github.com/zachcurry/emacs-anywhere][zachcurry/emacs-anywhere]] because I find the implementation to be cleaner in the first one.
     #+begin_src emacs-lisp
