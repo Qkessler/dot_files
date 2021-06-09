@@ -966,6 +966,7 @@
            "Run `magit-status` on repo containing the embark target."
            (interactive "GFile: ")
            (magit-status (locate-dominating-file file ".git")))
+         (require 'consult)
          (defun oa/select-tab-by-name (tab)
            (interactive
             (list
@@ -2128,7 +2129,7 @@
          :hook
          (mhtml-mode . lsp-deferred)
          (css-mode . lsp-deferred)
-         (python-mode . lsp-deferred)
+         ;; (python-mode . lsp-deferred)
          (csharp-mode . lsp-deferred)
          (js-mode . lsp-deferred)
          (typescript-mode . lsp-deferred)
@@ -2250,12 +2251,40 @@
           :custom (python-shell-interpreter "python3"))
       #+end_src
 
-      Adding pip-requirements in order to benefit from syntax and completion for pip requirements files.
-      #+begin_src emacs-lisp
-        (use-package pip-requirements
-          :demand t
-          :straight t)  
-      #+end_src
+****** lsp-pyright
+       Need to configure the pyright lsp package to provide the pyright support to python buffers, which seems to be much faster than the other Palantir options.
+       #+begin_src emacs-lisp
+         (use-package lsp-pyright
+           :straight t
+           :hook (python-mode . (lambda ()
+                                  (require 'lsp-pyright)
+                                  (lsp-deferred))))
+       #+end_src
+****** pip-requirements
+       Adding pip-requirements in order to benefit from syntax and completion for pip requirements files.
+       #+begin_src emacs-lisp
+         (use-package pip-requirements
+           :demand t
+           :straight t)  
+       #+end_src
+
+****** pyvenv.el
+       This is a simple global minor mode which will replicate the changes done by virtualenv activation inside Emacs.
+
+       The main entry points are pyvenv-activate, which queries the user for a virtual environment directory to activate, and pyvenv-workon.
+       #+begin_src emacs-lisp
+         (use-package pyvenv
+           :straight t
+           :hook (python-mode . rh/pyvenv-autoload)
+           :init
+           (defun rh/pyvenv-autoload ()
+             (interactive)
+             "auto activate venv directory if exists"
+             (f-traverse-upwards (lambda (path)
+                                   (let ((venv-path (f-expand ".env" path)))
+                                     (when (f-exists? venv-path)
+                                       (pyvenv-activate venv-path)))))))
+       #+end_src
 
 ***** C# programming
       C# still doens't have its own mode in emacs, we need to install an external package. I will be using lsp-mode for completion, but Emacs needs the csharp-mode support, for syntax highlighting and more, which uses [[*Tree-sitter-mode][Tree-sitter-mode]].
@@ -2564,7 +2593,6 @@
          (mu4e-attachment-dir "~/Downloads")
          (mu4e-get-mail-command "mbsync -a")
          (mu4e-change-filenames-when-moving t)
-         ;; (mu4e-completing-read-function 'ivy-completing-read)
          (mu4e-headers-show-threads nil)
          (mu4e-html2text-command 'mu4e-shr2text)
          (mu4e-update-interval (* 5 60))
@@ -2585,6 +2613,7 @@
          (mu4e-view-show-addresses t)
          (mu4e-display-update-status-in-modeline t)
          (mu4e-view-show-images nil)
+         ;; (mu4e-view-use-gnus t)
          (mu4e-context-policy 'pick-first)
          (mu4e-compose-format-flowed t)
          (mu4e-maildir-shortcuts
@@ -2679,6 +2708,7 @@
          (message-default-charset 'utf-8)
          :config (add-to-list 'mm-body-charset-encoding-alist '(utf-8 . base64)))
      #+end_src
+
 **** SMTP
      SMTP configuration in order to be able to send messages via smtp,
      adding the async functionality.
@@ -2692,6 +2722,13 @@
          (message-send-mail-function 'async-smtpmail-send-it))
      #+end_src
 
+**** Icalendar support
+     mu4e provides support for icalendar files, which are defined with the =.ics= extension. In order to benefit from the support, we need to run the gnus-icalendar-setup, which generates the RSVP buttons (accept, tentative, decline) in mu4e. The option =mu4e-view-use-gnus= also should be true.
+     #+begin_src emacs-lisp :tangle no
+       (require 'mu4e-icalendar)
+       (mu4e-icalendar-setup)
+     #+end_src
+     
 *** RSS/Atom feed reader: Elfeed
     Following the need of separating my email in a more organized and
     distraction free way, I found my self looking for a efficient enough
