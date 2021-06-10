@@ -934,7 +934,9 @@
       #+begin_src emacs-lisp
         (use-package consult-projectile
           :straight (consult-projectile :type git :host gitlab :repo "OlMon/consult-projectile")
-          :bind ("C-c p" . consult-projectile))
+          :bind ("C-c p" . consult-projectile)
+          :config (consult-customize
+                   consult-projectile :preview-key (kbd "M-.")))
       #+end_src
 
 ***** Consult-lsp
