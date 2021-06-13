@@ -935,7 +935,7 @@
         (use-package consult-projectile
           :straight (consult-projectile :type git :host github :repo "Qkessler/consult-projectile")
           :bind ("C-c p" . consult-projectile)
-          :custom (consult-projectile-preview-key (kbd "M-.")))
+          :config (setq consult-projectile-preview-key (kbd "M-.")))
       #+end_src
 
 ***** Consult-lsp
