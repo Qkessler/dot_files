@@ -1504,12 +1504,12 @@
          "org-agenda commands that I use, organized with the transient model, which I find cleaner and easier to read than hydra."
          [
           ["Entry"
-           ("h A" "Archive default" org-agenda-archive-default)
-           ("h k" "Remove entry" org-agenda-kill)
-           ("h r" "Refile" org-agenda-refile)
-           ("h p" "Set priority" org-agenda-priority)
-           ("h :" "Set tags" org-agenda-set-tags)
-           ("h t" "Set state" org-agenda-todo)
+           ("e A" "Archive default" org-agenda-archive-default)
+           ("e k" "Remove entry" org-agenda-kill)
+           ("e r" "Refile" org-agenda-refile)
+           ("e p" "Set priority" org-agenda-priority)
+           ("e :" "Set tags" org-agenda-set-tags)
+           ("e t" "Set state" org-agenda-todo)
            ("d d" "Set deadline" org-agenda-deadline)
            ("d t" "Date prompt" org-agenda-date-prompt)
            ("d s" "Schedule" org-agenda-schedule)
