@@ -488,7 +488,7 @@
 
 ***** Smooth scrolling
       Emacs works with the old graphics drivers, which turns its graphical support into a mess. There has been some efforts in making the old bovine better, but at the moment, we can only hope to remedy the smooth scrolling problem (which has also been called pixel scrolling) with packages trying to make the behavior better.
-      #+begin_src emacs-lisp
+      #+begin_src emacs-lisp :tangle no
         (use-package good-scroll
           :straight t
           :config (good-scroll-mode 1))
@@ -1946,6 +1946,57 @@
         (magit-diff-hide-trailing-cr-characters t))
     #+end_src
 
+*** Transient
+    Transient is the way that Magit recommended for setting keybindings, avoiding the clutter that usually forms when trying to get into complex keybindings with [[*Which key][Which key]]. You have different types of transients: suffix-commands, infix-commands and prefix-commands. The documentation is not really easy to understand, but I modified a help-transient that I found online to fit my needs.
+    #+begin_src emacs-lisp
+      (use-package transient
+        :config (define-transient-command qk/help-transient ()
+        "Help commands that I use. A subset of C-h with others thrown in."
+        ["Help Commands"
+         ["Mode & Bindings"
+          ("m m" "Mode" describe-mode)
+          ("m B" "Major Bindings" which-key-show-full-major-mode)
+          ("m b" "Minor Bindings" which-key-show-full-minor-mode-keymap)
+          ("m t" "Top Bindings  " which-key-show-top-level)
+          ("m w" "Where Is" where-is)
+          ]
+         ["Describe"
+          ("d C" "Command" helpful-command)
+          ("d f" "Function" helpful-function)
+          ("d v" "Variable" helpful-variable)
+          ("d m" "Macro" helpful-macro)
+          ("d k" "Key" helpful-key)
+          ]
+         ["Info on"
+          ("C-c" "M-x function" Info-goto-emacs-command-node)
+          ("C-k" "Emacs Key" Info-goto-emacs-key-command-node)
+          ]
+         ]
+        [
+         ["Internals"
+          ("i I" "Input Method" describe-input-method)
+          ("i G" "Language Env" describe-language-environment)
+          ("i S" "Syntax" describe-syntax)
+          ("i O" "Coding System" describe-coding-system)
+          ("i C-o" "Coding Brief" describe-current-coding-system-briefly)
+          ("i T" "Display Table" describe-current-display-table)
+          ("i e" "Echo Messages" view-echo-area-messages)
+          ("i l" "Lossage" view-lossage)
+          ]
+         ["DWIM"
+          ("." "At Point   " helpful-at-point)
+          ]
+         ["Info Manuals"
+          ("i RET" "Info" info)
+          ("4" "Other Window " info-other-window)
+          ("C-e" "Emacs" info-emacs-manual)
+          ]
+         ])
+        :bind (:map global-map
+                    ("C-h" . qk/help-transient)))
+    #+end_src
+
+    
 ** Project management
    #+BEGIN_SRC emacs-lisp
      (use-package projectile
