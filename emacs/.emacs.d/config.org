@@ -1500,84 +1500,61 @@
 **** org-agenda hydra
      Using the hydra in the hydra wiki page ([[https://github.com/abo-abo/hydra/wiki/Org-agenda][here]]), we get a ton of information that can be used in the org-agenda window. We also inhibit which-key to avoid overcrowding the minibuffer.
      #+begin_src emacs-lisp
-       (defhydra hydra-org-agenda (:pre (setq which-key-inhibit t)
-                                        :post (setq which-key-inhibit nil)
-                                        :hint none)
-         "
-       Org agenda (_q_uit)
-
-       ^Clock^      ^Visit entry^              ^Date^             ^Other^
-       ^-----^----  ^-----------^------------  ^----^-----------  ^-----^---------
-       _ci_ in      _SPC_ in other window      _ds_ schedule      _gr_ reload
-       _co_ out     _TAB_ & go to location     _dd_ set deadline  _._  go to today
-       _cq_ cancel  _RET_ & del other windows  _dt_ timestamp     _gd_ go to date
-       _cj_ jump    _o_   link                 _+_  do later      ^^
-       ^^           ^^                         _-_  do earlier    ^^
-       ^^           ^^                         ^^                 ^^
-       ^View^          ^Filter^                 ^Headline^         ^Toggle mode^
-       ^----^--------  ^------^---------------  ^--------^-------  ^-----------^----
-       _vd_ day        _ft_ by tag              _ht_ set status    _tf_ follow
-       _vw_ week       _fr_ refine by tag       _hk_ kill          _tl_ log
-       _vt_ fortnight  _fc_ by category         _hr_ refile        _ta_ archive trees
-       _vm_ month      _fh_ by top headline     _hA_ archive       _tA_ archive files
-       _vy_ year       _fx_ by regexp           _h:_ set tags      _tr_ clock report
-       _vn_ next span  _fd_ delete all filters  _hp_ set priority  _td_ diaries
-       _vp_ prev span  ^^                       ^^                 ^^
-       _vr_ reset      ^^                       ^^                 ^^
-       ^^              ^^                       ^^                 ^^
-       "
-         ;; Entry
-         ("hA" org-agenda-archive-default)
-         ("hk" org-agenda-kill)
-         ("hp" org-agenda-priority)
-         ("hr" org-agenda-refile)
-         ("h:" org-agenda-set-tags)
-         ("ht" org-agenda-todo)
-         ;; Visit entry
-         ("o"   link-hint-open-link :exit t)
-         ("<tab>" org-agenda-goto :exit t)
-         ("TAB" org-agenda-goto :exit t)
-         ("SPC" org-agenda-show-and-scroll-up)
-         ("RET" org-agenda-switch-to :exit t)
-         ;; Date
-         ("dt" org-agenda-date-prompt)
-         ("dd" org-agenda-deadline)
-         ("+" org-agenda-do-date-later)
-         ("-" org-agenda-do-date-earlier)
-         ("ds" org-agenda-schedule)
-         ;; View
-         ("vd" org-agenda-day-view)
-         ("vw" org-agenda-week-view)
-         ("vt" org-agenda-fortnight-view)
-         ("vm" org-agenda-month-view)
-         ("vy" org-agenda-year-view)
-         ("vn" org-agenda-later)
-         ("vp" org-agenda-earlier)
-         ("vr" org-agenda-reset-view)
-         ;; Toggle mode
-         ("ta" org-agenda-archives-mode)
-         ("tA" (org-agenda-archives-mode 'files))
-         ("tr" org-agenda-clockreport-mode)
-         ("tf" org-agenda-follow-mode)
-         ("tl" org-agenda-log-mode)
-         ("td" org-agenda-toggle-diary)
-         ;; Filter
-         ("fc" org-agenda-filter-by-category)
-         ("fx" org-agenda-filter-by-regexp)
-         ("ft" org-agenda-filter-by-tag)
-         ("fr" org-agenda-filter-by-tag-refine)
-         ("fh" org-agenda-filter-by-top-headline)
-         ("fd" org-agenda-filter-remove-all)
-         ;; Clock
-         ("cq" org-agenda-clock-cancel)
-         ("cj" org-agenda-clock-goto :exit t)
-         ("ci" org-agenda-clock-in :exit t)
-         ("co" org-agenda-clock-out)
-         ;; Other
-         ("q" nil :exit t)
-         ("gd" org-agenda-goto-date)
-         ("." org-agenda-goto-today)
-         ("gr" org-agenda-redo))
+       (transient-define-prefix qk/org-agenda-transient ()
+         "org-agenda commands that I use, organized with the transient model, which I find cleaner and easier to read than hydra."
+         [
+          ["Entry"
+           ("h A" "Archive default" org-agenda-archive-default)
+           ("h k" "Remove entry" org-agenda-kill)
+           ("h r" "Refile" org-agenda-refile)
+           ("h p" "Set priority" org-agenda-priority)
+           ("h :" "Set tags" org-agenda-set-tags)
+           ("h t" "Set state" org-agenda-todo)
+           ("d d" "Set deadline" org-agenda-deadline)
+           ("d t" "Date prompt" org-agenda-date-prompt)
+           ("d s" "Schedule" org-agenda-schedule)
+           ("+" "Next day" org-agenda-do-date-later)
+           ("-" "Previous day" org-agenda-do-date-earlier)
+           ("TAB" "Entry other buffer" org-agenda-goto)
+           ("SPC" "Show entry" org-agenda-show-and-scroll-up)
+           ("RET" "Switch to entry" org-agenda-switch-to)
+           ]
+          ["View"
+           ("v d" "Day view" org-agenda-day-view)
+           ("v w" "Week view" org-agenda-week-view)
+           ("v t" "Fortnight view" org-agenda-fortnight-view)
+           ("v m" "Month view" org-agenda-month-view)
+           ("v y" "Year view" org-agenda-year-view)
+           ("v n" "Next view" org-agenda-later)
+           ("v p" "Previous view" org-agenda-earlier)
+           ("v r" "Reset view" org-agenda-reset-view)
+           ("g d" "Go to date" org-agenda-goto-date)
+           ("g r" "Refresh" org-agenda-redo)
+           ("." "Go to today" org-agenda-goto-today)
+           ]
+          ]
+         [
+          ["Toggle"
+           ("t a" "Archives mode" org-agenda-archives-mode)
+           ("t r" "Clock report mode" org-agenda-clockreport-mode)
+           ("t f" "Follow mode" org-agenda-follow-mode)
+           ("t l" "Log mode" org-agenda-log-mode)
+           ("t d" "Diary" org-agenda-toggle-diary)
+           ]
+          ["Filter"
+           ("f c" "By category" org-agenda-filter-by-category)
+           ("f x" "By regexp" org-agenda-filter-by-regexp)
+           ("f t" "By tag" org-agenda-filter-by-tag)
+           ("f d" "Remove filters" org-agenda-filter-remove-all)
+           ]
+          ["Clock"
+           ("c q" "Cancel" org-agenda-clock-cancel)
+           ("c j" "Go to clock" org-agenda-clock-goto)
+           ("c i" "Clock in" org-agenda-clock-in)
+           ("c o" "Clock out" org-agenda-clock-out)
+           ("c p" "Clock pomodoro" org-pomodoro)
+           ]
+          ])
      #+end_src
 
 **** org-agenda-bulk-action hydra
@@ -1615,7 +1592,7 @@
        (add-hook 'org-agenda-mode-hook
                  (lambda ()
                    (local-set-key (kbd "r") 'org-agenda-refile)
-                   (local-set-key (kbd "?") 'hydra-org-agenda/body)))
+                   (local-set-key (kbd "?") 'qk/org-agenda-transient)))
      #+END_SRC
 
 *** Org source blocks
