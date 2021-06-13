@@ -2277,7 +2277,17 @@
       in your path, check the "echo $PATH" output.
       #+begin_src emacs-lisp
         (use-package python
-          :custom (python-shell-interpreter "python3"))
+          :custom
+          (python-shell-interpreter "python3")
+          (compilation-ask-about-save nil)
+          (compilation-scroll-output t)
+          :init
+          (defun mk/compile-python-buffer ()
+            "Use compile to run python programs."
+            (interactive)
+            (compile (concat "python3 " (buffer-name))))
+          :bind (:map python-mode-map
+                      ("C-c C-u" . mk/compile-python-buffer)))
       #+end_src
 
 ****** lsp-pyright
