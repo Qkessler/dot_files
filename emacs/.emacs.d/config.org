@@ -933,10 +933,8 @@
       Consult-projectile is a package that is still in development, adding this here only means I'm interested in having something of the sort. I might need to do a more in-depth search a few weeks forward.
       #+begin_src emacs-lisp
         (use-package consult-projectile
-          :straight (consult-projectile :type git :host gitlab :repo "OlMon/consult-projectile")
-          :bind ("C-c p" . consult-projectile)
-          :config (consult-customize
-                   consult-projectile :preview-key (kbd "M-.")))
+          :straight (consult-projectile :type git :host github :repo "Qkessler/consult-projectile")
+          :bind ("C-c p" . consult-projectile))
       #+end_src
 
 ***** Consult-lsp
@@ -1950,7 +1948,7 @@
     Transient is the way that Magit recommended for setting keybindings, avoiding the clutter that usually forms when trying to get into complex keybindings with [[*Which key][Which key]]. You have different types of transients: suffix-commands, infix-commands and prefix-commands. The documentation is not really easy to understand, but I modified a help-transient that I found online to fit my needs.
     #+begin_src emacs-lisp
       (use-package transient
-        :config (define-transient-command qk/help-transient ()
+        :config (transient-define-prefix qk/help-transient ()
         "Help commands that I use. A subset of C-h with others thrown in."
         ["Help Commands"
          ["Mode & Bindings"
