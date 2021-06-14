@@ -2359,6 +2359,13 @@
        #+end_src
 
        
+****** PHP
+       PHP programming is not included in the default emacs implementation. For that reason, we can use the wonderful =php-mode= package, which is everything we can look for for a major mode.
+       #+begin_src emacs-lisp
+         (use-package php-mode
+           :straight t)
+       #+end_src
+       
 ****** Emmet-mode
        Better completion for html tags, very good documentation. This package is configured with my fork, as emmet-mode's default repo has problems using the =cl= package, instead of the updated =cl-lib=.
        #+BEGIN_SRC emacs-lisp
