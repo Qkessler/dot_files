@@ -55,8 +55,8 @@
     The Gruvbox theme has everything that I love about Emacs, it is the theme that I have been working with for the longest time and I couldn't be happier about it. The reason I have the solarized theme under it is because I'm trying out a function to change the theme depending on the hour of the day.
     #+begin_src emacs-lisp
       (use-package gruvbox-theme
-        :straight (gruvbox-theme :type git :host github :repo "Qkessler/emacs-theme-gruvbox"))
-        ;; :config (add-to-list 'qk/themes-list 'gruvbox-dark))
+        :straight (gruvbox-theme :type git :host github :repo "Qkessler/emacs-theme-gruvbox")
+        :config (add-to-list 'qk/themes-list 'gruvbox-dark-medium))
     #+end_src
 
 *** Solarized theme
@@ -91,7 +91,7 @@
         (solarized-height-plus-4 1.0)
         :config
         (load-theme 'solarized-light-high-contrast t)
-        (add-to-list 'qk/themes-list 'solarized-dark-high-contrast)
+        ;; (add-to-list 'qk/themes-list 'solarized-dark-high-contrast)
         (add-to-list 'qk/themes-list 'solarized-light-high-contrast))
     #+end_src
 
@@ -2124,6 +2124,7 @@
      #+begin_src emacs-lisp
        (use-package treemacs
          :straight t
+         :init (defvar treemacs-no-load-time-warnings t)
          :bind (:map global-map (("C-c T" . treemacs)
                                  ("C-c t" . treemacs-select-window))))
      #+end_src
@@ -2662,7 +2663,6 @@
          (mu4e-view-show-addresses t)
          (mu4e-display-update-status-in-modeline t)
          (mu4e-view-show-images nil)
-         ;; (mu4e-view-use-gnus t)
          (mu4e-context-policy 'pick-first)
          (mu4e-compose-format-flowed t)
          (mu4e-maildir-shortcuts
