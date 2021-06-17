@@ -1,7 +1,7 @@
 IMAPAccount gmail-personal
 Host imap.gmail.com
 User qkessler@gmail.com
-PassCmd "lpass show -p as-qkessler"
+PassCmd "pass show smtp.gmail.com/qkessler@gmail.com"
 PipelineDepth 50
 SSLType IMAPS
 CertificateFile /etc/ssl/certs/ca-certificates.crt
@@ -24,7 +24,7 @@ SyncState *
 IMAPAccount gmail-work
 Host imap.gmail.com
 User enrique.kesslerm@gmail.com
-PassCmd "lpass show -p as-enrique.kesslerm"
+PassCmd "pass show smtp.gmail.com/enrique.kesslerm@gmail.com"
 PipelineDepth 50
 SSLType IMAPS
 CertificateFile /etc/ssl/certs/ca-certificates.crt
@@ -47,7 +47,7 @@ SyncState *
 IMAPAccount umu
 Host imap.um.es
 User enrique.kesslerm@um.es
-PassCmd "lpass show -p entrada.um.es"
+PassCmd "pass show smtp.um.es/enrique.kesslerm@um.es"
 PipelineDepth 50
 SSLType IMAPS
 CertificateFile /etc/ssl/certs/ca-certificates.crt

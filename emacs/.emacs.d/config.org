@@ -55,7 +55,7 @@
     The Gruvbox theme has everything that I love about Emacs, it is the theme that I have been working with for the longest time and I couldn't be happier about it. The reason I have the solarized theme under it is because I'm trying out a function to change the theme depending on the hour of the day.
     #+begin_src emacs-lisp
       (use-package gruvbox-theme
-        :straight (gruvbox-theme :type git :host github :repo "Qkessler/emacs-theme-gruvbox")
+        :straight (gruvbox-theme :type git :host github :repo "greduan/emacs-theme-gruvbox")
         :config (add-to-list 'qk/themes-list 'gruvbox-dark-medium))
     #+end_src
 
@@ -116,6 +116,20 @@
 
 
 ** Better defaults
+*** Password manager
+    Instead of using the default authinfo password manager, which defaults to the =.authinfo.gpg= file, configure Emacs to use [[https://www.passwordstore.org/][Pass: The Standard Unix Password Manager]].
+    #+begin_src emacs-lisp
+      (use-package auth-source-pass
+        :config (auth-source-pass-enable))
+    #+end_src
+
+    The previous snippet configures Emacs to be able to access the gpg files when a password is required. There is also a pass major mode to insert and copy passwords from Emacs.
+    #+begin_src emacs-lisp
+      (use-package pass
+        :straight t
+        :custom (pass-username-field "login"))
+    #+end_src
+
 *** Keep emacs clean
     This is the section created with the intention of make emacs create the files needed, but keep
     the directories clean, saving the backup files in set locations.
@@ -248,6 +262,7 @@
      #+BEGIN_SRC emacs-lisp
        (use-package doom-modeline
          :straight t
+         :custom (doom-modeline-mu4e t)
          :config
          (progn
            (doom-modeline-mode 1)
@@ -257,8 +272,7 @@
          "Whether show `all-the-icons' or not.
 
                Non-nil to show the icons in mode-line.
-               The icons may not be showed correctly in terminal and on Windows."
-         )
+               The icons may not be showed correctly in terminal and on Windows.")
        (setq doom-modeline-icon t)
        (defface egoge-display-time
          '((((type x w32 mac))
@@ -1097,10 +1111,6 @@
         (lastpass-user "qkessler@gmail.com")
         (lastpass-trust-login t)
         :bind-keymap("C-c l p" . qk/lastpass-global-map))
-
-      (if (boundp 'auth-source-backend-parser-functions)
-          (add-hook 'auth-source-backend-parser-functions #'lastpass-auth-source-backend-parse)
-        (advice-add 'auth-source-backend-parse :before-until #'lastpass-auth-source-backend-parse))
     #+end_src
 
 ** Org-mode
@@ -2737,6 +2747,25 @@
          (add-to-list 'mu4e-view-actions '("view in browser" . mu4e-action-view-in-browser)))
 
      #+end_src
+
+***** mu4e-alert
+      mu4e-alert is an Emacs extension providing desktop notifications for mu4e, additionally it can display the number of unread emails in the mode-line. This is a test, I might need to disable it manually for concentration times.
+      #+begin_src emacs-lisp
+        (use-package mu4e-alert
+          :straight t
+          :custom
+          (mu4e-alert-set-default-style 'libnotify)
+          (mu4e-alert-interesting-mail-query
+              (concat
+               "flag:unread"
+               " AND NOT flag:trashed"
+               " AND maildir:"
+               "/Gmail/Work/[Gmail]/All Mail"))
+           :config
+           (add-hook 'after-init-hook #'mu4e-alert-enable-notifications)
+           (add-hook 'after-init-hook #'mu4e-alert-enable-mode-line-display))
+      #+end_src
+
 **** Message package
      Adding the configuration for the message package, in order to allow for
      easier sending and composing of emails. The package comes already installed
