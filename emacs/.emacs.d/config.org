@@ -1095,30 +1095,6 @@
          (vterm-toggle-hide-method 'delete-window))
      #+end_src
 
-*** Lastpass
-    Lastpass-cli is used in order to avoid needing to use authinfo files
-    when configuring both email and elfeed passwords. I fully trust LastPass'
-    security and they have not had any recent breaches (last in 2015, encrypted
-    further with 100k rounds). I will be using the lastpass package on melpa,
-    which makes easier the process of using auth-source with the cli tool.
-    #+begin_src emacs-lisp
-      (defvar qk/lastpass-global-map
-        (let ((map (make-sparse-keymap)))
-          (define-key map "l" 'lastpass-list-all)
-          (define-key map "p" 'lastpass-getpass) map)
-        "Key map to scope `lastpass' bindings for global usage.
-                       The idea is to bind this to a prefix sequence, so that its
-                       defined keys follow the pattern of <PREFIX> <KEY>.")
-
-      (use-package lastpass
-        :straight t
-        :demand t
-        :custom
-        (lastpass-user "qkessler@gmail.com")
-        (lastpass-trust-login t)
-        :bind-keymap("C-c l p" . qk/lastpass-global-map))
-    #+end_src
-
 ** Org-mode
 *** Keybindings
     Keybindings for org-mode as well as better defaults. Not in use-package format yet.
@@ -2507,7 +2483,7 @@
     =crdt.el= is a real-time collaborative editing environment for Emacs using Conflict-free Replicated Data Types. A shared session is a place that can contains multiple buffers (or files), and multiple users can join to collaboratively edit those buffers (or files). Think about a meeting room with some people working together on some papers.
 
     Live share is one of the key features of the lastest VSCode build, and this is one of the first options to achieve the same using Emacs.
-    #+begin_src emacs-lisp
+    #+begin_src emacs-lisp :tangle no
       (use-package crdt)
     #+end_src
 
@@ -2560,12 +2536,8 @@
         (circe-color-nicks-everywhere t)
         :init
         (defun qk/lpass-fetch-libera-password (server)
-          "Returns Libera's NickServer password if the user is logged-in.
-       Prompt the login process if she isn't. "
-          (unless (lastpass-logged-in-p)
-            (lastpass-login)
-            (error "LastPass: Not logged in, log in and retry"))
-          (lastpass-getpass "libera.chat"))
+          "Returns Libera's NickServer password"
+          (password-store-get "libera.chat"))
         :config
         (defun qk/irc ()
           "Connect to all my IRC servers after enabling contrib modules."
