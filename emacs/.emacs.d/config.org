@@ -2503,6 +2503,15 @@
         :straight t)
     #+end_src
 
+*** Live share
+    =crdt.el= is a real-time collaborative editing environment for Emacs using Conflict-free Replicated Data Types. A shared session is a place that can contains multiple buffers (or files), and multiple users can join to collaboratively edit those buffers (or files). Think about a meeting room with some people working together on some papers.
+
+    Live share is one of the key features of the lastest VSCode build, and this is one of the first options to achieve the same using Emacs.
+    #+begin_src emacs-lisp
+      (use-package crdt)
+    #+end_src
+
+
 ** Extra
 *** Typo.el
     =typo-mode= is a buffer-specific minor mode that will change a number of normal keys to make them insert typographically useful unicode characters. Some of those keys can be used repeatedly to cycle through variations. This includes in particular quotation marks and dashes.
