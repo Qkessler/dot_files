@@ -1518,7 +1518,7 @@
            ("SPC" "Show entry" org-agenda-show-and-scroll-up)
            ("RET" "Switch to entry" org-agenda-switch-to)
            ("s o" "Show org calendar" qk/open-org-calendar)
-           ("s q" "Show qkessler calendar" qk/open-qkessler-gcal)
+           ("s q" "Show qkessler calendar" qk/open-qk-gcal)
            ("s e" "Show enrique.kesslerm calendar" qk/open-ekm-gcal)
            ]
           ["View"
