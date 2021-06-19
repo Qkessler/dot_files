@@ -1510,8 +1510,10 @@
            ("d d" "Set deadline" org-agenda-deadline)
            ("d t" "Date prompt" org-agenda-date-prompt)
            ("d s" "Schedule" org-agenda-schedule)
-           ("+" "Next day" org-agenda-do-date-later)
-           ("-" "Previous day" org-agenda-do-date-earlier)
+           ("d +" "Next day" org-agenda-do-date-later)
+           ("d -" "Previous day" org-agenda-do-date-earlier)
+           ]
+          ["Show"
            ("TAB" "Entry other buffer" org-agenda-goto)
            ("SPC" "Show entry" org-agenda-show-and-scroll-up)
            ("RET" "Switch to entry" org-agenda-switch-to)
