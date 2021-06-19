@@ -56,7 +56,7 @@
     #+begin_src emacs-lisp
       (use-package gruvbox-theme
         :straight (gruvbox-theme :type git :host github :repo "greduan/emacs-theme-gruvbox"))
-        ;; :config (add-to-list 'qk/themes-list 'gruvbox-dark-medium))
+      ;; :config (add-to-list 'qk/themes-list 'gruvbox-dark-medium))
     #+end_src
 
 *** Solarized theme
@@ -337,7 +337,8 @@
          :config (defhydra+ hydra:bufler ()
                    ("o" #'delete-other-windows "Full screen"))
          :bind (:map bufler-list-mode-map
-                     ("o" . delete-other-windows)))
+                     ("o" . delete-other-windows)
+                     ("u" . magit-section-up)))
      #+end_src
 
 
@@ -1018,10 +1019,10 @@
                         nil
                         (window-parameters (mode-line-format . none))))
          (embark-define-keymap embark-tab-actions
-           "Keymap for actions for tab-bar tabs (when mentioned by name)."
-           ("s" oa/select-tab-by-name)
-           ("r" tab-bar-rename-tab-by-name)
-           ("k" tab-bar-close-tab-by-name))
+                               "Keymap for actions for tab-bar tabs (when mentioned by name)."
+                               ("s" oa/select-tab-by-name)
+                               ("r" tab-bar-rename-tab-by-name)
+                               ("k" tab-bar-close-tab-by-name))
 
          (add-to-list 'embark-keymap-alist '(tab . embark-tab-actions)))
 
@@ -1494,8 +1495,7 @@
 
     
 
-**** org-agenda hydra
-     Using the hydra in the hydra wiki page ([[https://github.com/abo-abo/hydra/wiki/Org-agenda][here]]), we get a ton of information that can be used in the org-agenda window. We also inhibit which-key to avoid overcrowding the minibuffer.
+**** org-agenda transient
      #+begin_src emacs-lisp
        (transient-define-prefix qk/org-agenda-transient ()
          "org-agenda commands that I use, organized with the transient model, which I find cleaner and easier to read than hydra."
@@ -1555,34 +1555,6 @@
            ]
           ])
      #+end_src
-
-**** org-agenda-bulk-action hydra
-     Instead of having the results in the same line and without any highlighting, you can use Hydra to highlight the different options and overall make the process easier.
-     #+begin_src emacs-lisp :tangle no
-       (defhydra hydra-oa-bulk-action (:pre (setq which-key-inhibit t)
-                                            :post (setq which-key-inhibit nil)
-                                            :hint none)
-         "
-            Org agenda bulk action (_q_uit)
-
-            ^Actions^    
-            ^-----^----  
-            [_t_]odo     
-            [_+_] add tag
-            [_s_]chedule
-            [_d_]eadline
-            [_r_]efile
-            "
-         ;; Actions
-         ("t" org-agenda-todo)
-         ("+" org-agenda-set-tags)
-         ("s" org-agenda-schedule)
-         ("d" org-agenda-deadline)
-         ("r" org-agenda-refile)
-         ;; Other
-         ("q" nil :exit t))
-     #+end_src
-
 
 **** org-agenda keybindings
      Adding custom agenda commands, with the intention of making the refiling and
@@ -2074,23 +2046,23 @@
          :straight t)
 
        (flycheck-define-checker proselint
-         "A linter for prose."
-         :command ("proselint" source-inplace)
-         :error-patterns
-         ((warning line-start (file-name) ":" line ":" column ": "
-                   (id (one-or-more (not (any " "))))
-                   (message) line-end))
-         :modes (text-mode markdown-mode gfm-mode org-mode))
+                                "A linter for prose."
+                                :command ("proselint" source-inplace)
+                                :error-patterns
+                                ((warning line-start (file-name) ":" line ":" column ": "
+                                          (id (one-or-more (not (any " "))))
+                                          (message) line-end))
+                                :modes (text-mode markdown-mode gfm-mode org-mode))
        (add-to-list 'flycheck-checkers 'proselint)
 
        (flycheck-define-checker vale
-         "A checker for prose"
-         :command ("vale" "--output" "line"
-                   source)
-         :standard-input nil
-         :error-patterns
-         ((error line-start (file-name) ":" line ":" column ":" (id (one-or-more (not (any ":")))) ":" (message) line-end))
-         :modes (markdown-mode org-mode text-mode))
+                                "A checker for prose"
+                                :command ("vale" "--output" "line"
+                                          source)
+                                :standard-input nil
+                                :error-patterns
+                                ((error line-start (file-name) ":" line ":" column ":" (id (one-or-more (not (any ":")))) ":" (message) line-end))
+                                :modes (markdown-mode org-mode text-mode))
        (add-to-list 'flycheck-checkers 'vale 'append)
      #+end_src
 
