@@ -1517,6 +1517,9 @@
            ("TAB" "Entry other buffer" org-agenda-goto)
            ("SPC" "Show entry" org-agenda-show-and-scroll-up)
            ("RET" "Switch to entry" org-agenda-switch-to)
+           ("s o" "Show org calendar" qk/open-org-calendar)
+           ("s q" "Show qkessler calendar" qk/open-qkessler-gcal)
+           ("s e" "Show enrique.kesslerm calendar" qk/open-ekm-gcal)
            ]
           ["View"
            ("v d" "Day view" org-agenda-day-view)
@@ -1566,6 +1569,30 @@
                    (local-set-key (kbd "?") 'qk/org-agenda-transient)))
      #+END_SRC
 
+**** calfw
+     =emacs-calfw= is a calendar UI improvement package for Emacs, displaying a beautiful calendar using the sources that we configure. =calfw= has support for org-mode items, ical events (both from a local or remote file) and more.
+     #+begin_src emacs-lisp
+       (use-package calfw
+         :straight (calfw :type git :host github :repo "Qkessler/emacs-calfw")
+         :custom (cfw:org-overwrite-default-keybinding t)
+         :config
+         (with-eval-after-load 'calfw
+           (use-package calfw-ical
+             :straight (:host github :repo "Qkessler/emacs-calfw"))
+           (use-package calfw-org
+             :straight (:host github :repo "Qkessler/emacs-calfw")))
+         (defun qk/open-org-calendar ()
+           (interactive)
+           (cfw:open-org-calendar))
+         (defun qk/open-qk-calendar ()
+           (interactive)
+           (cfw:open-ical-calendar (password-store-get "qkessler gcal")))
+         (defun qk/open-ekm-calendar ()
+           (interactive)
+           (cfw:open-ical-calendar (password-store-get "enrique.kesslerm gcal"))))
+
+     #+end_src
+     
 *** Org source blocks
     Tabs on org-mode source blocks try to find the language added.
     If for some reason the language on the source tag doesn't exist
