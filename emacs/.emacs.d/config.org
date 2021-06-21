@@ -1750,6 +1750,15 @@
          :straight t)
      #+end_src
 
+**** Import to org-mode
+     This package aims to reduce this pain by leveraging Pandoc to convert selected file types to org. The difference betweeen the defined =as= and =to= functions are that the first ones don’t create an org file with the exported file, but only a temporary buffer that can be acted upon.
+     #+begin_src emacs-lisp
+       (use-package org-pandoc-import
+         :straight (:host github
+                    :repo "tecosaur/org-pandoc-import"
+                    :files ("*.el" "filters" "preprocessors")))
+     #+end_src
+
 **** Org-pomodoro
      Adding pomodoro support to emacs, with the intention of adding the effort
      column in pomodoros. Taking a lot of info from [[https://git.alenshaw.com/shuxiao9058/dotemacs.d/raw/master/dotemacs.d/lisp/init-pomodoro.el][shuxiao9058]] config.
