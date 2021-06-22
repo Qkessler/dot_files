@@ -195,6 +195,12 @@
                ("C-M-/" . dabbrev-expand)))
     #+end_src
 
+*** Bookmark faces
+    By default, there is a horrible bookmark face that has been defined in Emacs 28. I don’t really find the need to have a bookmark face, which dirties the org-mode buffers.
+    #+begin_src emacs-lisp
+      (use-package emacs
+        :custom (bookmark-face ((t nil))))
+    #+end_src
     
 *** Setting faces easily
     Found the face-spec-set, which is the easiest way to configure the faces for especific
@@ -525,8 +531,9 @@
      #+END_SRC
 
 **** Fonts
+     -*-Source Code Pro for Powerline-bold-normal-normal-*-*-*-*-*-m-0-iso10646-1
      #+BEGIN_SRC emacs-lisp
-       (setq default-frame-alist '((font . "Ubuntu Mono-13")))
+       (setq default-frame-alist '((font . "Source Code Pro for Powerline-13")))
      #+END_SRC
 
 *** Indentation
@@ -946,12 +953,13 @@
          :custom
          (consult-narrow-key "<")
          (consult-line-start-from-top t)
-         :config
-         (consult-customize
-          ;; Disable preview for `consult-theme' completely.
-          consult-theme :preview-key nil
-          ;; Set preview for `consult-buffer' to key `M-.'
-          consult-buffer :preview-key (kbd "M-.")))
+         ;; :config
+         ;; (consult-customize
+         ;;  ;; Disable preview for `consult-theme' completely.
+         ;;  consult-theme :preview-key nil
+         ;;  ;; Set preview for `consult-buffer' to key `M-.'n
+         ;;  consult-buffer :preview-key (kbd "M-."))
+         )
      #+end_src
 
 ***** Consult-projectile
@@ -2634,7 +2642,7 @@
 
      In order to be able to send email, we need to configure smtp in the
      different contexts.
-     #+begin_src emacs-lisp
+     #+begin_src emacs-lisp :tangle no
        (require 'mu4e-context)
        (use-package mu4e
          :straight nil
@@ -2745,7 +2753,7 @@
 
 ***** mu4e-alert
       mu4e-alert is an Emacs extension providing desktop notifications for mu4e, additionally it can display the number of unread emails in the mode-line. This is a test, I might need to disable it manually for concentration times.
-      #+begin_src emacs-lisp
+      #+begin_src emacs-lisp :tangle no
         (use-package mu4e-alert
           :straight t
           :custom

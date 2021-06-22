@@ -2,7 +2,8 @@
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
 # Path to your oh-my-zsh installation.
-export ZSH="/home/qkessler/.oh-my-zsh"
+export ZSH="/Users/enrikes/.oh-my-zsh"
+ZSH_DISABLE_COMPFIX=true
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
@@ -171,6 +172,7 @@ export NVM_DIR="$HOME/.nvm"
 export LPASS_AGENT_TIMEOUT=10800
 
 alias ae=". .env/bin/activate"
+alias ave=". venv/bin/activate"
 alias ec="emacsclient-one-frame.sh"
 alias semacs="sudo emacs"
 alias uemacs="killall -USR2 emacs" # Unfreezing emacs.
@@ -178,4 +180,5 @@ alias ect="emacsclient -t" # Open emacs inside terminal.
 # Pulling everything inside a directory.
 alias pa="find . -mindepth 1 -maxdepth 1 -type d -print -exec git -C {} pull \;" 
 alias mon2cam="deno run --unstable -A -r -q https://raw.githubusercontent.com/ShayBox/Mon2Cam/master/src/mod.ts"
+
 

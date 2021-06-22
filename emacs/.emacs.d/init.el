@@ -12,6 +12,7 @@
   (load bootstrap-file nil 'nomessage))
 
 (setq comp-deferred-compilation t)
+(setq vc-follow-symlinks t)
 
 (straight-use-package 'use-package)
 (eval-when-compile
