@@ -22,6 +22,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(default ((t (:background nil))))
+ '(bookmark-face ((t nil)))
  '(org-document-title ((t (:inherit default :weight bold :height 1.75 :underline nil))))
  '(org-level-1 ((t (:inherit default :weight bold :height 1.5))))
  '(org-level-2 ((t (:inherit default :weight bold :height 1.25))))
