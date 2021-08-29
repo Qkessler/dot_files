@@ -1008,11 +1008,6 @@
 
          ;; Optionally replace the key help with a completing-read interface
          (setq prefix-help-command #'embark-prefix-help-command)
-         (setq embark-action-indicator
-               (lambda (map _target)
-                 (which-key--show-keymap "Embark" map nil nil 'no-paging)
-                 #'which-key--hide-popup-ignore-command)
-               embark-become-indicator embark-action-indicator)
          :config
          ;; Hide the mode line of the Embark live/completions buffers
          (add-to-list 'display-buffer-alist
@@ -1020,10 +1015,10 @@
                         nil
                         (window-parameters (mode-line-format . none))))
          (embark-define-keymap embark-tab-actions
-           "Keymap for actions for tab-bar tabs (when mentioned by name)."
-           ("s" oa/select-tab-by-name)
-           ("r" tab-bar-rename-tab-by-name)
-           ("k" tab-bar-close-tab-by-name))
+                               "Keymap for actions for tab-bar tabs (when mentioned by name)."
+                               ("s" oa/select-tab-by-name)
+                               ("r" tab-bar-rename-tab-by-name)
+                               ("k" tab-bar-close-tab-by-name))
 
          (add-to-list 'embark-keymap-alist '(tab . embark-tab-actions)))
 
@@ -1067,10 +1062,12 @@
          :after orderless
          :bind (("M-s f" . affe-find)
                 ("M-s g" . affe-grep))
+         :custom
+         (affe-find-command "fd --color=never -H -t f")
+         (affe-grep-command "rg --null --color=never --max-columns=1000 --no-heading --hidden --no-ignore --line-number -v ^$ .")
+         (affe-regexp-function 'orderless-pattern-compiler)
+         (affe-highlight-function 'orderless--highlight)
          :config
-         ;; Configure Orderless
-         (setq affe-regexp-function #'orderless-pattern-compiler
-               affe-highlight-function #'orderless-highlight-matches)
          (consult-customize affe-grep :preview-key (kbd "M-.")))
      #+end_src
 
@@ -1082,8 +1079,8 @@
     #+begin_src emacs-lisp
       (use-package vterm
         :straight t
-        :custom (vterm-max-scrollback 10000)
-        )
+        :commands vterm
+        :custom (vterm-max-scrollback 10000))
     #+end_src
 
 **** Vterm toggle
@@ -1111,39 +1108,71 @@
       (define-key org-mode-map (kbd "C-c o t") 'org-babel-tangle)
     #+END_SRC
 
+**** Org-mode file movement
+     There are already defined org-mode movement keys to navigate the header tree, but I find difficult to reach everytime for =C-c C-n= or =C-c C-u= to go to the next or parent header respectively.
+
+     That said, I find that a hydra would fit nicely in the mix, maybe consider hercules?
+     #+begin_src emacs-lisp
+       (defhydra hydra-org-movement
+         (:color pink
+                 :hint nil
+                 :pre (smerge-mode 1)
+                 ;; Disable `smerge-mode' when quitting hydra if
+                 ;; no merge conflicts remain.
+                 :post (smerge-auto-leave))
+         "
+             ^Movement^                        ^Heading^       
+             ^^-----------                     ^^-----------
+             _n_ext visible heading            _w_ copy heading
+             _p_rev visible heading            _y_ank heading
+             _u_p heading
+             _b_ackward same level
+             _f_orward same level
+             "
+         ("n" outline-next-visible-heading)
+         ("p" outline-previous-visible-heading)
+         ("u" outline-up-heading)
+         ("b" outline-backward-same-level)
+         ("f" outline-forward-same-level)
+         ("q" nil "cancel" :color blue)
+         ("w" org-copy-special)
+         ("y" org-paste-subtree))
+
+       (define-key org-mode-map (kbd "C-c ?") #'hydra-org-movement/body)
+     #+end_src
+
 *** Initial configuration
     Initial configuration of org-directory and refile.org, with the
     intention of all capture created items to go there before correct refiling.
-    #+BEGIN_SRC emacs-lisp
-      (setq org-directory "~/Documents/org_files")
-      (defvar org-book-list-file (concat org-directory "/book_list.org"))
-      (setq
-       org-default-notes-file (concat org-directory "/org-agenda/refile.org")
-       org-agenda-files (list (concat org-directory "/org-agenda"))
-       org-archive-location (concat org-directory "/archive/%s_archive::")
-       org-refile-targets (quote ((nil :maxlevel . 5)
-                                  (org-agenda-files :maxlevel . 5)
-                                  (org-book-list-file :maxlevel . 2)))
-       org-src-fontify-natively t
-       ;; org-src-preserve-indentation t
-       org-columns-default-format "%50ITEM(Task) %10Effort{:} %10CLOCKSUM"
-       org-clock-out-remove-zero-time-clocks t
-       org-clock-out-when-done t
-       org-agenda-restore-windows-after-quit t
-       org-clock-persistence-insinuate t
-       org-clock-persist t
-       org-clock-in-resume t
-       org-startup-with-inline-images t
-       )
-      (defvar org-archive-file-header-format "#+FILETAGS: ARCHIVE\nArchived entries from file %s\n")
-      (add-hook 'org-capture-after-finalize-hook 'org-save-all-org-buffers)
-      (add-hook 'org-clock-in-hook 'org-save-all-org-buffers)
-      (add-hook 'org-clock-out-hook 'org-save-all-org-buffers)
-      (add-hook 'org-mode-hook 'visual-line-mode)
-      (org-babel-do-load-languages 'org-babel-load-languages
-                                   (append org-babel-load-languages
-                                           '((ledger . t))))
-    #+END_SRC
+    #+begin_src emacs-lisp
+      (setq org-roam-directory "~/Documents/slipbox")
+      (use-package org
+        :custom
+        (org-directory "~/Documents/org_files")
+        (org-default-notes-file (concat org-roam-directory "/pages/refile.org"))
+        (org-agenda-files (list (concat org-directory "/org-agenda")))
+        (org-archive-location (concat org-directory "/archive/%s_archive::"))
+        (org-refile-targets (quote ((nil :maxlevel . 5)
+                                    (org-agenda-files :maxlevel . 5)
+                                    (org-book-list-file :maxlevel . 2))))
+        (org-src-fontify-natively t)
+        (org-columns-default-format "%50ITEM(Task) %10Effort{:} %10CLOCKSUM")
+        (org-clock-out-remove-zero-time-clocks t)
+        (org-clock-out-when-done t)
+        (org-agenda-restore-windows-after-quit t)
+        (org-clock-persistence-insinuate t)
+        (org-clock-persist t)
+        (org-clock-in-resume t)
+        (org-startup-with-inline-images t)
+        (org-archive-file-header-format "#+FILETAGS: ARCHIVE\nArchived entries from file %s\n")
+        :hook
+        (org-capture-after-finalize . org-save-all-org-buffers)
+        (org-clock-in-hook . org-save-all-org-buffers)
+        (org-clock-out-hook . org-save-all-org-buffers)
+        (org-mode . visual-line-mode)
+        :config
+        (defvar org-book-list-file (concat org-directory "/book_list.org")))
+    #+end_src
 
 **** org-insert-link DWIM
      I followed the [[https://xenodium.com/emacs-dwim-do-what-i-mean/][xenodium blog post]] talking about DWIM and its interactive commands already in Emacs. He implements his DWIM changes to to org-insert-link, and I found his changes to be interesting enough to add them to my own command.
