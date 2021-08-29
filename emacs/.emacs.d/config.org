@@ -10,53 +10,12 @@
       (setq qk/themes-index 0)
     #+end_src
     
-*** Modus-themes
-    Accessible themes for GNU Emacs, conforming with the highest standard for colour contrast between background and foreground values (WCAG AAA). Even though they have been added to Emacs 28 master, I figured I need to have the full-package in order to configure every option. The options added here are not my full preferences, I still haven't tested them enough to be sure.
-    #+begin_src emacs-lisp :tangle no
-      (use-package modus-themes
+*** Nord theme
+    #+begin_src emacs-lisp
+      (use-package doom-themes
         :straight t
         :init
-        (setq modus-themes-slanted-constructs nil
-              modus-themes-bold-constructs nil
-              modus-themes-no-mixed-fonts nil
-              modus-themes-subtle-line-numbers t
-              modus-themes-success-deuteranopia t
-              modus-themes-inhibit-reload nil ; only applies to `customize-set-variable' and related
-              modus-themes-fringes nil
-              modus-themes-lang-checkers nil
-              modus-themes-mode-line 'borderless
-              modus-themes-syntax nil
-              modus-themes-hl-line 'accented-background
-              modus-themes-paren-match 'subtle ; {nil,'subtle-bold,'intense,'intense-bold}
-              modus-themes-links 'neutral-underline
-              modus-themes-prompts nil
-              modus-themes-completions nil ; {nil,'moderate,'opinionated}
-              modus-themes-mail-citations 'faint ; {nil,'faint,'monochrome}
-              modus-themes-region 'bg-only-no-extend
-              modus-themes-diffs nil
-              modus-themes-org-blocks nil ; {nil,'gray-background,'tinted-background} (also read doc string)
-              modus-themes-org-habit nil ; {nil,'simplified,'traffic-light}
-              modus-themes-headings nil ; this is an alist: read the manual or its doc string
-              modus-themes-variable-pitch-ui t
-              modus-themes-variable-pitch-headings nil
-              modus-themes-scale-headings nil
-              modus-themes-scale-1 1.1
-              modus-themes-scale-2 1.15
-              modus-themes-scale-3 1.21
-              modus-themes-scale-4 1.27
-              modus-themes-scale-5 1.33)
-        (modus-themes-load-themes)
-        :config (modus-themes-load-operandi)
-        (add-to-list 'qk/themes-list 'modus-operandi))
-    #+end_src
-
-    
-*** Gruvbox theme
-    The Gruvbox theme has everything that I love about Emacs, it is the theme that I have been working with for the longest time and I couldn't be happier about it. The reason I have the solarized theme under it is because I'm trying out a function to change the theme depending on the hour of the day.
-    #+begin_src emacs-lisp
-      (use-package gruvbox-theme
-        :straight (gruvbox-theme :type git :host github :repo "greduan/emacs-theme-gruvbox"))
-      ;; :config (add-to-list 'qk/themes-list 'gruvbox-dark-medium))
+        (add-to-list 'qk/themes-list 'doom-nord))
     #+end_src
 
 *** Solarized theme
@@ -89,15 +48,14 @@
         (solarized-height-plus-2 1.0)
         (solarized-height-plus-3 1.0)
         (solarized-height-plus-4 1.0)
-        :config
-        (load-theme 'solarized-light-high-contrast t)
-        (add-to-list 'qk/themes-list 'solarized-dark-high-contrast)
+        :init
         (add-to-list 'qk/themes-list 'solarized-light-high-contrast))
     #+end_src
 
 *** Toggle theme
     I found this function to cycle through a list of themes, which is defined before the function. In my opinion toggling from light to dark is key when working in the evenings.
     #+begin_src emacs-lisp
+      (straight-use-package 'consult)
       (defun qk/cycle-theme ()
         "Change the theme to the next index in the `qk/themes-list'. I would normally use this for switching from light to dark modes."
         (interactive)
@@ -105,7 +63,7 @@
         (qk/load-indexed-theme))
 
       (defun qk/load-indexed-theme ()
-        (qk/try-load-theme (nth qk/themes-index qk/themes-list)))
+        (consult-theme (nth qk/themes-index qk/themes-list)))
 
       (defun qk/try-load-theme (theme)
         (if (ignore-errors (load-theme theme :no-confirm))
@@ -114,8 +72,58 @@
       (qk/load-indexed-theme)
     #+end_src
 
+*** After-load-theme-hook
+    Emacs does not have an =after-load-theme-hook=, which a I find key for adding or changing some of the faces dinamically. Not everything is lost, we still have the =advice= sintax. We can advise the change-theme function to define a hook.
+    #+begin_src emacs-lisp
+      (defvar after-load-theme-hook nil
+        "Hook run after a color theme is loaded using `load-theme'.")
+      (defadvice consult-theme (after run-after-load-theme-hook activate)
+        "Run `after-load-theme-hook'."
+        (run-hooks 'after-load-theme-hook))
+    #+end_src
 
 ** Better defaults
+*** Encoding system
+    #+begin_src emacs-lisp
+      (prefer-coding-system 'utf-8)
+      (set-default-coding-systems 'utf-8)
+      (set-terminal-coding-system 'utf-8)
+      (set-keyboard-coding-system 'utf-8)
+      ;; backwards compatibility as default-buffer-file-coding-system
+      ;; is deprecated in 23.2.
+      (if (boundp 'buffer-file-coding-system)
+          (setq-default buffer-file-coding-system 'utf-8)
+        (setq default-buffer-file-coding-system 'utf-8))
+
+      ;; Treat clipboard input as UTF-8 string first; compound text next, etc.
+      (setq x-select-request-type '(UTF8_STRING COMPOUND_TEXT TEXT STRING))
+    #+end_src
+
+*** Isearch
+    #+begin_quote
+    Isearch stands for incremental search. This means that search results are updated and highlighted while you are typing your query, incrementally.
+    #+end_quote
+    Using the config from angrybacon: [[https://github.com/angrybacon/dotemacs/blob/master/dotemacs.org#navigation-search][dotemacs/dotemacs.org at master · angrybacon/dotemacs · GitHub]]
+    #+begin_src emacs-lisp
+      (use-package isearch
+        :hook (isearch-update-post . ab/isearch-aim-beginning)
+        :custom (isearch-allow-scroll t)
+        :preface
+        (defun ab/isearch-aim-beginning ()
+          "Move cursor back to the beginning of the current match."
+          (when (and isearch-forward (number-or-marker-p isearch-other-end))
+            (goto-char isearch-other-end))))
+    #+end_src
+
+*** Expand-region
+    Expand region increases the selected region by semantic units. Just keep pressing the key until it selects what you want.
+    #+begin_src emacs-lisp
+      (pending-delete-mode)
+      (use-package expand-region
+        :straight t
+        :bind ("C-=" . er/expand-region))
+    #+end_src
+
 *** Password manager
     Instead of using the default authinfo password manager, which defaults to the =.authinfo.gpg= file, configure Emacs to use [[https://www.passwordstore.org/][Pass: The Standard Unix Password Manager]].
     #+begin_src emacs-lisp
@@ -127,12 +135,20 @@
     #+begin_src emacs-lisp
       (use-package pass
         :straight t
+        :commands pass
         :custom (pass-username-field "login"))
     #+end_src
 
 *** Keep emacs clean
     This is the section created with the intention of make emacs create the files needed, but keep
     the directories clean, saving the backup files in set locations.
+
+**** Warnings
+     There are some warnings that need to be supressed, as they happen on startup, according to some of the code of the packages. There is nothing else to do.
+     #+begin_src emacs-lisp
+       (use-package emacs
+         :custom (ad-redefinition-action 'accept))
+     #+end_src
 
 **** Load-path
      Whenever a package is too experimental to be uploaded to MELPA, you can still install the =.el= file through the load-path list, which can hold a directory. The convention is to use the =/lisp= folder.
@@ -195,51 +211,25 @@
                ("C-M-/" . dabbrev-expand)))
     #+end_src
 
-    
-*** Setting faces easily
-    Found the face-spec-set, which is the easiest way to configure the faces for especific
-    modes, specially using use-package. The code is from the [[https://se30.xyz/conf.html][Alexm website]].
+*** Bookmark faces
+    By default, there is a horrible bookmark face that has been defined in Emacs 28. I don’t really find the need to have a bookmark face, which dirties the org-mode buffers.
     #+begin_src emacs-lisp
-      (defun alexm/set-faces-by-spec (&rest specs)
-        "Maps SPECS through face-spec-set."
-        (mapc #'(lambda (f) (apply #'face-spec-set f)) specs))
+      (use-package emacs
+        :custom-face (bookmark-face ((t nil))))
     #+end_src
 
-*** Try
-    Package that allows to try emacs packages without installing them.
-    What it really does is installing the files in a temp directory and
-    removing them later.
-
-    #+BEGIN_SRC emacs-lisp
-      (use-package try
-        :straight t)
-    #+END_SRC
-
-*** General
-    =general.el= provides a more convenient method for binding keys in emacs (for both evil and non-evil users). Like use-package, which provides a convenient, unified interface for managing packages, general.el is intended to provide a convenient, unified interface for key definitions.
-    #+begin_src emacs-lisp
-      (use-package general
-        :straight t)
-    #+end_src
-
-*** Hercules
-    =hercules.el= lets you call any group of related command sequentially with no prefix keys, while showing a handy popup to remember the bindings for those commands. hercules.el can create both of these (the grouped commands, and the popup) from any keymap. It is basically the hydra killer for use configuration, providing useful commands and cutting the setup lines from 10 to 1.
-    #+begin_src emacs-lisp
-      (use-package hercules
-        :straight t)
-    #+end_src
-    
 *** Delimiters
 **** smart-parens
      Smart-parens is a package that improves on the previous package,
      now deprecated: autopair. Smart-parens has the plus of being maintained,
      considering that they usually merge pull requests and responde to issues.
-
      #+begin_src emacs-lisp
        (use-package smartparens
          :straight t
-         :hook (prog-mode . smartparens-mode)
-         :config (require 'smartparens-config))
+         :hook (prog-mode . smartparens-mode))
+
+       (use-package smartparens-config
+         :after smartparens)
      #+end_src
 
 **** rainbow-delimiters
@@ -251,35 +241,31 @@
        (use-package rainbow-delimiters
          :straight t
          :hook (prog-mode . rainbow-delimiters-mode)
-         :config
-         (alexm/set-faces-by-spec
-          '(rainbow-delimiters-base-error-face
-            ((t (:foreground "#fc0303" :inherit nil)))))
-         (alexm/set-faces-by-spec
-          '(rainbow-delimiters-mismatched-face
-            ((t (:foreground "#fc0303" :inherit nil)))))
-         (alexm/set-faces-by-spec
-          '(rainbow-delimiters-unmatched-face
-            ((t (:foreground "#fc0303" :inherit nil))))))
+         :custom-face
+         (rainbow-delimiters-base-error-face
+          ((t (:foreground "#fc0303" :inherit nil))))
+         (rainbow-delimiters-mismatched-face
+          ((t (:foreground "#fc0303" :inherit nil))))
+         (rainbow-delimiters-unmatched-face
+          ((t (:foreground "#fc0303" :inherit nil)))))
      #+end_src
 
 *** Modeline
 **** Doom-modeline
      #+BEGIN_SRC emacs-lisp
-       (use-package doom-modeline
-         :straight t
-         :custom (doom-modeline-mu4e t)
-         :config
-         (progn
-           (doom-modeline-mode 1)
-           (setq doom-modeline-project-detection 'project)
-           (setq doom-modeline-window-width-limit fill-column)))
        (defvar doom-modeline-icon (display-graphic-p)
          "Whether show `all-the-icons' or not.
 
                Non-nil to show the icons in mode-line.
                The icons may not be showed correctly in terminal and on Windows.")
-       (setq doom-modeline-icon t)
+
+       (defface egoge-display-time
+         '((((type x w32 mac))
+            (:inherit highlight))
+           (((type tty))
+            (:foreground "blue")))
+         "Face used to display the time in the mode line.")
+
        (defface egoge-display-time
          '((((type x w32 mac))
             (:inherit highlight))
@@ -291,6 +277,21 @@
                            'face 'egoge-display-time)))
        (display-time-mode 1)
        (display-time-update)
+
+       (use-package doom-modeline
+         :straight t
+         :custom
+         (doom-modeline-mu4e t)
+         (doom-modeline-icon t)
+         (doom-modeline-project-detection 'project)
+         (doom-modeline-window-width-limit fill-column)
+         (display-time-string-forms
+          '((propertize (concat " " 24-hours ":" minutes " ")
+                        'face 'egoge-display-time)))
+         :hook (after-init . doom-modeline-mode)
+         :config
+         (display-time-mode)
+         (display-time-update))
      #+END_SRC
 
 **** All-the-icons
@@ -336,21 +337,27 @@
          :straight t
          :config (defhydra+ hydra:bufler ()
                    ("o" #'delete-other-windows "Full screen"))
-         :bind (:map bufler-list-mode-map
-                     ("o" . delete-other-windows)
-                     ("u" . magit-section-up)))
+         :bind
+         (:map bufler-list-mode-map
+               ("o" . delete-other-windows)
+               ("u" . magit-section-up))
+         (:map global-map
+               ("C-x C-b" . bufler)))
      #+end_src
 
+**** Visiting-buffer
+     #+begin_quote
+     I often want to both delete a file and kill the buffer it's open in. I thought of writing a simple command to do that, but then realized I basically never want to delete the file and keep the buffer open. So instead, I'm advising delete-file so that if it is called interactively (i.e., I called the command directly, not that some Emacs Lisp called it), it also kills a buffer visiting the file if there is one.
 
-     Function to make bufler buffer full-screen.
-     #+BEGIN_SRC emacs-lisp
-       (defun bufler-one-window (&optional force-refresh)
-         (interactive "P")
-         (bufler-list)
-         (delete-other-windows)
-         )
-       (global-set-key (kbd "C-x C-b") 'bufler)
-     #+END_SRC
+     Similarly, I advise rename-file so that if it is called interactively, it also renames any visiting buffer. And additionally for Emacs Lisp libraries it handles updating the (provide 'library-name) form and the ;;; library-name.el comments you often find at top and bottom.
+     #+end_quote
+     Oantolin - [[https://www.reddit.com/r/emacs/comments/p6mwx2/weekly_tips_tricks_c_thread/h9fclek?utm_source=share&utm_medium=web2x&context=3][link]]
+
+     I added the =visiting-buffer.el= file to my /lisp dir, and use-packaged the call. The =:demand t= clause is required, as I have set =use-package-always-defer= to =t=.
+     #+begin_src emacs-lisp
+       (use-package visiting-buffer
+         :demand t)
+     #+end_src
 
 *** Directories
 **** Dired
@@ -368,7 +375,7 @@
 
 **** Directories first on dired.
      #+BEGIN_SRC emacs-lisp
-       (setq dired-listing-switches "-aBhl  --group-directories-first")
+       (setq dired-listing-switches "-aBhl")
      #+END_SRC
 
 **** Backup directory
@@ -376,51 +383,82 @@
        (setq backup-directory-alist '(("" . "~/.emacs.d/backup")))
      #+END_SRC
 
-**** Dired-collapse
-     Collapse the folders if they only have an unique file.
+**** Dired-subtree
+     This package defines function dired-subtree-insert which instead inserts the subdirectory directly below its line in the original listing, and indent the listing of subdirectory to resemble a tree-like structure (somewhat similar to tree(1) except the pretty graphics). The tree display is somewhat more intuitive than the default "flat" subdirectory manipulation provided by =i=.
      #+begin_src emacs-lisp
-       (use-package dired-collapse
-         :hook (dired-load . (lambda () (dired-collapse)))
-         :straight t)
+       (use-package dired-subtree
+         :straight t
+         :after dired
+         :custom (dired-subtree-use-backgrounds nil)
+         :bind (:map dired-mode-map
+                     ("<tab>" . dired-subtree-toggle)
+                     ("<C-tab>" . dired-subtree-cycle)
+                     ("<backtab>" . dired-subtree-remove)))
      #+end_src
-
      
 *** Help
     The default emacs help buffers could use some tweaking, and the Helpful package is there to assist. It provides better formatting and links for help buffers, and defines different functions to limit the disruption effect in your emacs configuration.
     #+begin_src emacs-lisp
       (use-package helpful
         :straight t
-        :init
-        (global-set-key (kbd "C-h f") #'helpful-function)
-        (global-set-key (kbd "C-h v") #'helpful-variable)
-        (global-set-key (kbd "C-h c") #'helpful-key))
+        :bind (:map global-map
+                    ("C-h" . qk/help-transient))
+        :config (transient-define-prefix qk/help-transient ()
+                  "Help commands that I use. A subset of C-h with others thrown in."
+                  ["Help Commands"
+                   ["Mode & Bindings"
+                    ("m m" "Mode" describe-mode)
+                    ("m w" "Where Is" where-is)
+                    ]
+                   ["Describe"
+                    ("d C" "Command" helpful-command)
+                    ("d f" "Function" helpful-function)
+                    ("d v" "Variable" helpful-variable)
+                    ("d m" "Macro" helpful-macro)
+                    ("d k" "Key" helpful-key)
+                    ]
+                   ["Info on"
+                    ("C-c" "M-x function" Info-goto-emacs-command-node)
+                    ("C-k" "Emacs Key" Info-goto-emacs-key-command-node)
+                    ]
+                   ]
+                  [
+                   ["Internals"
+                    ("i I" "Input Method" describe-input-method)
+                    ("i G" "Language Env" describe-language-environment)
+                    ("i S" "Syntax" describe-syntax)
+                    ("i O" "Coding System" describe-coding-system)
+                    ("i C-o" "Coding Brief" describe-current-coding-system-briefly)
+                    ("i T" "Display Table" describe-current-display-table)
+                    ("i e" "Echo Messages" view-echo-area-messages)
+                    ("i l" "Lossage" view-lossage)
+                    ]
+                   ["DWIM"
+                    ("." "At Point   " helpful-at-point)
+                    ]
+                   ["Info Manuals"
+                    ("i RET" "Info" info)
+                    ("4" "Other Window " info-other-window)
+                    ("C-e" "Emacs" info-emacs-manual)
+                    ]
+                   ]))
     #+end_src
 
-    
 *** Latex
-**** :warning: TESTING: lsp-latex
+**** lsp-latex
      LaTeX has its own lsp server: texlab. I have added it here to check whether I'm interested in keeping it or keep going with latex. I added the TESTING flag to let the possible outside user know.
+
+     We defer the package, as the lsp-mode package is already calling it with its hooks.
      #+begin_src emacs-lisp
        (use-package lsp-latex
          :straight t)
      #+end_src
 
-    
      Adding reference connection made easier with reftex.
      #+BEGIN_SRC emacs-lisp
        (use-package reftex
          :straight t
-         :defer t
-         :config
-         (setq reftex-cite-prompt-optional-args t))
-     #+END_SRC
-
-     Adding autodictionary in order to get completion on the words
-     that have been miss-typed.
-     #+BEGIN_SRC emacs-lisp
-       (use-package auto-dictionary
-         :straight t
-         :init(add-hook 'flyspell-mode-hook (lambda () (auto-dictionary-mode 1))))
+         :custom (reftex-cite-prompt-optional-args t))
      #+END_SRC
 
      Adding general configuration for tex files and latex-mode better defaults.
@@ -490,43 +528,10 @@
        (setq visible-bell 1)
      #+END_SRC
 
-**** Toolbar
-     Disabling toolbar.
-     #+BEGIN_SRC emacs-lisp
-       (tool-bar-mode -1)
-     #+END_SRC
-
-**** Scroll-bar
-***** Removing scroll-bar.
-      #+BEGIN_SRC emacs-lisp
-        (when (fboundp 'set-scroll-bar-mode)
-          (set-scroll-bar-mode nil))
-        (defun qk/disable-scroll-bars (frame)
-          "Remove all possible scroll-bars, both vertical and horizontal."
-          (modify-frame-parameters frame
-                                   '((vertical-scroll-bars . nil)
-                                     (horizontal-scroll-bars . nil))))
-        (add-hook 'after-make-frame-functions 'qk/disable-scroll-bars)
-      #+END_SRC
-
-***** Smooth scrolling
-      Emacs works with the old graphics drivers, which turns its graphical support into a mess. There has been some efforts in making the old bovine better, but at the moment, we can only hope to remedy the smooth scrolling problem (which has also been called pixel scrolling) with packages trying to make the behavior better.
-      #+begin_src emacs-lisp :tangle no
-        (use-package good-scroll
-          :straight t
-          :config (good-scroll-mode 1))
-      #+end_src
-
-
 **** Menu-bar
      Disabling the menu-bar, prior to tab-mode-line configuration.
      #+BEGIN_SRC emacs-lisp
        (menu-bar-mode -1)
-     #+END_SRC
-
-**** Fonts
-     #+BEGIN_SRC emacs-lisp
-       (setq default-frame-alist '((font . "Ubuntu Mono-13")))
      #+END_SRC
 
 *** Indentation
@@ -557,36 +562,30 @@
         :straight t
         :commands impatient-mode)
 
+      (defun eh/markdown-html (buffer)
+        (princ (with-current-buffer buffer
+                 (format "<!DOCTYPE html><html><title>Impatient Markdown</title><xmp theme=\"united\" style=\"display:none;\"> %s  </xmp><script src=\"http://strapdownjs.com/v/0.2/strapdown.js\"></script></html>" (buffer-substring-no-properties (point-min) (point-max))))
+               (current-buffer)))
+      (defun bb/markdown-preview ()
+        "Preview markdown."
+        (interactive)
+        (unless (process-status "httpd")
+          (httpd-start))
+        (impatient-mode)
+        (imp-set-user-filter 'eh/markdown-html)
+        (imp-visit-buffer))
+
       (use-package markdown-mode
         :straight nil
         :mode ("\\.md\\'" . gfm-mode)
         :commands (markdown-mode gfm-mode)
         :custom (markdown-command "pandoc -t html5")
-        :bind ("C-c r" . bb/markdown-preview)
-        :init
-        (add-hook 'markdown-mode-hook #'toc-org-mode)
-        (add-hook 'markdown-mode-hook #'visual-line-mode)
-        (defun bb/markdown-filter (buffer)
-          (princ
-           (with-temp-buffer
-             (let ((tmp (buffer-name)))
-               (set-buffer buffer)
-               (set-buffer (markdown tmp))
-               (format "<!DOCTYPE html><html><title>Markdown preview</title><link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/4.0.0/github-markdown.min.css\"/>
-                <body><article class=\"markdown-body\" style=\"box-sizing: border-box;min-width: 200px;max-width: 980px;margin: 0 auto;padding: 45px;\">%s</article></body></html>" (buffer-string))))
-           (current-buffer)))
-        (defun eh/markdown-html (buffer)
-          (princ (with-current-buffer buffer
-                   (format "<!DOCTYPE html><html><title>Impatient Markdown</title><xmp theme=\"united\" style=\"display:none;\"> %s  </xmp><script src=\"http://strapdownjs.com/v/0.2/strapdown.js\"></script></html>" (buffer-substring-no-properties (point-min) (point-max))))
-                 (current-buffer)))
-        (defun bb/markdown-preview ()
-          "Preview markdown."
-          (interactive)
-          (unless (process-status "httpd")
-            (httpd-start))
-          (impatient-mode)
-          (imp-set-user-filter 'eh/markdown-html)
-          (imp-visit-buffer)))
+        :hook 
+        (markdown-mode . toc-org-mode)
+        (markdown-mode . visual-line-mode)
+        :bind
+        (:map markdown-mode-map
+              ("C-c r" . bb/markdown-preview)))
     #+END_SRC
 
 *** Mark commands
@@ -625,14 +624,30 @@
     #+BEGIN_SRC emacs-lisp
       (global-unset-key (kbd "C-x o"))
       (global-unset-key (kbd "C-x u"))
+
       (use-package ace-window
         :straight t
-        :config 
-        (global-set-key (kbd "M-o") 'ace-window)
-        :custom(
-                (aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
-                (aw-background nil)))
+        :bind (:map global-map
+                    ("M-o" . ace-window))
+        :custom
+        (aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
+        (aw-background nil))
     #+END_SRC
+
+*** Perspective.el
+    The Perspective package provides multiple named workspaces (or "perspectives") in Emacs, similar to multiple desktops in window managers like Awesome and XMonad, and Spaces on the Mac. Each perspective has its own buffer list and its own window layout, along with some other isolated niceties, like the xref ring.
+    #+begin_src emacs-lisp
+      (use-package perspective
+        :straight t
+        :bind
+        ("C-x x s" . persp-switch)
+        ("s-]" . persp-next)
+        ("s-[" . persp-prev)
+        :custom
+        (persp-sort 'created)
+        (persp-state-default-file (concat persp-save-dir "persp-save-state.el"))
+        :config (persp-mode))
+    #+end_src
 
 *** Fill column
     #+begin_src emacs-lisp
@@ -651,35 +666,21 @@
     #+BEGIN_SRC emacs-lisp
       (use-package pdf-tools
         :straight t
-        :config (pdf-tools-install)
-        (setq-default pdf-view-display-size 'fit-page)
-        (setq pdf-annot-activate-created-annotations t)
-        (define-key pdf-view-mode-map (kbd "C-s") 'isearch-forward)
-        (define-key pdf-view-mode-map (kbd "C-r") 'isearch-backward)
-        (add-hook 'TeX-after-compilation-finished-functions #'TeX-revert-document-buffer)
-        (add-hook 'pdf-view-mode-hook (lambda ()
-                                        (linum-mode -1))))
-    #+END_SRC
-
-*** Which key
-    Which key is the pinnacle of keybinding packages, with
-    a helpful minibuffer that states the keybindings 
-    available for a certain prefix you start typing.
-    #+begin_src emacs-lisp
-      (use-package which-key
-        :straight t
         :custom
-        ((which-key-show-early-on-C-h t)
-         (which-key-idle-delay .5)
-         (which-key-popup-type 'minibuffer))
-        :config (which-key-mode))
-    #+end_src
+        (pdf-view-display-size . 'fit-page)
+        (pdf-annot-activate-created-annotations t)
+        :hook (pdf-view-mode . (lambda () (linum-mode -1)))
+        :bind (:map pdf-view-mode-map
+                    ("C-s" . isearch-forward)
+                    ("C-r" . isearch-backward)))
+    #+END_SRC
 
 *** Ripgrep
     Adding ripgrep configuration to be able to access the functionality from emacs.
     #+begin_src emacs-lisp
       (use-package rg
         :straight t
+        :bind ("C-c s" . rg-menu)
         :config (rg-enable-default-bindings))
     #+end_src
 
@@ -787,15 +788,25 @@
       Source: URL `https://www.thepunctuationguide.com/hyphen.html'"
         (interactive)
         (help/real-insert ?-))
-
     #+end_src
+
+**** Euro symbol
+     Bind the euro symbol to an easy to reach command.
+     #+begin_src emacs-lisp
+       (defun qk/insert-euro-symbol ()
+         (interactive)
+         (help/real-insert ?€))
+
+       (use-package emacs
+         :bind ("C-c e" . qk/insert-euro-symbol))
+     #+end_src
 
 *** Browse-url
     Browse url is the package that controls the information that is passed to the browser when forwarded from emacs. I find that cookies are important when accessing chrome, might need to check again if I can select to save cookies only for Chrome browsing.
 
     #+begin_src emacs-lisp
       (use-package browse-url
-        :straight nil
+        :commands (browse-url browse-url-firefox)
         :custom
         (url-cookie-file (no-littering-expand-var-file-name "cookies/cookies")))
     #+end_src
@@ -807,7 +818,7 @@
     #+begin_src emacs-lisp
       (use-package whole-line-or-region
         :straight t
-        :config (whole-line-or-region-global-mode))
+        :init (whole-line-or-region-global-mode))
     #+end_src
 
 ** Completion framework
@@ -828,10 +839,10 @@
      #+begin_src emacs-lisp
        (use-package orderless
          :straight t
-         :init
-         (setq completion-styles '(orderless)
-               completion-category-defaults nil
-               completion-category-overrides '((file (styles . (partial-completion))))))
+         :custom
+         (completion-styles '(orderless))
+         (completion-category-defaults nil)
+         (completion-category-overrides '((file (styles . (partial-completion))))))
      #+end_src
 
 **** Savehist
@@ -889,24 +900,14 @@
        (use-package consult
          ;; Replace bindings. Lazily loaded due by `use-package'.
          :straight t
-         :bind (;; C-c bindings (mode-specific-map)
-                ("C-c h" . consult-history)
-                ("C-c b" . consult-bookmark)
-                ("C-c k" . consult-kmacro)
-                ;; C-x bindings (ctl-x-map)
+         :bind (;; C-x bindings (ctl-x-map)
                 ("C-x M-:" . consult-complex-command)     ;; orig. repeat-complex-command
-                ("C-x b" . consult-buffer)                ;; orig. switch-to-buffer
+                ;; ("C-x b" . consult-buffer)                ;; orig. switch-to-buffer
                 ("C-x 4 b" . consult-buffer-other-window) ;; orig. switch-to-buffer-other-window
                 ("C-x 5 b" . consult-buffer-other-frame)  ;; orig. switch-to-buffer-other-frame
-                ;; Custom M-# bindings for fast register access
-                ("M-#" . consult-register-load)
-                ("M-'" . consult-register-store)          ;; orig. abbrev-prefix-mark (unrelated)
-                ("C-M-#" . consult-register)
                 ;; Other custom bindings
                 ("M-y" . consult-yank-pop)                ;; orig. yank-pop
-                ("<help> a" . consult-apropos)            ;; orig. apropos-command
                 ;; M-g bindings (goto-map)
-                ("M-g e" . consult-compile-error)
                 ("M-g f" . consult-flymake)               ;; Alternative: consult-flycheck
                 ("M-g g" . consult-goto-line)             ;; orig. goto-line
                 ("M-g M-g" . consult-goto-line)           ;; orig. goto-line
@@ -928,12 +929,12 @@
                 ;; Isearch integration
                 ("M-s e" . consult-isearch)
                 :map isearch-mode-map
-                ("M-e" . consult-isearch)                 ;; orig. isearch-edit-string
-                ("M-s e" . consult-isearch)               ;; orig. isearch-edit-string
-                ("M-s l" . consult-line)
-                :map global-map
-                ("C-s" . consult-line)
-                ("C-r" . consult-line))
+                ("M-e" . consult-isearch)                 ;; orig. `isearch-edit-string'
+                ("M-s e" . consult-isearch)               ;; orig. `isearch-edit-string'
+                ("M-s l" . consult-line))
+                ;;:map global-map
+                ;; ("C-s" . consult-isearch)
+                ;; ("C-r" . consult-isearch))
 
          ;; The :init configuration is always executed (Not lazy)
          :init
@@ -945,12 +946,11 @@
                xref-show-definitions-function #'consult-xref)
          :custom
          (consult-narrow-key "<")
-         (consult-line-start-from-top t)
          :config
          (consult-customize
           ;; Disable preview for `consult-theme' completely.
           consult-theme :preview-key nil
-          ;; Set preview for `consult-buffer' to key `M-.'
+          ;; Set preview for `consult-buffer' to key `M-.'n
           consult-buffer :preview-key (kbd "M-.")))
      #+end_src
 
@@ -973,6 +973,7 @@
           :bind (:map lsp-mode-map
                       ([remap xref-find-apropos] . consult-lsp-symbols)))
       #+end_src
+
 **** Embark
      This package provides a sort of right-click contextual menu for Emacs, accessed through the embark-act command (which you should bind to a convenient key), offering you relevant actions to use on a target determined by the context:
 
@@ -983,8 +984,7 @@
        (use-package embark
          :straight t
          :bind
-         (("C-M-y" . embark-act)       ;; pick some comfortable binding
-          ("C-h B" . embark-bindings) ;; alternative for `describe-bindings'
+         (("C-;" . embark-act)
           :map embark-file-map
           ("s" . embark-magit-status)
           :map minibuffer-local-map
@@ -1020,10 +1020,10 @@
                         nil
                         (window-parameters (mode-line-format . none))))
          (embark-define-keymap embark-tab-actions
-                               "Keymap for actions for tab-bar tabs (when mentioned by name)."
-                               ("s" oa/select-tab-by-name)
-                               ("r" tab-bar-rename-tab-by-name)
-                               ("k" tab-bar-close-tab-by-name))
+           "Keymap for actions for tab-bar tabs (when mentioned by name)."
+           ("s" oa/select-tab-by-name)
+           ("r" tab-bar-rename-tab-by-name)
+           ("k" tab-bar-close-tab-by-name))
 
          (add-to-list 'embark-keymap-alist '(tab . embark-tab-actions)))
 
@@ -1755,8 +1755,8 @@
      #+begin_src emacs-lisp
        (use-package org-pandoc-import
          :straight (:host github
-                    :repo "tecosaur/org-pandoc-import"
-                    :files ("*.el" "filters" "preprocessors")))
+                          :repo "tecosaur/org-pandoc-import"
+                          :files ("*.el" "filters" "preprocessors")))
      #+end_src
 
 **** Org-pomodoro
