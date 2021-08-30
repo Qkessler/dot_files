@@ -252,7 +252,7 @@
 
 *** Modeline
 **** Doom-modeline
-     #+BEGIN_SRC emacs-lisp
+     #+begin_src emacs-lisp
        (defvar doom-modeline-icon (display-graphic-p)
          "Whether show `all-the-icons' or not.
 
@@ -292,13 +292,13 @@
          :config
          (display-time-mode)
          (display-time-update))
-     #+END_SRC
+     #+end_src
 
 **** All-the-icons
-     #+BEGIN_SRC emacs-lisp
+     #+begin_src emacs-lisp
        (use-package all-the-icons
          :straight t)
-     #+END_SRC
+     #+end_src
 
 *** Commenting
 **** Smart comments
@@ -306,11 +306,11 @@
      When at the beginning or middle of the line, comments line.
      When pointing at region, comments full region.
 
-     #+BEGIN_SRC emacs-lisp
+     #+begin_src emacs-lisp
        (use-package smart-comment
          :straight t
          :bind ("M-;" . smart-comment))
-     #+END_SRC
+     #+end_src
 
 **** Copy and comment
      Custom function created with the intention of using the commented
@@ -374,14 +374,14 @@
      #+end_src
 
 **** Directories first on dired.
-     #+BEGIN_SRC emacs-lisp
+     #+begin_src emacs-lisp
        (setq dired-listing-switches "-aBhl")
-     #+END_SRC
+     #+end_src
 
 **** Backup directory
-     #+BEGIN_SRC emacs-lisp
+     #+begin_src emacs-lisp
        (setq backup-directory-alist '(("" . "~/.emacs.d/backup")))
-     #+END_SRC
+     #+end_src
 
 **** Dired-subtree
      This package defines function dired-subtree-insert which instead inserts the subdirectory directly below its line in the original listing, and indent the listing of subdirectory to resemble a tree-like structure (somewhat similar to tree(1) except the pretty graphics). The tree display is somewhat more intuitive than the default "flat" subdirectory manipulation provided by =i=.
@@ -455,14 +455,14 @@
      #+end_src
 
      Adding reference connection made easier with reftex.
-     #+BEGIN_SRC emacs-lisp
+     #+begin_src emacs-lisp
        (use-package reftex
          :straight t
          :custom (reftex-cite-prompt-optional-args t))
-     #+END_SRC
+     #+end_src
 
      Adding general configuration for tex files and latex-mode better defaults.
-     #+BEGIN_SRC emacs-lisp
+     #+begin_src emacs-lisp
        (use-package tex
          :straight auctex
          :mode ("\\.tex\\'" . latex-mode)
@@ -483,7 +483,7 @@
                                (reftex-mode t)
                                (flyspell-mode t)))
                    ))
-     #+END_SRC
+     #+end_src
 
      Removing the mark keybindings on latex buffers, which are
      normally bound to the flyspell word correction keys.
@@ -496,50 +496,50 @@
 *** Appearence
 **** Cursor display
      Bar cursor instead of rectangle default.
-     #+BEGIN_SRC emacs-lisp
+     #+begin_src emacs-lisp
        (setq-default cursor-type 'bar)
-     #+END_SRC
+     #+end_src
 
 **** Yes/No with y/n
-     #+BEGIN_SRC emacs-lisp
+     #+begin_src emacs-lisp
        (fset 'yes-or-no-p 'y-or-n-p)
-     #+END_SRC
+     #+end_src
 
 **** Splash screen and startup message
-     #+BEGIN_SRC emacs-lisp
+     #+begin_src emacs-lisp
        (setq inhibit-startup-message t)
-     #+END_SRC
+     #+end_src
 
 **** Line numeration on left side
-     #+BEGIN_SRC emacs-lisp
+     #+begin_src emacs-lisp
        (global-linum-mode t)
        (put 'erase-buffer 'disabled nil)
-     #+END_SRC
+     #+end_src
 
 **** New lines
      Adding newline at the end of the file.
-     #+BEGIN_SRC emacs-lisp
+     #+begin_src emacs-lisp
        (setq next-line-add-newlines t)    
-     #+END_SRC
+     #+end_src
 
 **** Sounds
      Disabling beep sound.
-     #+BEGIN_SRC emacs-lisp
+     #+begin_src emacs-lisp
        (setq visible-bell 1)
-     #+END_SRC
+     #+end_src
 
 **** Menu-bar
      Disabling the menu-bar, prior to tab-mode-line configuration.
-     #+BEGIN_SRC emacs-lisp
+     #+begin_src emacs-lisp
        (menu-bar-mode -1)
-     #+END_SRC
+     #+end_src
 
 *** Indentation
     Indentation to 4 spaces instead of tab.
-    #+BEGIN_SRC emacs-lisp
+    #+begin_src emacs-lisp
       (setq-default indent-tabs-mode nil)
       (setq-default tab-width 4)
-    #+END_SRC
+    #+end_src
 
 *** Markdown
     Markdown configuration, which I use specially often when editing README files
@@ -551,7 +551,7 @@
     from the [[https://blog.bitsandbobs.net/blog/emacs-markdown-live-preview/][bits and bobs blog post.]]
 
     The second markdown function is from this link: [[https://stackoverflow.com/questions/36183071/how-can-i-preview-markdown-in-emacs-in-real-time/41288851#41288851][stack overflow markdown link]].
-    #+BEGIN_SRC emacs-lisp
+    #+begin_src emacs-lisp
       (use-package simple-httpd
         :straight t
         :custom
@@ -586,13 +586,13 @@
         :bind
         (:map markdown-mode-map
               ("C-c r" . bb/markdown-preview)))
-    #+END_SRC
+    #+end_src
 
 *** Mark commands
     Adding better defaults to the mark commands, as I find cumbersome to remove the
     region everytime I want to access the mark functionality.
 
-    #+BEGIN_SRC emacs-lisp
+    #+begin_src emacs-lisp
       (defun push-mark-no-activate ()
         "Pushes `point' to `mark-ring' and does not activate the region
          Equivalent to \\[set-mark-command] when \\[transient-mark-mode] is disabled"
@@ -615,13 +615,13 @@
       (global-set-key (kbd "C-.") 'push-mark-no-activate)
       (global-set-key (kbd "C-,") 'jump-to-mark)
       (define-key global-map [remap exchange-point-and-mark] 'exchange-point-and-mark-no-activate)
-    #+END_SRC
+    #+end_src
 
 *** Window switching
     I'm trying ace-window in order to allow faster window switching, when working with
     multiple buffers in the same frame. Disabling also the undo command, trying to get
     used to C-/
-    #+BEGIN_SRC emacs-lisp
+    #+begin_src emacs-lisp
       (global-unset-key (kbd "C-x o"))
       (global-unset-key (kbd "C-x u"))
 
@@ -632,7 +632,7 @@
         :custom
         (aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
         (aw-background nil))
-    #+END_SRC
+    #+end_src
 
 *** Perspective.el
     The Perspective package provides multiple named workspaces (or "perspectives") in Emacs, similar to multiple desktops in window managers like Awesome and XMonad, and Spaces on the Mac. Each perspective has its own buffer list and its own window layout, along with some other isolated niceties, like the xref ring.
@@ -655,15 +655,15 @@
     #+end_src
 
 *** Auto indent
-    #+BEGIN_SRC emacs-lisp
+    #+begin_src emacs-lisp
       (define-key global-map (kbd "RET") 'newline-and-indent)
-    #+END_SRC
+    #+end_src
 
 *** pdf tools
     pdf tools so that pages are created on demand instead of preloading the entire file, which
     may freeze emacs. Also adding the hook in order to autorevert the pdf buffer when compiling
     with auctex.
-    #+BEGIN_SRC emacs-lisp
+    #+begin_src emacs-lisp
       (use-package pdf-tools
         :straight t
         :custom
@@ -673,7 +673,7 @@
         :bind (:map pdf-view-mode-map
                     ("C-s" . isearch-forward)
                     ("C-r" . isearch-backward)))
-    #+END_SRC
+    #+end_src
 
 *** Ripgrep
     Adding ripgrep configuration to be able to access the functionality from emacs.
@@ -1099,14 +1099,14 @@
 ** Org-mode
 *** Keybindings
     Keybindings for org-mode as well as better defaults. Not in use-package format yet.
-    #+BEGIN_SRC emacs-lisp
+    #+begin_src emacs-lisp
       (define-key global-map (kbd "C-c o l") 'org-store-link)
       (define-key global-map (kbd "C-c a") 'org-agenda)
       (define-key global-map (kbd "C-c c") 'org-capture)
       (define-key org-mode-map (kbd "C-c o c") 'org-columns)
       (define-key org-mode-map (kbd "C-,") nil)
       (define-key org-mode-map (kbd "C-c o t") 'org-babel-tangle)
-    #+END_SRC
+    #+end_src
 
 **** Org-mode file movement
      There are already defined org-mode movement keys to navigate the header tree, but I find difficult to reach everytime for =C-c C-n= or =C-c C-u= to go to the next or parent header respectively.
@@ -1291,19 +1291,28 @@
     Refiling setup, using the file name as header. Last line is
     so that we ensure that tasks cannot be tagged as completed
     before subtasks have been done so.
-    #+BEGIN_SRC emacs-lisp
-      (setq
-       org-refile-use-outline-path 'file
-       org-outline-path-complete-in-steps nil
-       org-refile-allow-creating-parent-nodes 'confirm
-       org-enforce-todo-dependencies t
-       )
-    #+END_SRC
+    #+begin_src emacs-lisp
+      (defun qk/org-refile-target-verify-function ()
+        "Function to be assigned to the `org-refile-target-verify-function'.
+         Show only refile targets if they are tagged with PROJECT or the header
+         that surrounds the current target is Items, which is a placeholder for
+         either PROJECT items headings or non-PROJECT file targets."
+        (or (string= (nth 2 (org-heading-components)) "PROJECT")
+            (string= (nth 4 (org-heading-components)) "Items")))
+
+      (use-package org
+        :custom
+        (org-refile-use-outline-path 'file)
+        (org-outline-path-complete-in-steps nil)
+        (org-refile-allow-creating-parent-nodes 'confirm)
+        (org-enforce-todo-dependencies t)
+        (org-refile-target-verify-function 'qk/org-refile-target-verify-function))
+    #+end_src
 
     Adding keywords for easier refiling and capturing. Right side of
     the "|" key is used to indicate the keyword designing completion for
     a certain state.
-    #+BEGIN_SRC emacs-lisp
+    #+begin_src emacs-lisp
       (setq 
        org-todo-keywords
        (quote ((sequence "TODO(t)" "|" "DONE(d)")
@@ -1318,26 +1327,43 @@
               )
 
        )
-    #+END_SRC
+    #+end_src
 
     Change the faces of the keywords, I keep it in a different source block to tangle or untagle if necessary.
     #+begin_src emacs-lisp
-      (setq org-todo-keyword-faces
-            '(
-              ("PROJECT" . (:foreground "#a87600" :weight bold))
-              ("OPTIONAL" . (:foreground "#08a838" :weight bold))
-              ("WAITING" . (:foreground "#fe2f92" :weight bold))
-              ("CANCELLED" . (:foreground "#999999" :weight bold))
-              ("SOMEDAY" . (:foreground "#ab82ff" :weight bold))
-              ("MEETING" . (:foreground "#1874cd" :weight bold))
-              ("NOTE" . (:foreground "#fcba03" :weight bold))
-              ))
+      (defface qk/meeting-todo-face '((t :weight bold))
+        "Face to be changed by the `qk/choose-meeting-todo-face' function.")
+      (defun qk/choose-meeting-todo-face ()
+        "Depending on the theme change the MEETING todo-face. That face is too dark
+      on dark themes, which I always have in my second index of the `qk/themes-list'"
+        (if (equal qk/themes-index 0)
+            (face-spec-set 'qk/meeting-todo-face '((t :foreground "#1874cd" :weight bold)) 'face-defface-spec)
+          (face-spec-set 'qk/meeting-todo-face '((t :foreground "#81A1C1" :weight bold)) 'face-defface-spec)))
+      (qk/choose-meeting-todo-face)
+
+      (defun qk/set-org-todo-keyword-faces ()
+        "Configure the MEETING org-todo-face and set up the others, which are still static."
+        (qk/choose-meeting-todo-face)
+        (setq org-todo-keyword-faces
+              '(
+                ("PROJECT" . (:foreground "#a87600" :weight bold))
+                ("OPTIONAL" . (:foreground "#08a838" :weight bold))
+                ("WAITING" . (:foreground "#fe2f92" :weight bold))
+                ("CANCELLED" . (:foreground "#999999" :weight bold))
+                ("SOMEDAY" . (:foreground "#ab82ff" :weight bold))
+                ("MEETING" . (get 'qk/meeting-todo-face 'face-defface-spec))
+                ("NOTE" . (:foreground "#fcba03" :weight bold))
+                )))
+      (qk/set-org-todo-keyword-faces)
+
+      (use-package emacs
+        :hook (after-load-theme . qk/set-org-todo-keyword-faces))
     #+end_src
 
 *** Org capture
     Capture templates are used with the intention of improving
     the workflow of adding several items and refiling.
-    #+BEGIN_SRC emacs-lisp
+    #+begin_src emacs-lisp
       (defvar org-blog-directory-file (concat org-directory "/blog/refile.org"))
       (setq
        org-capture-templates
@@ -1366,272 +1392,252 @@
           "* TODO #+TITLE: \n#+DATE: \n#+CATEGORY: \n#+TAGS: \n#+SUMMARY: \n #+IMAGE: \n")
          )
        )
-    #+END_SRC
+    #+end_src
 
 *** Org agenda
-    Adding hiding the tags on org agenda.
-    #+BEGIN_SRC emacs-lisp
-      (setq org-agenda-hide-tags-regexp (regexp-opt '(
-                                                      "REFILING" "MEETING" "IDEA" "EMAIL" "SOMEDAY" "OPTIONAL" "PROJECT" "NOTE" "@work" "@home")))
-    #+END_SRC
-
-    Removing inherited and REFILING tags in order to use the tags correctly
-    #+BEGIN_SRC emacs-lisp
-      (defun qk/org-remove-inherited-tag-strings ()
-        "Removes inherited tags from the headline-at-point's tag string.
-          Note this does not change the inherited tags for a headline,
-          just the tag string."
-        (org-set-tags (seq-remove (lambda (tag)
-                                    (get-text-property 0 'inherited tag))
-                                  (org-get-tags))))
-
-      (defun qk/org-remove-refiling-tag ()
-        "Remove the REFILING tag once the item has been refiled."
-        (org-toggle-tag "REFILING" 'off))
-
-      (defun qk/org-clean-tags ()
-        "Visit last refiled headline and remove inherited tags from tag string."
-        (save-window-excursion
-          (org-refile-goto-last-stored)
-          (qk/org-remove-inherited-tag-strings)
-          (qk/org-remove-refiling-tag)))
-
-      (add-hook 'org-after-refile-insert-hook 'qk/org-clean-tags)
-    #+END_SRC
-
-    Adding series of tags with the intention of tagging the items for better 
-    organization besides the refile file. Adding automated tasks to a tagged item.
-    #+BEGIN_SRC emacs-lisp
-      (setq org-tag-alist '((:startgroup . nil)
-                            ("@work" . ?w)
-                            ("@home" . ?h)
-                            (:endgroup . nil)
-                            ("literature" . ?n)
-                            ("coding" . ?c)
-                            ("writing" . ?p)
-                            ("emacs" . ?e)
-                            ("misc" . ?m)))
-
-      (setq
-       org-todo-state-tags-triggers
-       (quote (
-               ;; Move to cancelled adds the cancelled tag
-               ("CANCELLED" ("CANCELLED" . t))
-               ;; Move to waiting adds the waiting tag
-               ("WAITING" ("WAITING" . t))
-               ;; Move to a done state removes waiting/cancelled
-               (done ("WAITING") ("CANCELLED"))
-               ("DONE" ("WAITING") ("CANCELLED"))
-               ;; Move to todo, removes waiting/cancelled
-               ("TODO" ("WAITING") ("CANCELLED"))
-               )
-              )
-       )
-    #+END_SRC
-
-    Configuration of a NEXT actions org-agenda view, getting the first valid TODO item in an open (non-stuck PROJECT). Depending on context, we are able to get the information. The context is represented on projects by tags: @work and @home. I got most of the configuration out of the [[https://www.adventuresinwhy.com/post/next-actions/][adventuresinwhy blog post]], which I recommend for a deeper explanation.
-    #+begin_src emacs-lisp
-      (defun aw/org-agenda-skip-all-siblings-but-first ()
-        "Skip all but the first non-done entry."
-        (let (should-skip-entry)
-          (unless (org-current-is-todo)
-            (setq should-skip-entry t))
-          (save-excursion
-            ;; If previous sibling exists and is TODO,
-            ;; skip this entry
-            (while (and (not should-skip-entry) (org-goto-sibling t))
-              (when (org-current-is-todo)
-                (setq should-skip-entry t))))
-          (let ((num-ancestors (org-current-level))
-                (ancestor-level 1))
-            (while (and (not should-skip-entry) (<= ancestor-level num-ancestors))
-              (save-excursion
-                ;; When ancestor (parent, grandparent, etc) exists
-                (when (ignore-errors (outline-up-heading ancestor-level t))
-                  ;; If ancestor is WAITING, skip entry
-                  (if (string= "WAITING" (org-get-todo-state))
-                      (setq should-skip-entry t)
-                    ;; Else if ancestor is TODO, check previous siblings of
-                    ;; ancestor ("uncles"); if any of them are TODO, skip
-                    (when (org-current-is-todo)
-                      (while (and (not should-skip-entry) (org-goto-sibling t))
-                        (when (org-current-is-todo)
-                          (setq should-skip-entry t)))))))
-              (setq ancestor-level (1+ ancestor-level))
-              ))
-          (when should-skip-entry
-            (or (outline-next-heading)
-                (goto-char (point-max))))))
-
-      (defun org-current-is-todo ()
-        (string= "TODO" (org-get-todo-state)))
-    #+end_src
-    
-    Adding more beautiful org-agenda view with all-icons and better configuration
-    of the layout, giving me a lot more information.
-    #+BEGIN_SRC emacs-lisp
-      (setq org-deadline-warning-days 3)
-      (setq org-agenda-block-separator ?—)
-      (setq org-agenda-category-icon-alist
-            `(("TODO" (list (all-the-icons-faicon "tasks")) nil nil :ascent center)))
-      (setq org-agenda-custom-commands
-            '(
-              ("d" "Agenda" ((agenda "" ((org-agenda-overriding-header "Today's Schedule:")
-                                         (org-agenda-span 'day)
-                                         (org-agenda-ndays 1)
-                                         (org-agenda-start-on-weekday nil)
-                                         (org-agenda-start-day "+0d")
-                                         (org-agenda-skip-function '(cond ((equal (file-name-nondirectory (buffer-file-name)) "refile.org") (outline-next-heading) (1- (point)))
-                                                                          (t (org-agenda-skip-entry-if 'todo 'done))))
-                                         (org-agenda-todo-ignore-deadlines nil)))
-                             ;; Project tickle list.
-                             (todo "PROJECT" ((org-agenda-overriding-header "Project list:")
-                                              (org-tags-match-list-sublevels nil)))
-                             ;; Refiling category set file wide in file.
-                             (tags "REFILING" ((org-agenda-overriding-header "Tasks to Refile:")
-                                               (org-tags-match-list-sublevels nil)))
-                             ;; Tasks that are unscheduled
-                             (todo "TODO" ((org-agenda-overriding-header "Unscheduled Tasks:")
-                                           (org-tags-match-list-sublevels nil)
-                                           (org-agenda-skip-function '(org-agenda-skip-entry-if 'deadline 'scheduled))
-                                           ))
-                             ;; Tasks that are waiting or someday
-                             (todo "WAITING|SOMEDAY" ((org-agenda-overriding-header "Waiting/Someday Tasks:")
-                                                      (org-tags-match-list-sublevels nil)))
-                             (todo "NOTE" ((org-agenda-overriding-header "Notes:")
-                                           (org-tags-match-list-sublevels nil)))
-                             (agenda "" ((org-agenda-overriding-header "Upcoming:")
-                                         (org-agenda-span 7)
-                                         (org-agenda-start-day "+1d")
-                                         (org-agenda-start-on-weekday nil)
-                                         (org-agenda-skip-function '(cond ((equal (file-name-nondirectory (buffer-file-name)) "refile.org")
-                                                                           (outline-next-heading) (1- (point)))
-                                                                          (t (org-agenda-skip-entry-if 'todo 'done))
-                                                                          ))
-                                         ;; I should set this next one to true, so that deadlines are ignored...?
-                                         (org-agenda-todo-ignore-deadlines nil)))))
-              ("N" "Next Actions"
-               ((tags-todo "@work"
-                           ((org-agenda-overriding-header "Work:")
-                            (org-agenda-skip-function #'aw/org-agenda-skip-all-siblings-but-first)))
-                (tags-todo "@home"
-                           ((org-agenda-overriding-header "Home:")
-                            (org-agenda-skip-function #'aw/org-agenda-skip-all-siblings-but-first)))
-                )))
-
-            ;; If an item has a (near) deadline, and is scheduled, only show the deadline.
-            org-agenda-skip-scheduled-if-deadline-is-shown t)
-    #+END_SRC
-
-    
-
-**** org-agenda transient
+**** Hiding tags 
+     Adding hiding the tags on org agenda.
      #+begin_src emacs-lisp
-       (transient-define-prefix qk/org-agenda-transient ()
-         "org-agenda commands that I use, organized with the transient model, which I find cleaner and easier to read than hydra."
-         [
-          ["Entry"
-           ("e A" "Archive default" org-agenda-archive-default)
-           ("e k" "Remove entry" org-agenda-kill)
-           ("e r" "Refile" org-agenda-refile)
-           ("e p" "Set priority" org-agenda-priority)
-           ("e :" "Set tags" org-agenda-set-tags)
-           ("e t" "Set state" org-agenda-todo)
-           ("d d" "Set deadline" org-agenda-deadline)
-           ("d t" "Date prompt" org-agenda-date-prompt)
-           ("d s" "Schedule" org-agenda-schedule)
-           ("d +" "Next day" org-agenda-do-date-later)
-           ("d -" "Previous day" org-agenda-do-date-earlier)
-           ]
-          ["Show"
-           ("TAB" "Entry other buffer" org-agenda-goto)
-           ("SPC" "Show entry" org-agenda-show-and-scroll-up)
-           ("RET" "Switch to entry" org-agenda-switch-to)
-           "Calendar"
-           ("s o" "Show org calendar" qk/open-org-calendar)
-           ("s q" "Show qkessler calendar" qk/open-qk-calendar)
-           ("s e" "Show enrique.kesslerm calendar" qk/open-ekm-calendar)
-           ]
-          ["View"
-           ("v d" "Day view" org-agenda-day-view)
-           ("v w" "Week view" org-agenda-week-view)
-           ("v t" "Fortnight view" org-agenda-fortnight-view)
-           ("v m" "Month view" org-agenda-month-view)
-           ("v y" "Year view" org-agenda-year-view)
-           ("v n" "Next view" org-agenda-later)
-           ("v p" "Previous view" org-agenda-earlier)
-           ("v r" "Reset view" org-agenda-reset-view)
-           ("g d" "Go to date" org-agenda-goto-date)
-           ("g r" "Refresh" org-agenda-redo)
-           ("." "Go to today" org-agenda-goto-today)
-           ]
-          ]
-         [
-          ["Toggle"
-           ("t a" "Archives mode" org-agenda-archives-mode)
-           ("t r" "Clock report mode" org-agenda-clockreport-mode)
-           ("t f" "Follow mode" org-agenda-follow-mode)
-           ("t l" "Log mode" org-agenda-log-mode)
-           ("t d" "Diary" org-agenda-toggle-diary)
-           ]
-          ["Filter"
-           ("f c" "By category" org-agenda-filter-by-category)
-           ("f x" "By regexp" org-agenda-filter-by-regexp)
-           ("f t" "By tag" org-agenda-filter-by-tag)
-           ("f d" "Remove filters" org-agenda-filter-remove-all)
-           ]
-          ["Clock"
-           ("c q" "Cancel" org-agenda-clock-cancel)
-           ("c j" "Go to clock" org-agenda-clock-goto)
-           ("c i" "Clock in" org-agenda-clock-in)
-           ("c o" "Clock out" org-agenda-clock-out)
-           ("c p" "Clock pomodoro" org-pomodoro)
-           ]
-          ])
+       (setq org-agenda-hide-tags-regexp ".*")
+
+       (use-package org-agenda
+         :bind (:map org-agenda-mode-map
+                     ("?" . qk/org-agenda-transient))
+         :custom
+         (org-agenda-prefix-format "  %?-12t% s")
+         (org-agenda-archives-mode nil)
+         (org-agenda-skip-comment-trees nil)
+         (org-agenda-skip-function nil)
+         :config
+         (transient-define-prefix qk/org-agenda-transient ()
+           "org-agenda commands that I use, organized with the transient model, which I find cleaner and easier to read than hydra."
+           [
+            ["Entry"
+             ("e A" "Archive default" org-agenda-archive-default)
+             ("e k" "Remove entry" org-agenda-kill)
+             ("e r" "Refile" org-agenda-refile)
+             ("e p" "Set priority" org-agenda-priority)
+             ("e :" "Set tags" org-agenda-set-tags)
+             ("e t" "Set state" org-agenda-todo)
+             ("d d" "Set deadline" org-agenda-deadline)
+             ("d t" "Date prompt" org-agenda-date-prompt)
+             ("d s" "Schedule" org-agenda-schedule)
+             ("d +" "Next day" org-agenda-do-date-later)
+             ("d -" "Previous day" org-agenda-do-date-earlier)
+             ]
+            ["Show"
+             ("TAB" "Entry other buffer" org-agenda-goto)
+             ("SPC" "Show entry" org-agenda-show-and-scroll-up)
+             ("RET" "Switch to entry" org-agenda-switch-to)
+             "Calendar"
+             ("s o" "Show org calendar" qk/open-org-calendar)
+             ("s q" "Show qkessler calendar" qk/open-qk-calendar)
+             ("s e" "Show enrique.kesslerm calendar" qk/open-ekm-calendar)
+             ]
+            ["View"
+             ("v d" "Day view" org-agenda-day-view)
+             ("v w" "Week view" org-agenda-week-view)
+             ("v t" "Fortnight view" org-agenda-fortnight-view)
+             ("v m" "Month view" org-agenda-month-view)
+             ("v y" "Year view" org-agenda-year-view)
+             ("v n" "Next view" org-agenda-later)
+             ("v p" "Previous view" org-agenda-earlier)
+             ("v r" "Reset view" org-agenda-reset-view)
+             ("g d" "Go to date" org-agenda-goto-date)
+             ("g r" "Refresh" org-agenda-redo)
+             ("." "Go to today" org-agenda-goto-today)
+             ]
+            ]
+           [
+            ["Toggle"
+             ("t a" "Archives mode" org-agenda-archives-mode)
+             ("t r" "Clock report mode" org-agenda-clockreport-mode)
+             ("t f" "Follow mode" org-agenda-follow-mode)
+             ("t l" "Log mode" org-agenda-log-mode)
+             ("t d" "Diary" org-agenda-toggle-diary)
+             ]
+            ["Filter"
+             ("f c" "By category" org-agenda-filter-by-category)
+             ("f x" "By regexp" org-agenda-filter-by-regexp)
+             ("f t" "By tag" org-agenda-filter-by-tag)
+             ("f d" "Remove filters" org-agenda-filter-remove-all)
+             ]
+            ["Clock"
+             ("c q" "Cancel" org-agenda-clock-cancel)
+             ("c j" "Go to clock" org-agenda-clock-goto)
+             ("c i" "Clock in" org-agenda-clock-in)
+             ("c o" "Clock out" org-agenda-clock-out)
+             ("c p" "Clock pomodoro" org-pomodoro)
+             ]
+            ]))
      #+end_src
 
-**** org-agenda keybindings
+**** Refiling workflow 
+     Removing inherited and REFILING tags in order to use the tags correctly
+     #+begin_src emacs-lisp
+       (defun qk/org-remove-inherited-tag-strings ()
+         "Removes inherited tags from the headline-at-point's tag string.
+           Note this does not change the inherited tags for a headline,
+           just the tag string."
+         (org-set-tags (seq-remove (lambda (tag)
+                                     (get-text-property 0 'inherited tag))
+                                   (org-get-tags))))
+
+       (defun qk/org-remove-refiling-tag ()
+         "Remove the REFILING tag once the item has been refiled."
+         (org-toggle-tag "REFILING" 'off))
+
+       (defun qk/org-clean-tags ()
+         "Visit last refiled headline and remove inherited tags from tag string."
+         (save-window-excursion
+           (org-refile-goto-last-stored)
+           (qk/org-remove-inherited-tag-strings)
+           (qk/org-remove-refiling-tag)))
+
+       (add-hook 'org-after-refile-insert-hook 'qk/org-clean-tags)
+     #+end_src
+
+**** Series of tags on org-agenda 
+     Adding series of tags with the intention of tagging the items for better 
+     organization besides the refile file. Adding automated tasks to a tagged item.
+     #+begin_src emacs-lisp
+       (setq org-tag-alist '((:startgroup . nil)
+                             ("@work" . ?w)
+                             ("@home" . ?h)
+                             (:endgroup . nil)
+                             ("literature" . ?n)
+                             ("coding" . ?c)
+                             ("writing" . ?p)
+                             ("emacs" . ?e)
+                             ("misc" . ?m)))
+
+       (setq
+        org-todo-state-tags-triggers
+        (quote (
+                ;; Move to cancelled adds the cancelled tag
+                ("CANCELLED" ("CANCELLED" . t))
+                ;; Move to waiting adds the waiting tag
+                ("WAITING" ("WAITING" . t))
+                ;; Move to a done state removes waiting/cancelled
+                (done ("WAITING") ("CANCELLED"))
+                ("DONE" ("WAITING") ("CANCELLED"))
+                ;; Move to todo, removes waiting/cancelled
+                ("TODO" ("WAITING") ("CANCELLED"))
+                )
+               )
+        )
+     #+end_src
+
+**** NEXT actions org-agenda view
+     Configuration of a NEXT actions org-agenda view, getting the first valid TODO item in an open (non-stuck PROJECT). Depending on context, we are able to get the information. The context is represented on projects by tags: @work and @home. I got most of the configuration out of the [[https://www.adventuresinwhy.com/post/next-actions/][adventuresinwhy blog post]], which I recommend for a deeper explanation.
+     #+begin_src emacs-lisp
+       (defun aw/org-agenda-skip-all-siblings-but-first ()
+         "Skip all but the first non-done entry."
+         (let (should-skip-entry)
+           (unless (org-current-is-todo)
+             (setq should-skip-entry t))
+           (save-excursion
+             ;; If previous sibling exists and is TODO,
+             ;; skip this entry
+             (while (and (not should-skip-entry) (org-goto-sibling t))
+               (when (org-current-is-todo)
+                 (setq should-skip-entry t))))
+           (let ((num-ancestors (org-current-level))
+                 (ancestor-level 1))
+             (while (and (not should-skip-entry) (<= ancestor-level num-ancestors))
+               (save-excursion
+                 ;; When ancestor (parent, grandparent, etc) exists
+                 (when (ignore-errors (outline-up-heading ancestor-level t))
+                   ;; If ancestor is WAITING, skip entry
+                   (if (string= "WAITING" (org-get-todo-state))
+                       (setq should-skip-entry t)
+                     ;; Else if ancestor is TODO, check previous siblings of
+                     ;; ancestor ("uncles"); if any of them are TODO, skip
+                     (when (org-current-is-todo)
+                       (while (and (not should-skip-entry) (org-goto-sibling t))
+                         (when (org-current-is-todo)
+                           (setq should-skip-entry t)))))))
+               (setq ancestor-level (1+ ancestor-level))
+               ))
+           (when should-skip-entry
+             (or (outline-next-heading)
+                 (goto-char (point-max))))))
+
+       (defun org-current-is-todo ()
+         (string= "TODO" (org-get-todo-state)))
+     #+end_src
+
+**** Org-agenda custom views
+     Adding more beautiful org-agenda view with all-icons and better configuration
+     of the layout, giving me a lot more information.
+     #+begin_src emacs-lisp
+       (setq org-deadline-warning-days 3)
+       (setq org-agenda-block-separator ?—)
+       (setq org-agenda-category-icon-alist
+             `(("TODO" (list (all-the-icons-faicon "tasks")) nil nil :ascent center)))
+       (setq org-agenda-custom-commands
+             '(
+               ("d" "Agenda" ((agenda "" ((org-agenda-overriding-header "Today's Schedule:")
+                                          (org-agenda-span 'day)
+                                          (org-agenda-ndays 1)
+                                          (org-agenda-start-on-weekday nil)
+                                          (org-agenda-start-day "+0d")
+                                          (org-agenda-skip-function '(cond ((equal (file-name-nondirectory (buffer-file-name)) "refile.org") (outline-next-heading) (1- (point)))
+                                                                           (t (org-agenda-skip-entry-if 'todo 'done))))
+                                          (org-agenda-todo-ignore-deadlines nil)))
+                              ;; Project tickle list.
+                              (todo "PROJECT" ((org-agenda-overriding-header "Project list:")
+                                               (org-tags-match-list-sublevels nil)))
+                              ;; Refiling category set file wide in file.
+                              (tags "REFILING" ((org-agenda-overriding-header "Tasks to Refile:")
+                                                (org-tags-match-list-sublevels nil)))
+                              ;; Tasks that are unscheduled
+                              (todo "TODO" ((org-agenda-overriding-header "Unscheduled Tasks:")
+                                            (org-tags-match-list-sublevels nil)
+                                            (org-agenda-skip-function '(org-agenda-skip-entry-if 'deadline 'scheduled))
+                                            ))
+                              ;; Tasks that are waiting or someday
+                              (todo "WAITING|SOMEDAY" ((org-agenda-overriding-header "Waiting/Someday Tasks:")
+                                                       (org-tags-match-list-sublevels nil)))
+                              (todo "NOTE" ((org-agenda-overriding-header "Notes:")
+                                            (org-tags-match-list-sublevels nil)))
+                              (agenda "" ((org-agenda-overriding-header "Upcoming:")
+                                          (org-agenda-span 7)
+                                          (org-agenda-start-day "+1d")
+                                          (org-agenda-start-on-weekday nil)
+                                          (org-agenda-skip-function '(cond ((equal (file-name-nondirectory (buffer-file-name)) "refile.org")
+                                                                            (outline-next-heading) (1- (point)))
+                                                                           (t (org-agenda-skip-entry-if 'todo 'done))
+                                                                           ))
+                                          ;; I should set this next one to true, so that deadlines are ignored...?
+                                          (org-agenda-todo-ignore-deadlines nil)))))
+               ("N" "Next Actions"
+                ((tags-todo "@work"
+                            ((org-agenda-overriding-header "Work:")
+                             (org-agenda-skip-function #'aw/org-agenda-skip-all-siblings-but-first)))
+                 (tags-todo "@home"
+                            ((org-agenda-overriding-header "Home:")
+                             (org-agenda-skip-function #'aw/org-agenda-skip-all-siblings-but-first)))
+                 )))
+
+             ;; If an item has a (near) deadline, and is scheduled, only show the deadline.
+             org-agenda-skip-scheduled-if-deadline-is-shown t)
+     #+end_src
+
+**** Org-agenda keybindings
      Adding custom agenda commands, with the intention of making the refiling and
      tagging workflow a bit faster, as C-c C-w might be cumbersome to write in agenda-view.
-     #+BEGIN_SRC emacs-lisp
+     #+begin_src emacs-lisp
        (add-hook 'org-agenda-mode-hook
                  (lambda ()
-                   (local-set-key (kbd "r") 'org-agenda-refile)
-                   (local-set-key (kbd "?") 'qk/org-agenda-transient)))
-     #+END_SRC
-
-**** calfw
-     =emacs-calfw= is a calendar UI improvement package for Emacs, displaying a beautiful calendar using the sources that we configure. =calfw= has support for org-mode items, ical events (both from a local or remote file) and more.
-     #+begin_src emacs-lisp
-       (use-package calfw
-         :straight (calfw :type git :host github :repo "Qkessler/emacs-calfw")
-         :config
-         (with-eval-after-load 'calfw
-           (use-package calfw-ical
-             :straight (:host github :repo "Qkessler/emacs-calfw"))
-           (use-package calfw-org
-             :straight (:host github :repo "Qkessler/emacs-calfw")
-             :custom (cfw:org-overwrite-default-keybinding t)))
-         (defun qk/open-org-calendar ()
-           "Open the calfw calendar using the org-agenda source."
-           (interactive)
-           (cfw:open-org-calendar))
-         (defun qk/open-qk-calendar ()
-           "Open the calfw calendar using qkessler's google calendar source."
-           (interactive)
-           (cfw:open-ical-calendar (password-store-get "qkessler gcal")))
-         (defun qk/open-ekm-calendar ()
-           "Open the calfw calendar using enrique.kesslerm's google calendar source."
-           (interactive)
-           (cfw:open-ical-calendar (password-store-get "enrique.kesslerm gcal"))))
-
+                   (local-set-key (kbd "r") 'org-agenda-refile)))
      #+end_src
-     
+
 *** Org source blocks
     Tabs on org-mode source blocks try to find the language added.
     If for some reason the language on the source tag doesn't exist
     add 4 spaces.
-    #+BEGIN_SRC emacs-lisp
+    #+begin_src emacs-lisp
       (add-hook 'org-tab-first-hook
                 (lambda ()
                   (when (org-in-src-block-p t)
@@ -1640,19 +1646,22 @@
                            (langs org-babel-load-languages))
                       (unless (alist-get lang langs)
                         (indent-to 4))))))
-    #+END_SRC
+    #+end_src
 
-    Remove the anoying warnings when you compile a source block. 
+    Remove the annoying warnings when you compile a source block. 
     #+begin_src emacs-lisp
       (use-package ob
         :custom (org-confirm-babel-evaluate nil))
+
+      (use-package ob-ledger
+        :commands (org-babel-execute:ledger))
     #+end_src
 
 *** Archiving of files
     Creating function which archives all files which contain only done (not necessarily
     in a DONE state.) items, with the intention of making org-agenda quicker to proccess.
 
-    #+BEGIN_SRC emacs-lisp
+    #+begin_src emacs-lisp
       (defun qk/archive-done-org-files ()
         "Cycles all org files through checking function."
         (interactive) 
@@ -1700,7 +1709,7 @@
                 (kill-buffer (current-buffer))
                 (message "File '%s' successfully archived as '%s'."
                          name (file-name-nondirectory new-name)))))))
-    #+END_SRC
+    #+end_src
 
 *** Extension packages
 **** toc-org
@@ -1713,57 +1722,84 @@
      #+end_src
 
 **** Org-roam
-     I use the Zettelkasten (slip-box) method for taking and recalling notes and
-     information. To be able to do so, I started with my own workflow, adding
-     org-mode links to the different notes, and has been working for me for 
-     close to a month. As a way of improving this workflow, I decided to give
-     org-roam a chance.
-
-     #+BEGIN_SRC emacs-lisp
+     I use the Zettelkasten (slip-box) method for taking and recalling notes and information. To be able to do so, I started with my own workflow, adding org-mode links to the different notes, and has been working for me for close to a month. As a way of improving this workflow, I decided to give org-roam a chance.
+     #+begin_src emacs-lisp
        (use-package org-roam
          :straight t
-         :hook
-         (after-init . org-roam-mode)
+         :commands org-roam-db-query
          :custom
-         (org-roam-directory "~/Documents/slipbox")
          (org-roam-capture-templates '(
-                                       ("d" "default" plain (function org-roam--capture-get-point)
-                                        "%?"
-                                        :file-name "pages/${slug}"
-                                        :head "#+title: ${title}\n#+roam_key: \n#+roam_tags: \n"
+                                       ("d" "default" plain "%?" :if-new
+                                        (file+head "pages/${slug}.org" ":PROPERTIES:\n:ID:  %(org-id-uuid)\n:END:\n#+title: ${title}\n#+filetags: \n\n")
                                         :unnarrowed t)))
-         :bind (:map org-roam-mode-map
-                     (("C-c n l" . org-roam)
-                      ("C-c n f" . org-roam-find-file)
-                      ("C-c n g" . org-roam-graph))
+         :bind (:map global-map
+                     ("C-c n f" . org-roam-node-find)
                      :map org-mode-map
-                     (("C-c n i" . org-roam-insert)
-                      ("C-c n I" . org-roam-insert-immediate))
-                     :map org-roam-backlinks-mode-map
-                     ("w" . visual-line-mode)))
-     #+END_SRC
+                     (("C-c n i" . org-roam-node-insert)
+                      ("C-c n l" . org-roam-buffer-toggle)
+                      ("C-c n g" . org-roam-graph)))
+         :config (org-roam-setup))
+     #+end_src
+
+***** Org-agenda in Org-roam
+      One of the possible options that org-roam provides is the use of org-roam to control the org-agenda files. The big problem in solving this is that org-agenda takes ages to load if the node count goes up. For that, we use clever techniques and advices to check on save and on load for a file, allowing to use per-note TODOs and fast query for the org-agenda buffer. This has been taken out of [[https://d12frosted.io/posts/2021-01-16-task-management-with-roam-vol5.html][vulpea’s blog post]].
+      #+begin_src emacs-lisp
+        (use-package vulpea
+          :straight t
+          :commands (vulpea-buffer-tags-get vulpea-buffer-tags-add))
+
+        (use-package vulpea-org-roam
+          :commands vulpea-agenda-files-update
+          :hook
+          (find-file . vulpea-project-update-tag)
+          (before-save . vulpea-project-update-tag))
+
+        (advice-add 'org-agenda :before #'vulpea-agenda-files-update)
+      #+end_src
+
+***** Hide properties
+      The V2 version of org-roam adds properties to the files, which are then used to query and index the files. Using this org-mode native sintax (instead of buffer properties), a higher performance and consistency is achieved.
+      #+begin_src emacs-lisp
+        (defun sc/org-hide-properties ()
+          "Hide all org-mode headline property drawers in buffer. Could be slow if it has a lot of overlays."
+          (interactive)
+          (save-excursion
+            (goto-char (point-min))
+            (while (re-search-forward
+                    "^ *:properties:\n\\( *:.+?:.*\n\\)+ *:end:\n" nil t)
+              (let ((ov_this (make-overlay (match-beginning 0) (match-end 0))))
+                (overlay-put ov_this 'display "")
+                (overlay-put ov_this 'hidden-prop-drawer t))))
+          (put 'org-toggle-properties-hide-state 'state 'hidden))
+
+        (defun sc/org-show-properties ()
+          "Show all org-mode property drawers hidden by org-hide-properties."
+          (interactive)
+          (remove-overlays (point-min) (point-max) 'hidden-prop-drawer t)
+          (put 'org-toggle-properties-hide-state 'state 'shown))
+
+        (defun sc/org-toggle-properties ()
+          "Toggle visibility of property drawers."
+          (interactive)
+          (if (eq (get 'org-toggle-properties-hide-state 'state) 'hidden)
+              (sc/org-show-properties)
+            (sc/org-hide-properties)))
+      #+end_src
 
 ***** Hooks
       Adding the execution of certain functions when the org-roam-file-setup-hook
       is run, for example, adding spelling correction functionality.
       #+begin_src emacs-lisp
         (add-hook 'org-roam-file-setup-hook (lambda ()
-                                              (flyspell-mode t)))
-      #+end_src
+                                              (flyspell-mode t)
+                                              (sc/org-hide-properties)))
 
-***** Org-roam protocol
-      After having configured the org-protocol, the org-roam-protocol will open the links
-      that have been created with the org-roam-graph function in order to allow for faster
-      browsing when outilining blog posts or articles.
-      #+begin_src emacs-lisp
-        (use-package org-roam-protocol
-          :straight nil)
+        (add-hook 'org-roam-find-file-hook (lambda ()
+                                             (sc/org-hide-properties)))
       #+end_src
 
 **** Org-pdftools
-     Org-pdftools is the mantained version of the package org-pdfview, which allos for annotations
-     and org-links to different pages of the pdf, instead of giving the normal 500 kilometers wide
-     slug that org-mode gives.
+     Org-pdftools is the mantained version of the package org-pdfview, which allos for annotations and org-links to different pages of the pdf, instead of giving the normal 500 kilometers wide slug that org-mode gives.
      #+begin_src emacs-lisp
        (use-package org-pdftools
          :straight t
@@ -1771,12 +1807,18 @@
      #+end_src
 
 **** Exporting to epub
-     This is an attempt to have org-mode export to epub, in order to produce ebooks
-     that I can later convert to mobi in order to include in my kindle. The books
-     that was interested in converting would most likely be collections of blog posts.
+     This is an attempt to have org-mode export to epub, in order to produce ebooks that I can later convert to mobi in order to include in my kindle. The books that was interested in converting would most likely be collections of blog posts.
      #+begin_src emacs-lisp
        (use-package ox-epub
-         :straight t)
+         :straight t
+         :after org-export)
+     #+end_src
+
+**** Org-mode exporting
+     This is the configuration for the exporting backends, which need to be configured in order to create a hook to the =org-export-dispatch= function.
+     #+begin_src emacs-lisp
+       (add-to-list 'org-export-backends 'md)
+       (add-to-list 'org-export-backends 'epub)
      #+end_src
 
 **** Import to org-mode
@@ -1786,6 +1828,14 @@
          :straight (:host github
                           :repo "tecosaur/org-pandoc-import"
                           :files ("*.el" "filters" "preprocessors")))
+     #+end_src
+
+**** Export from org-mode
+     Even though org-mode has an already built in export dispatch, it is a good idea to complement the default modes (i.e =md=) with *pandoc*, which is a powerful file converter.
+     #+begin_src emacs-lisp
+       (use-package ox-pandoc
+         :straight t
+         :commands (org-pandoc-export-to-md org-pandoc-export-as-md))
      #+end_src
 
 **** Org-pomodoro
@@ -1805,7 +1855,6 @@
            (org-set-effort nil (org-duration-from-minutes (* n mins-per-pomodoro)))))
        (use-package org-pomodoro
          :straight t
-         :demand t
          :hook (org-pomodoro-break-finished .
                                             (lambda ()
                                               (interactive)
@@ -1818,8 +1867,6 @@
          (org-pomodoro-keep-killed-pomodoro-time t)
          (org-pomodoro-start-sound (concat user-emacs-directory "extra/loud-bell.wav"))
          (org-pomodoro-short-break-sound (concat user-emacs-directory "extra/bell.wav"))
-         :bind-keymap("C-c o p" . qk/org-pomodoro-mode-global-map)
-         :bind (:map org-agenda-mode-map ("P" . org-pomodoro))
          :init 
          (defvar shu/org-pomodoro-columns-format
            "%22SCHEDULED %CATEGORY %42ITEM %4Effort(Effort){:} %4CLOCKSUM_T(Time)")
@@ -1842,6 +1889,14 @@
                        defined keys follow the pattern of <PREFIX> <KEY>."))
      #+end_src
 
+**** org-download
+     Org-download is a great package to benefit from org-mode and its connection with the images. Instead of using a file link, which may be cumbersome to setup, just drop the image in the buffer and it is automatically added.
+     #+begin_src emacs-lisp
+       (use-package org-download
+         :straight t
+         :after org
+         :hook (dired-mode . org-download-enable))
+     #+end_src
 
 ** Version control
 *** Symlinks
@@ -1859,6 +1914,7 @@
     Provides a convenient way of simultaneous browsing through the differences between a pair (or a triple) of files or buffers. Nevertheless, it needs to be configured to remove some of the defaults that are horrible. We will remove the frame that ediff creates, opting for using a window with options if needed. We might even change the behaviour to use a transient command.
     #+begin_src emacs-lisp
       (use-package ediff
+        :commands ediff
         :custom
         (ediff-window-setup-function 'ediff-setup-windows-plain)
         (ediff-split-window-function (if (> (frame-width) 150)
@@ -1870,15 +1926,15 @@
 *** Smerge-mode
     =smerge-mode= is a minor mode included in Emacs that provides merging functionality. There has been defined multiple funcions to navigate and act upon changes in files. You are able to use ediff-like functionality to move around and make the changes that you need. The following configuration provides the automatic activation when a merge conflict is detected, a.k.a, when the buffer has multiple "<" in the same line.
     #+begin_src emacs-lisp
+      (defun modi/enable-smerge-maybe ()
+        "Auto-enable `smerge-mode' when merge conflict is detected."
+        (save-excursion
+          (goto-char (point-min))
+          (when (re-search-forward "^<<<<<<< " nil :noerror)
+            (smerge-mode 1))))
+
       (use-package smerge-mode
-        :init
-        (defun modi/enable-smerge-maybe ()
-          "Auto-enable `smerge-mode' when merge conflict is detected."
-          (save-excursion
-            (goto-char (point-min))
-            (when (re-search-forward "^<<<<<<< " nil :noerror)
-              (smerge-mode 1))))
-        (add-hook 'find-file-hook #'modi/enable-smerge-maybe :append)
+        :hook (find-file . modi/enable-smerge-maybe)
         :config
         (defhydra hydra-smerge (:color pink
                                        :hint nil
@@ -1937,7 +1993,7 @@
 
 *** Magit forge
     Magit with the integration of Github Issues.
-    #+BEGIN_SRC emacs-lisp
+    #+begin_src emacs-lisp
       (use-package forge
         :straight t
         :after magit
@@ -1947,7 +2003,7 @@
                      ("e a" "assignees" forge-edit-topic-assignees)
                      ("e r" "review requests" forge-edit-topic-review-requests)])
                   ))
-    #+END_SRC
+    #+end_src
 
 *** Magit
     Obviously [[https://magit.vc/][Magit]].
@@ -1955,7 +2011,6 @@
       (use-package magit
         :straight t
         :bind ("C-x g" . magit-status)
-        :hook (after-save . magit-after-save-refresh-status)
         :hook (git-commit-mode . (lambda ()
                                    (set-fill-column 72)))
         :custom 
@@ -1967,81 +2022,45 @@
     Transient is the way that Magit recommended for setting keybindings, avoiding the clutter that usually forms when trying to get into complex keybindings with [[*Which key][Which key]]. You have different types of transients: suffix-commands, infix-commands and prefix-commands. The documentation is not really easy to understand, but I modified a help-transient that I found online to fit my needs.
     #+begin_src emacs-lisp
       (use-package transient
-        :config (transient-define-prefix qk/help-transient ()
-                  "Help commands that I use. A subset of C-h with others thrown in."
-                  ["Help Commands"
-                   ["Mode & Bindings"
-                    ("m m" "Mode" describe-mode)
-                    ("m B" "Major Bindings" which-key-show-full-major-mode)
-                    ("m b" "Minor Bindings" which-key-show-full-minor-mode-keymap)
-                    ("m t" "Top Bindings  " which-key-show-top-level)
-                    ("m w" "Where Is" where-is)
-                    ]
-                   ["Describe"
-                    ("d C" "Command" helpful-command)
-                    ("d f" "Function" helpful-function)
-                    ("d v" "Variable" helpful-variable)
-                    ("d m" "Macro" helpful-macro)
-                    ("d k" "Key" helpful-key)
-                    ]
-                   ["Info on"
-                    ("C-c" "M-x function" Info-goto-emacs-command-node)
-                    ("C-k" "Emacs Key" Info-goto-emacs-key-command-node)
-                    ]
-                   ]
-                  [
-                   ["Internals"
-                    ("i I" "Input Method" describe-input-method)
-                    ("i G" "Language Env" describe-language-environment)
-                    ("i S" "Syntax" describe-syntax)
-                    ("i O" "Coding System" describe-coding-system)
-                    ("i C-o" "Coding Brief" describe-current-coding-system-briefly)
-                    ("i T" "Display Table" describe-current-display-table)
-                    ("i e" "Echo Messages" view-echo-area-messages)
-                    ("i l" "Lossage" view-lossage)
-                    ]
-                   ["DWIM"
-                    ("." "At Point   " helpful-at-point)
-                    ]
-                   ["Info Manuals"
-                    ("i RET" "Info" info)
-                    ("4" "Other Window " info-other-window)
-                    ("C-e" "Emacs" info-emacs-manual)
-                    ]
-                   ])
-        :bind (:map global-map
-                    ("C-h" . qk/help-transient)))
+        :straight t
+        :commands transient-define-prefix)
     #+end_src
-
     
 ** Project management
-   #+BEGIN_SRC emacs-lisp
+   #+begin_src emacs-lisp
+     (defvar qk/fd-command "fdfind")
+     (if (or (eq window-system 'ns)
+             (eq window-system 'mac))
+         (setq qk/fd-command "fd"))
+
      (use-package projectile
        :straight t
-       ;; Working on ubuntu, if you are not, change fdfind to fd.
-       :custom (projectile-generic-command "fdfind . -0 --type f --color=never")
-       :config(progn 
-                ;; (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
-                (setq projectile-project-search-path '("~/Documents/"))
-                (projectile-global-mode)))
-     (with-eval-after-load 'projectile
+       :after consult-projectile
+       :commands (projectile-remove-known-project projectile-find-file)
+       :custom
+       (projectile-generic-command (concat qk/fd-command " . -0 --type f --color=never"))
+       (projectile-project-search-path '("~/Documents/"))
+       :config
        (add-to-list 'projectile-project-root-files-bottom-up "pubspec.yaml")
-       (add-to-list 'projectile-project-root-files-bottom-up "BUILD"))
-   #+END_SRC
+       (add-to-list 'projectile-project-root-files-bottom-up "BUILD")
+       (projectile-global-mode))
+   #+end_src
 
 ** Snippets
 *** Yasnippet
-    #+BEGIN_SRC emacs-lisp
+    #+begin_src emacs-lisp
       (use-package yasnippet
         :straight t
-        :config (yas-global-mode))
-    #+END_SRC
+        :hook ((prog-mode org-mode gfm-mode) . yas-minor-mode)
+        :config (yas-reload-all))
+    #+end_src
 
 *** Better yasnippets for modes.
-    #+BEGIN_SRC emacs-lisp
+    #+begin_src emacs-lisp
       (use-package yasnippet-snippets
-        :straight t)
-    #+END_SRC
+        :straight t
+        :after yasnippet)
+    #+end_src
 
 ** Programming
 *** Completion Overlay
@@ -2049,7 +2068,7 @@
      Company is used for better completion on the fly. :warning: UPDATE 2021/05/20: Instead of using company, the master branch will now be testing [[https://github.com/minad/corfu][corfu]], which seems a package that is better align with my goal of making the configuration as modular as possible.
 
      For completion reasons, I still leave the company configuration here, just in case someone might want to give it a try.
-     #+BEGIN_SRC emacs-lisp :tangle no
+     #+begin_src emacs-lisp :tangle no
        (use-package company
          :straight t
          :config (progn 
@@ -2057,10 +2076,10 @@
                    (setq company-show-numbers t)
                    (setq company-dabbrev-downcase 0)
                    (setq company-idle-delay 0)))
-     #+END_SRC
+     #+end_src
 
      Adding completion on tab.
-     #+BEGIN_SRC emacs-lisp :tangle no
+     #+begin_src emacs-lisp :tangle no
        (defun tab-indent-or-complete ()
          (interactive)
          (if (minibufferp)
@@ -2071,7 +2090,7 @@
                    (company-complete-common)
                  (indent-for-tab-command)))))
        (global-set-key [backtab] 'tab-indent-or-complete)
-     #+END_SRC
+     #+end_src
 
      Adding prescient sorting and filtering mechanism with the intention
      of enabling a better candidate mechanism.
@@ -2093,18 +2112,17 @@
          :bind (:map corfu-map
                      ("C-n" . corfu-next)
                      ("C-p" . corfu-previous))
-         :custom (corfu-cycle t) (corfu-global-mode t)
+         :custom
+         (corfu-cycle t)
+         (corfu-global-mode t)
+         (corfu-quit-no-match t)
+         (corfu-commit-predicate nil)
          :config (corfu-global-mode))
 
        (use-package emacs
-         :init
-         ;; TAB cycle if there are only few candidates
-         (setq completion-cycle-threshold 3)
-
-         ;; Enable indentation+completion using the TAB key.
-         ;; `completion-at-point' is often bound to M-TAB.
-         (setq tab-always-indent 'complete))
-
+         :custom
+         (completion-cycle-threshold 3)
+         (tab-always-indent 'complete))
      #+end_src
 
 *** Server side functionality (LSP)
@@ -2113,38 +2131,9 @@
      Sintax checking on the fly.
      #+begin_src emacs-lisp
        (use-package flycheck
-         :straight t)
-
-       (flycheck-define-checker proselint
-         "A linter for prose."
-         :command ("proselint" source-inplace)
-         :error-patterns
-         ((warning line-start (file-name) ":" line ":" column ": "
-                   (id (one-or-more (not (any " "))))
-                   (message) line-end))
-         :modes (text-mode markdown-mode gfm-mode org-mode))
-       (add-to-list 'flycheck-checkers 'proselint)
-
-       (flycheck-define-checker vale
-         "A checker for prose"
-         :command ("vale" "--output" "line"
-                   source)
-         :standard-input nil
-         :error-patterns
-         ((error line-start (file-name) ":" line ":" column ":" (id (one-or-more (not (any ":")))) ":" (message) line-end))
-         :modes (markdown-mode org-mode text-mode))
-       (add-to-list 'flycheck-checkers 'vale 'append)
+         :straight t
+         :custom (flycheck-display-errors-function nil))
      #+end_src
-
-***** Flycheck-vale
-      flycheck-vale is a package trying to provide seemless integration
-      with the =vale= prose linter, which is written in go, it is fast and
-      maintained, couldn't be a better option.
-      #+begin_src emacs-lisp :tangle no
-        (use-package flycheck-vale
-          :straight t
-          :config (flycheck-vale-setup))
-      #+end_src
 
 **** Treemacs
      Treemacs is a package explorer that has been created taking a ton of inspiration
@@ -2160,20 +2149,19 @@
        considering that treemacs opens when this command is called and the treemacs
        window was hidden.
      #+begin_src emacs-lisp
+       (defvar treemacs-no-load-time-warnings t)
        (use-package treemacs
          :straight t
-         :init (defvar treemacs-no-load-time-warnings t)
          :bind (:map global-map (("C-c T" . treemacs)
                                  ("C-c t" . treemacs-select-window))))
      #+end_src
 
 ***** treemacs-projectile
-      treemacs-projectile is a little extension to the comprehensive treemacs functionality,
-      focused on providing an easy exprerience adding projects, specially some of which have
-      already been imported by projectile.
+      treemacs-projectile is a little extension to the comprehensive treemacs functionality, focused on providing an easy exprerience adding projects, specially some of which have already been imported by projectile.
       #+begin_src emacs-lisp
         (use-package treemacs-projectile
-          :straight t)
+          :straight t
+          :after treemacs)
       #+end_src
 
 **** Tree-sitter-mode
@@ -2192,80 +2180,73 @@
      #+end_src
      
 **** lsp-mode
-     Client for Language Server Protocol (v3.14). lsp-mode aims to provide IDE-like experience by providing optional integration with the most popular Emacs packages.
-     #+BEGIN_SRC emacs-lisp
+     Client for Language Server Protocol (v3.14). =lsp-mode= aims to provide IDE-like experience by providing optional integration with the most popular Emacs packages.
+     #+begin_src emacs-lisp
        (use-package lsp-mode
          :straight t
          :commands (lsp lsp-deferred)
          :hook
          (mhtml-mode . lsp-deferred)
          (css-mode . lsp-deferred)
-         ;; (python-mode . lsp-deferred)
+         (python-mode . lsp-deferred)
          (csharp-mode . lsp-deferred)
          (js-mode . lsp-deferred)
          (typescript-mode . lsp-deferred)
-         (tex-mode . lsp-deferred) ;; :warning: testing
-         (latex-mode . lsp-deferred) ;; :warning: testing
-         (lsp-mode . lsp-enable-which-key-integration)
-         (lsp-mode . (lambda () (setq-local company-minimum-prefix-length 1)))
-         :init
-         (setq gc-cons-threshold 100000000)
-         (setq read-process-output-max (* 1024 1024))
-         (setq lsp-completion-provider :none)
-         (setq lsp-idle-delay 0.500)
-         (setq lsp-enable-file-watchers nil)
-         (setq lsp-signature-auto-activate nil)
-         (setq lsp-headerline-breadcrumb-enable nil)
-         (setq lsp-enable-links nil)
-         :config (define-key lsp-mode-map (kbd "C-c l") lsp-command-map))
-
-     #+END_SRC
+         (tex-mode . lsp-deferred)
+         (latex-mode . lsp-deferred)
+         :custom
+         (read-process-output-max (* 1024 1024))
+         (lsp-completion-provider :none)
+         (lsp-idle-delay 0.500)
+         (lsp-enable-file-watchers nil)
+         (lsp-signature-auto-activate nil)
+         (lsp-headerline-breadcrumb-enable nil)
+         (lsp-enable-links nil)
+         :config
+         (define-key lsp-mode-map (kbd "C-c l") lsp-command-map))
+     #+end_src
 
 ***** Html preview.
-      Adding the html preview filter, which uses the httpd server and impatient-mode,
-      in order to process all the information. Keep in mind that you would need to use
-      the impatient-mode command on all the buffers that need to be refreshed on change,
-      including possible stylesheets that are connected to the initial 
+      Adding the html preview filter, which uses the httpd server and impatient-mode, in order to process all the information. Keep in mind that you would need to use the impatient-mode command on all the buffers that need to be refreshed on change, including possible stylesheets that are connected to the initial 
       #+begin_src emacs-lisp
-        (use-package mhtml-mode
-          :straight nil
-          :init
-          (defun qk/html-preview ()
-            "Preview html using httpd and impatient-mode"
-            (interactive)
-            (unless (process-status "httpd")
-              (httpd-start))
-            (impatient-mode)
-            (imp-visit-buffer))) 
+        (defun qk/html-preview ()
+          "Preview html using httpd and impatient-mode"
+          (interactive)
+          (unless (process-status "httpd")
+            (httpd-start))
+          (impatient-mode)
+          (imp-visit-buffer))
       #+end_src
       
 ***** lsp-ui
       Better ui for lsp-mode, adding el-doc.
-      #+BEGIN_SRC emacs-lisp
+      #+begin_src emacs-lisp
         (use-package lsp-ui
           :requires (flycheck)
           :straight t
           :commands lsp-ui-mode
           :custom (lsp-ui-sideline-show-code-actions nil))
-      #+END_SRC
+      #+end_src
 
 ***** C++/C programming.
       Always works on C++, sometimes wrong on C programming.
-      #+BEGIN_SRC emacs-lisp
+      #+begin_src emacs-lisp
         (use-package ccls
           :straight t
+          :disabled
           :config (progn
                     (setq ccls-executable "ccls")
                     (setq lsp-prefer-flymake nil)
                     (setq-default flycheck-disabled-checkers '(c/c++-clang c/c++-cppcheck c/c++-gcc)))
           :hook ((c-mode c++-mode objc-mode) .
                  (lambda () (require 'ccls) (lsp-deferred))))
-      #+END_SRC
+      #+end_src
 
 ****** Keybindings
        Disable some keybindings. For some reason c-mode, c++-mode binds the default keys like TAB, RET and more to their own changes. I don't really like that modes change some of the default keys.
        #+begin_src emacs-lisp
          (use-package cc-mode
+           :mode ("\\.cpp\\'" "\\.c\\'")
            :bind
            (:map c-mode-base-map
                  ("TAB" . nil))
@@ -2276,7 +2257,7 @@
        #+end_src
 
 ***** Dart/Flutter programming
-      #+BEGIN_SRC emacs-lisp
+      #+begin_src emacs-lisp
         (use-package lsp-dart 
           :straight t
           :hook (dart-mode . lsp-deferred)
@@ -2289,7 +2270,7 @@
           (lsp-dart-dap-flutter-hot-reload-on-save t)
           (dart-format-on-save t))
 
-      #+END_SRC
+      #+end_src
 
       Adding hover to emulate running flutter mobile application on dekstop.
       #+begin_src emacs-lisp
@@ -2306,11 +2287,11 @@
 
 ***** Java Programming
       Works with the eclipse server, not really sure if it is what I'm looking for.
-      #+BEGIN_SRC emacs-lisp
+      #+begin_src emacs-lisp
         (use-package lsp-java
           :straight t
           :hook (java-mode . lsp-deferred))
-      #+END_SRC
+      #+end_src
 
 ***** Python programming
       Making sure the executable for python is not longer "python", but default to
@@ -2322,6 +2303,7 @@
           :custom
           (python-shell-interpreter "python3")
           (compilation-ask-about-save nil)
+          (python-indent-guess-indent-offset-verbose nil)
           (compilation-scroll-output t)
           :init
           (defun mk/compile-python-buffer ()
@@ -2332,11 +2314,24 @@
                       ("C-c C-u" . mk/compile-python-buffer)))
       #+end_src
 
+****** lsp-pylsp
+       This is the configuration for the python lsp update palantir server, which is configured in the lsp-mode section, but I thought adding custom variables here would make the section cleaner.
+       #+begin_src emacs-lisp
+         (use-package lsp-mode
+           :custom
+           (lsp-pylsp-jedi-completion-fuzzy t)
+           (lsp-pylsp-plugins-jedi-use-pyenv-environment t)
+           (lsp-pylsp-plugins-black-enabled t)
+           (lsp-pylsp-plugins-rope-completion-enabled t)
+           (lsp-pylsp-plugins-pylint-enabled t))
+       #+end_src
+
 ****** lsp-pyright
        Need to configure the pyright lsp package to provide the pyright support to python buffers, which seems to be much faster than the other Palantir options.
        #+begin_src emacs-lisp
          (use-package lsp-pyright
            :straight t
+           :disabled
            :hook (python-mode . (lambda ()
                                   (require 'lsp-pyright)
                                   (lsp-deferred))))
@@ -2345,11 +2340,10 @@
        Adding pip-requirements in order to benefit from syntax and completion for pip requirements files.
        #+begin_src emacs-lisp
          (use-package pip-requirements
-           :demand t
            :straight t)  
        #+end_src
 
-****** pyvenv.el
+****** pyvenv
        This is a simple global minor mode which will replicate the changes done by virtualenv activation inside Emacs.
 
        The main entry points are pyvenv-activate, which queries the user for a virtual environment directory to activate, and pyvenv-workon.
@@ -2367,13 +2361,36 @@
                                        (pyvenv-activate venv-path)))))))
        #+end_src
 
+****** Conda
+       Conda is an easy to use, packaged set of libraries that comes with package versioning, environments and different kernels, containing the set of packages that you need. Conda contains all the major Machine Learning and Data Science libraries.
+       #+begin_src emacs-lisp
+         (use-package conda
+           :straight t
+           :commands conda-env-activate
+           :custom (conda-anaconda-home "/Users/enrikes/opt/anaconda3/")
+           :config (conda-env-initialize-interactive-shells))
+       #+end_src
+
+****** Jupyter
+       Jupyter Notebook is an open-source web application that allows you to create and share documents that contain live code, equations, visualizations and narrative text. Uses include: data cleaning and transformation, numerical simulation, statistical modeling, data visualization, machine learning, and much more.
+       #+begin_src emacs-lisp :tangle no
+         (use-package jupyter
+           :straight t
+           :custom
+           (jupyter-repl-echo-eval-p t)
+           (org-babel-default-header-args:jupyter-python '((:async . "yes")
+                                                                   (:session . "py"))))
+         (use-package ob-jupyter
+           :commands (org-babel-execute:jupyter org-babel-expand-body:jupyter))
+       #+end_src
+
 ***** C# programming
       C# still doens't have its own mode in emacs, we need to install an external package. I will be using lsp-mode for completion, but Emacs needs the csharp-mode support, for syntax highlighting and more, which uses [[*Tree-sitter-mode][Tree-sitter-mode]].
       #+begin_src emacs-lisp
         (use-package csharp-mode
           :straight t
-          :config
-          (add-to-list 'auto-mode-alist '("\\.cs\\'" . csharp-tree-sitter-mode)))
+          :mode "\\.cs\\'"
+          :hook (csharp-mode . csharp-tree-sitter-mode))
       #+end_src
     
 ***** Web programming
@@ -2384,7 +2401,8 @@
        Colors need to be highlighted in other buffers too, i.e. elisp-mode. For that I intend to use rainbow-mode, which may be enabled with =M-x rainbow-mode=.
        #+begin_src emacs-lisp
          (use-package rainbow-mode
-           :straight t)
+           :straight t
+           :commands rainbow-mode)
        #+end_src
 
 ****** HTML
@@ -2396,18 +2414,18 @@
            :mode ("\\.html\\'" "\\.hbs\\'")
            :straight nil)
        #+end_src
-
        
 ****** PHP
        PHP programming is not included in the default emacs implementation. For that reason, we can use the wonderful =php-mode= package, which is everything we can look for for a major mode.
        #+begin_src emacs-lisp
          (use-package php-mode
-           :straight t)
+           :straight t
+           :mode "\\.php\\'")
        #+end_src
        
 ****** Emmet-mode
        Better completion for html tags, very good documentation. This package is configured with my fork, as emmet-mode's default repo has problems using the =cl= package, instead of the updated =cl-lib=.
-       #+BEGIN_SRC emacs-lisp
+       #+begin_src emacs-lisp
          (use-package emmet-mode
            :straight (emmet-mode :type git :host github :repo "smihica/emmet-mode"
                                  :fork (:host github
@@ -2416,7 +2434,7 @@
          (add-hook 'sgml-mode-hook 'emmet-mode) ;; Auto-start on any markup modes
          (add-hook 'css-mode-hook  'emmet-mode) ;; enable Emmet's css abbreviation.
          (add-hook 'js-mode-hook 'emmet-mode)
-       #+END_SRC
+       #+end_src
 
 ****** JavaScript environment
        Adding the JavaScript programming environment, trying only with lsp-mode and then
@@ -2432,10 +2450,8 @@
 
        In order to be able to find the node path, we need to make sure that the "~/.nvm/..." path
        is on the exec-path, not tangling this because the correct solution for this problem is the
-       [[*Syncing .profile env variables][exec-path-from-shell package]]
-       #+begin_src emacs-lisp
-         (setq exec-path (append exec-path '("~/.nvm/versions/node/v15.12.0/bin")))
-       #+end_src
+       [[*Syncing .profile env variables][exec-path-from-shell package]].
+       
        I've found this is often a misnaming error, if you install from a package
        manager you bin may be called nodejs so you just need to symlink it like so "ln
        -s /usr/bin/nodejs /usr/bin/node"
@@ -2443,6 +2459,7 @@
        Connecting js2-mode as a minor-mode to js-mode just for JavaScript linting.
        #+begin_src emacs-lisp
          (use-package js2-mode
+           :disabled
            :straight t)
        #+end_src
 
@@ -2461,6 +2478,7 @@
        #+begin_src emacs-lisp
          (use-package xref-js2
            :straight t
+           :after js-mode
            :custom (xref-js2-search-program 'rg))
        #+end_src
 
@@ -2469,12 +2487,9 @@
        #+begin_src emacs-lisp
          (use-package json-mode
            :straight t
-           :config
-           (progn
-             (flycheck-add-mode 'json-jsonlint 'json-mode)
-             (add-hook 'json-mode-hook 'flycheck-mode)
-             (setq js-indent-level 2)
-             (add-to-list 'auto-mode-alist '("\\.json\\'" . json-mode))))
+           :mode "\\.json\\'"
+           :hook (json-mode . flycheck-mode)
+           :custom (js-indent-level 2))
        #+end_src
 
 ***** treemacs-all-the-icons
@@ -2482,8 +2497,8 @@
       #+begin_src emacs-lisp
         (use-package treemacs-all-the-icons
           :straight t
-          :config
-          (treemacs-load-theme "Netbeans"))
+          :after treemacs
+          :config (treemacs-load-theme "Netbeans"))
       #+end_src
 
 ***** Dap-mode
@@ -2502,8 +2517,16 @@
        In order to be able to access the java functionality (debugger with dap-java), I needed to update the =jdtls= server, and require the dap-java package. As I'm using =straight=, I figured I would use the =straight-use-package= function.
        #+begin_src emacs-lisp
          (use-package dap-java
-           :after dap-mode
-           :straight nil)
+           :straight nil
+           :after dap-mode)
+       #+end_src
+
+****** Dap-python
+       Here is the dap extension for debugging python files. Since I intend to connect to remote machines for debugging, I might need to dive a bit deeper on dap-python’s configuration variables.
+       #+begin_src emacs-lisp
+         (use-package dap-python
+           :straight nil
+           :after dap-mode)
        #+end_src
 
 *** DevDocs
@@ -2513,7 +2536,7 @@
         :straight (emacs-devdocs-browser :type git :host github :repo "blahgeek/emacs-devdocs-browser" )
         :custom
         (devdocs-browser-cache-directory (no-littering-expand-var-file-name "devdocs-browser"))
-        :bind ("C-c d" . devdocs-browser-open))
+        :bind ("C-c d" . devdocs-browser-open-in))
     #+end_src
 
 *** Yaml-mode
@@ -2533,7 +2556,6 @@
       (use-package crdt)
     #+end_src
 
-
 ** Extra
 *** Typo.el
     =typo-mode= is a buffer-specific minor mode that will change a number of normal keys to make them insert typographically useful unicode characters. Some of those keys can be used repeatedly to cycle through variations. This includes in particular quotation marks and dashes.
@@ -2552,94 +2574,6 @@
       (use-package emacs-everywhere
         :straight t)
     #+end_src
-    
-*** Circe
-    Circe is a Client for IRC in Emacs. It tries to have sane defaults, and integrates well with the rest of the editor, using standard Emacs key bindings and indicating activity in channels in the status bar so it stays out of your way unless you want to use it.
-    #+begin_src emacs-lisp
-      (use-package circe
-        :straight t
-        :bind ("C-c i" . qk/irc)
-        :custom
-        (circe-default-nick "qkessler")
-        (cirfe-default-user "qkessler")
-        (circe-default-realname "qkessler")
-        (circe-default-part-message "Bye!")
-        (circe-default-quit-message "Bye!")
-        (circe-format-self-say "<{nick}> {body}")
-        (circe-network-options
-         '(("Libera"
-            :host "irc.libera.chat"
-            :port "6697"
-            :nick "qkessler"
-            :sasl-username "qkessler"
-            :sasl-password qk/lpass-fetch-libera-password
-            :channels ("#emacs")
-            :tls t
-            )))
-        (circe-format-server-topic "*** Topic Change by {userhost}: {topic-diff}")
-        (circe-server-buffer-name (concat circe-default-nick "@{network}"))
-        (circe-prompt-string (propertize ">>> " 'face 'circe-prompt-face))
-        (circe-color-nicks-everywhere t)
-        :init
-        (defun qk/lpass-fetch-libera-password (server)
-          "Returns Libera's NickServer password"
-          (password-store-get "libera.chat"))
-        :config
-        (defun qk/irc ()
-          "Connect to all my IRC servers after enabling contrib modules."
-          (interactive)
-          (circe-lagmon-mode)
-          (enable-circe-color-nicks)
-          (enable-lui-autopaste)
-          (enable-lui-track)
-          (require 'circe-chanop)
-          (circe "Libera")))
-    #+end_src
-
-**** Lui
-     Lui, the Linewise User Interface, is a simple extensible mode that allows any program to present a userfriendly interface to the user. [[*Circe][Circe]] uses it to configure the interface.
-     #+begin_src emacs-lisp
-       (use-package lui
-         :custom
-         (lui-time-stamp-position 'right-margin)
-         (lui-fill-type nil)
-         (lui-track-behavior 'before-switch-to-buffer)
-         :init
-         (defun brause/trim-surrounding-lui-whitespace ()
-           (save-excursion
-             (let ((bol (line-beginning-position)))
-               (goto-char bol)
-               (skip-syntax-forward "-")
-               (when (/= (point) bol)
-                 (delete-region bol (point)))
-               (let ((eol (point-max)))
-                 (goto-char eol)
-                 (skip-syntax-backward "-" bol)
-                 (when (/= (point) eol)
-                   (delete-region (point) eol))))))
-         (defun brause/fill-lui-input ()
-           (interactive)
-           (fill-delete-newlines lui-input-marker (point-max) nil nil nil)
-           (brause/trim-surrounding-lui-whitespace)
-           (goto-char (point-max)))
-         (defun brause/no-fill-lui-setup ()
-           (setq fringes-outside-margins t
-                 right-margin-width 10
-                 visual-fill-column-extra-text-width '(0 . -10)
-                 fill-column 80
-                 wrap-prefix "    ")
-           (visual-line-mode)
-           (setf (cdr (assoc 'continuation fringe-indicator-alist)) nil)
-           (make-local-variable 'overflow-newline-into-fringe)
-           (setq overflow-newline-into-fringe nil))
-         (defun qk/circe-set-margin ()
-           (setq right-margin-width 7))
-         :bind (:map lui-mode-map
-                     ("M-q" . brause/fill-lui-input))
-         :hook
-         (circe-char-mode . brause/no-fill-lui-setup)
-         (lui-mode . qk/circe-set-margin))
-     #+end_src
     
 *** Google calendar integration
     There are multiple packages to integrate Google calendar with org-mode, but I didn't found that any was really fit to my needs, which are simply to have the calendars synced in.
@@ -2669,7 +2603,8 @@
          :straight nil
          :load-path "/usr/share/emacs/site-lisp/mu4e/"
          :bind (("C-c m" . mu4e)
-                :map mu4e-headers-mode-map ("f" . mu4e-headers-view-message))
+                :map mu4e-headers-mode-map ("f" . mu4e-headers-view-message)
+                :map mu4e-view-mode-map ("C-h" . nil))
          :hook (mu4e-compose-mode . flyspell-mode)
          :hook (after-init . (lambda () (mu4e t)))
          :custom
@@ -2767,9 +2702,14 @@
                    :query "to:enrique.kesslerm@um.es AND g:unread AND NOT g:trashed"
                    :key ?u)))
          :config
-         (mu4e t)
-         (add-to-list 'mu4e-view-actions '("view in browser" . mu4e-action-view-in-browser)))
-
+         (add-to-list 'mu4e-view-actions '("view in browser" . mu4e-action-view-in-browser))
+         (use-package mu4e-icalendar
+           :demand t
+           :straight nil)
+         (mu4e-icalendar-setup)
+         (setq gnus-icalendar-org-capture-file "~/Documents/slipbox/pages/amazon_meetings.org")
+         (setq gnus-icalendar-org-capture-headline '("Meetings"))
+         (gnus-icalendar-org-setup))
      #+end_src
 
 ***** mu4e-alert
@@ -2777,8 +2717,8 @@
       #+begin_src emacs-lisp
         (use-package mu4e-alert
           :straight t
+          :after mu4e
           :custom
-          (mu4e-alert-set-default-style 'libnotify)
           (mu4e-alert-interesting-mail-query
            (concat
             "flag:unread"
@@ -2786,8 +2726,13 @@
             " AND maildir:"
             "/Gmail/Work/[Gmail]/All Mail"))
           :config
-          (add-hook 'after-init-hook #'mu4e-alert-enable-notifications)
-          (add-hook 'after-init-hook #'mu4e-alert-enable-mode-line-display))
+          (mu4e-alert-enable-mode-line-display)
+          (defun gjstein-refresh-mu4e-alert-mode-line ()
+            (interactive)
+            (mu4e~proc-kill)
+            (mu4e-alert-enable-mode-line-display)
+            )
+          (run-with-timer 0 60 'gjstein-refresh-mu4e-alert-mode-line))
       #+end_src
 
 **** Message package
@@ -2796,6 +2741,7 @@
      with emacs.
      #+begin_src emacs-lisp
        (use-package message
+         :commands mu4e
          :custom
          (mail-user-agent 'mu4e-user-agent)
          (compose-mail-user-agent-warnings nil)
@@ -2826,140 +2772,12 @@
 
 **** Icalendar support
      mu4e provides support for icalendar files, which are defined with the =.ics= extension. In order to benefit from the support, we need to run the gnus-icalendar-setup, which generates the RSVP buttons (accept, tentative, decline) in mu4e. The option =mu4e-view-use-gnus= also should be true.
-     #+begin_src emacs-lisp :tangle no
-       (require 'mu4e-icalendar)
-       (mu4e-icalendar-setup)
+     #+begin_src emacs-lisp
+       (use-package mu4e-icalendar
+         :after mu4e
+         :config (mu4e-icalendar-setup))
      #+end_src
      
-*** RSS/Atom feed reader: Elfeed
-    Following the need of separating my email in a more organized and
-    distraction free way, I found my self looking for a efficient enough
-    messure to read all the mailing lists I was subscribed to. A lot of
-    free knowledge is being distributed (specially given the amount of
-    amazing people on the internet this days) and it would be a shame to
-    pass the opportunity. That said, I settled on Elfeed, which seems to
-    have become the standard de facto on the community, while still being
-    highly customizable and well documented. I followed the Protesilaos
-    configuration, as I believe the workflow he implements is similar to
-    the one I aspire to achieve.
-
-    #+begin_src emacs-lisp
-      (use-package elfeed
-        :straight t
-        :custom
-        (elfeed-use-curl t)
-        (elfeed-curl-max-connections 10)
-        (elfeed-db-directory "~/.emacs.d/elfeed/")
-        (elfeed-enclosure-default-dir "~/Downloads/")
-        (elfeed-search-filter "@4-months-ago +unread")
-        (elfeed-sort-order 'descending)
-        (elfeed-search-clipboard-type 'CLIPBOARD)
-        (elfeed-search-title-max-width 100)
-        (elfeed-search-title-min-width 30)
-        (elfeed-search-trailing-width 25)
-        (elfeed-show-truncate-long-urls t)
-        (elfeed-show-unique-buffers t)
-        (elfeed-search-date-format '("%F %R" 16 :left))
-        :config
-        (defun hk/elfeed-link-title (entry)
-          "Copy the entry title and URL as org link to the clipboard."
-          (interactive)
-          (let* ((link (elfeed-entry-link entry))
-                 (title (elfeed-entry-title entry))
-                 (titlelink (concat "[[" link "][" title "]]")))
-            (when titlelink
-              (kill-new titlelink)
-              (x-set-selection 'PRIMARY titlelink)
-              (message "Yanked: %s" titlelink))))
-
-        (defun hk/elfeed-show-link-title ()
-          "Copy the current entry title and URL as org link to the clipboard."
-          (interactive)
-          (hk/elfeed-link-title elfeed-show-entry))
-
-        (defun hk/elfeed-show-quick-url-note ()
-          "Fastest way to capture entry link to org agenda from elfeed show mode"
-          (interactive)
-          (hk/elfeed-link-title elfeed-show-entry)
-          (org-capture nil "n")
-          (yank)
-          (org-capture-finalize))
-
-        (defun hk/elfeed-search-link-title ()
-          "Copy the current entry title and URL as org link to the clipboard."
-          (interactive)
-          (let ((entries (elfeed-search-selected)))
-            (cl-loop for entry in entries
-                     when (elfeed-entry-link entry)
-                     do (hk/elfeed-link-title entry))))
-
-        (defun hk/elfeed-search-quick-url-note ()
-          "In search mode, capture the title and link for the selected
-           entry or entries in org aganda."
-          (interactive)
-          (let ((entries (elfeed-search-selected)))
-            (cl-loop for entry in entries
-                     do (elfeed-untag entry 'unread)
-                     when (elfeed-entry-link entry)
-                     do (hk/elfeed-link-title entry)
-                     do (org-capture nil "n")
-                     do (yank)
-                     do (org-capture-finalize)
-                     (mapc #'elfeed-search-update-entry entries))
-            (unless (use-region-p) (forward-line))))
-
-        :bind (("C-c e" . elfeed)
-               :map elfeed-search-mode-map
-               ("w" . elfeed-search-yank)
-               ("g" . elfeed-update)
-               ("G" . elfeed-search-update--force)
-               ("l" . hk/elfeed-search-link-title)
-               ("v" . hk/elfeed-search-quick-url-note)
-               :map elfeed-show-mode-map
-               ("w" . elfeed-show-yank)
-               ("l" . hk/elfeed-show-link-title)
-               ("v" . hk/elfeed-show-quick-url-note)))
-    #+end_src
-
-**** Elfeed org
-     Adding the possibility to read the feeds from an org file, which
-     gives us easier control of the tags, making use of regexp and
-     inherited tags.
-     #+begin_src emacs-lisp
-       (use-package elfeed-org
-         :straight t
-         :custom (rmh-elfeed-org-files (list (concat user-emacs-directory "feeds.org")))
-         :config (elfeed-org))
-     #+end_src
-
-**** Protesilaos personal configuration
-     In order to access the personal protesilaos elfeed configuration I decided on adding the .el file to the load-path, in order to avoid cluttering this config file.
-
-     A lot of functionality implemented regards the configuration of mpv and bongo, which I don't currently use, a revision will follow in order to remove those entries.
-
-     I tried using the straight recipe from the gitlab repo, without success, I still will be using the local prot-elfeed.
-     #+begin_src emacs-lisp
-       (use-package prot-elfeed
-         ;; :straight (prot-elfeed :type git :host gitlab :repo "protesilaos/dotfiles"
-         ;;                        :files ("emacs/.emacs.d/prot-lisp/prot-elfeed.el"))
-         :straight nil
-         :custom (prot-elfeed-tag-faces t)
-         :config
-         (prot-elfeed-fontify-tags)
-         :bind ( :map elfeed-search-mode-map
-                 ;; ("s" . prot-elfeed-search-tag-filter)
-                 ("f" . prot-elfeed-search-open-other-window)
-                 ("q" . prot-elfeed-kill-buffer-close-window-dwim)
-                 ("+" . prot-elfeed-toggle-tag)
-                 ("!" . (lambda ()
-                          (interactive)
-                          (prot-elfeed-toggle-tag 'important)))
-                 :map elfeed-show-mode-map
-                 ("a" . prot-elfeed-show-archive-entry)
-                 ("e" . prot-elfeed-show-eww)
-                 ("q" . prot-elfeed-kill-buffer-close-window-dwim)))
-     #+end_src
-
 *** Eww
     Eww is the emacs browser, which can have different integrations and
     workflows, specially if you are reading text, as it has a great
@@ -2971,6 +2789,7 @@
      be working correctly, anyway.
      #+begin_src emacs-lisp
        (use-package shr
+         :after (:any eww mu4e)
          :custom
          (shr-use-fonts nil)
          (shr-use-colors nil)
@@ -3073,30 +2892,28 @@
     #+begin_src emacs-lisp
       (use-package emojify
         :straight t
-        :hook (after-init . global-emojify-mode))  
+        :hook (after-init . global-emojify-mode)
+        :custom (emojify-emoji-set "emojione-v2.2.6-22"))  
     #+end_src
 
 *** Accounting from emacs
-    Thanks to the amazing Ledger command line tool, which is an double-entry
-    accounting system that allows for fast queries and reports we are able to
-    connect our emacs --and ledger files-- to the amazing ledger-mode.
+    Thanks to the amazing Ledger command line tool, which is an double-entry accounting system that allows for fast queries and reports we are able to connect our emacs --and ledger files-- to the amazing ledger-mode.
     #+begin_src emacs-lisp
       (use-package ledger-mode
+        :straight t
         :mode "\\.ledger\\'"
         :custom
         (ledger-clear-whole-transactions t)
         (ledger-reports '(("bal" "%(binary) -f %(ledger-file) bal --real")
                           ("reg" "%(binary) -f %(ledger-file) reg")
+                          ("reg this month" "%(binary) -f %(ledger-file) reg -p \"this month\"")
                           ("payee" "%(binary) -f %(ledger-file) reg @%(payee)")
                           ("account" "%(binary) -f %(ledger-file) reg %(account)")
                           ("expenses this month" "%(binary) -p \"this month\" -f %(ledger-file) bal Expenses and not \
       \\(Expenses:Rebalancing or Expenses:Refundable or Expenses:Lent money\\)")
                           ("budget" "%(binary) -f %(ledger-file) -E bal ^Budget and not Budget:Checking")))
-        :straight t
-        :config
-        (alexm/set-faces-by-spec
-         '(ledger-occur-xact-face
-           ((t (:background "#222324" :inherit nil))))))
+        :custom-face
+        (ledger-occur-xact-face ((t (:background "#222324" :inherit nil)))))
     #+end_src
 
 *** Todo in code
